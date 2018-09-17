@@ -1,0 +1,27 @@
+@import '~@angular/material/theming';
+
+@mixin login-theme($theme) {
+  $primary: map-get($theme, primary);
+  $accent: map-get($theme, accent);
+  $warn: map-get($theme, warn);
+
+  login {
+    .container {
+      background-color: mat-color($primary, 50);
+      .card {
+        background-color: white;
+        .header {
+          background-color: mat-color($accent, 300);
+        }
+        .content {
+          .title {
+            color: mat-color($primary);
+          }
+          strong {
+            color: mat-color($accent, 700);
+          }
+        }
+      }
+    }
+  }
+}

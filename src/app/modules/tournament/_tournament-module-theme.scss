@@ -1,0 +1,5 @@
+@import './layouts/tournament-theme.component';
+
+@mixin tournament-module-theme($theme) {
+  @include tournament-theme($theme);
+}

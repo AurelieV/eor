@@ -1,0 +1,21 @@
+<div class="container">
+  <section class="card">
+    <div class="header">
+      <div class="picture" [inlineSVG]="'/assets/img/fox.svg'"></div>
+    </div>
+    <div class="content">
+      <div class="title">Welcome to PurpleFox app</div>
+      <div class="body">
+        <p>For security reason, PurpleFox needs to know who you are</p>
+        <ng-template [ngIf]="isUsingJudgeApps">
+          <p>We will use you <strong>JudgeApps</strong> account for identify you throw the app, and also granted you
+            access based on
+            information it provide.</p>
+          <p class="actions">
+            <button mat-flat-button color="primary">Sure, connect me !</button>
+          </p>
+        </ng-template>
+      </div>
+    </div>
+  </section>
+</div>

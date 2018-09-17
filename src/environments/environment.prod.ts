@@ -1,3 +1,6 @@
 export const environment = {
-  production: true
-};
+  production: true,
+  configuration: {
+    loginMethod: 'JUDGE_APPS',
+  },
+}

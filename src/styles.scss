@@ -1,1 +1,15 @@
-/* You can add global styles to this file, and also import other style files */
+@import './styles/_reset';
+@import '~@angular/material/theming';
+@import './styles/eor';
+
+@include mat-core();
+
+$eor-primary: mat-palette($mat-deep-purple);
+$eor-accent: mat-palette($mat-indigo);
+
+// The warn palette is optional (defaults to red).
+$eor-warn: mat-palette($mat-red);
+$eor-theme: mat-light-theme($eor-primary, $eor-accent, $eor-warn);
+
+@include angular-material-theme($eor-theme);
+@include eor-theme($eor-theme);
