@@ -1,6 +1,7 @@
 import { Component } from '@angular/core'
 import { environment } from '../environments/environment'
 import { Configuration } from './interfaces'
+import { UserService } from './user.service'
 
 @Component({
   selector: 'login',
@@ -10,7 +11,15 @@ import { Configuration } from './interfaces'
 export class LoginComponent {
   config: Configuration = environment.configuration
 
+  constructor(private userService: UserService) {}
+
   get isUsingJudgeApps() {
     return this.config.loginMethod === 'JUDGE_APPS'
+  }
+
+  login() {
+    if (this.isUsingJudgeApps) {
+      this.userService.loginWithJudgeApps()
+    }
   }
 }

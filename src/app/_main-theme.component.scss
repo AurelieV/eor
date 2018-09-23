@@ -8,10 +8,6 @@
   mat-sidenav {
     .user {
       background-color: mat-color($primary, 50);
-
-      .picture {
-        background-color: mat-color($accent);
-      }
     }
   }
 }

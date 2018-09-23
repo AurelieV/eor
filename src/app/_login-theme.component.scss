@@ -11,14 +11,14 @@
       .card {
         background-color: white;
         .header {
-          background-color: mat-color($accent, 300);
+          background-color: mat-color($primary);
         }
         .content {
           .title {
-            color: mat-color($primary);
+            color: mat-color($accent);
           }
           strong {
-            color: mat-color($accent, 700);
+            color: mat-color($accent);
           }
         }
       }

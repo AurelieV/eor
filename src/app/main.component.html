@@ -10,8 +10,8 @@
 
   <mat-sidenav-container class="main-sidenav-container" [style.marginTop.px]="mobileQuery.matches ? 56 : 0">
     <mat-sidenav id="sidenav" #snav [fixedInViewport]="mobileQuery.matches" fixedTopGap="56">
-      <div class="user" *ngIf="user">
-        <strong class="name">{{user.displayName}}</strong>
+      <div class="user" *ngIf="user$ | async as user">
+        <strong class="name">{{user.name}}</strong>
         <button mat-stroked-button color="accent" (click)="logout()" class="logout">Logout</button>
       </div>
       <mat-nav-list>

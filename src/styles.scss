@@ -4,8 +4,8 @@
 
 @include mat-core();
 
-$eor-primary: mat-palette($mat-deep-purple);
-$eor-accent: mat-palette($mat-indigo);
+$eor-primary: mat-palette($mat-indigo);
+$eor-accent: mat-palette($mat-deep-purple);
 
 // The warn palette is optional (defaults to red).
 $eor-warn: mat-palette($mat-red);
