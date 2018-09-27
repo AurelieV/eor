@@ -8,27 +8,31 @@
     </mat-toolbar-row>
   </mat-toolbar>
 
-  <mat-sidenav-container class="main-sidenav-container" [style.marginTop.px]="mobileQuery.matches ? 56 : 0">
+  <mat-sidenav-container (backdropClick)="closeSide()" class="main-sidenav-container" [style.marginTop.px]="mobileQuery.matches ? 56 : 0">
     <mat-sidenav id="sidenav" #snav [fixedInViewport]="mobileQuery.matches" fixedTopGap="56">
       <div class="user" *ngIf="user$ | async as user">
         <strong class="name">{{user.name}}</strong>
         <button mat-stroked-button color="accent" (click)="logout()" class="logout">Logout</button>
       </div>
       <mat-nav-list>
-        <a mat-list-item (click)="snav.close()" [routerLink]="['/']">Homepage</a>
-        <a mat-list-item (click)="snav.close()" [routerLink]="['/tournament']">Tournament (to be deleted)</a>
+        <a mat-list-item (click)="snav.close()" [routerLink]="['']">Homepage</a>
+        <a mat-list-item (click)="snav.close()" [routerLink]="['', 'tournament']">Tournament (to be deleted)</a>
       </mat-nav-list>
     </mat-sidenav>
     <mat-sidenav-content>
       <div class="container">
         <router-outlet></router-outlet>
-        <button (click)="sidePanel.toggle()">Toggle</button>
       </div>
     </mat-sidenav-content>
-    <mat-sidenav id="sidePanel" #sidePanel position="end">
-      <button mat-icon-button color="accent" class="side-panel-close">
-        <mat-icon (click)="sidePanel.close()">close</mat-icon>
-      </button>
+    <mat-sidenav [disableClose]="true" id="sidePanel" #sidePanel="matSidenav" position="end">
+      <div class="side-panel-header">
+        <button mat-icon-button color="accent" class="side-panel-close">
+          <mat-icon (click)="closeSide()">close</mat-icon>
+        </button>
+      </div>
+      <div class="side-panel-container">
+        <ng-container *ngTemplateOutlet="sidePanelTemplate$ | async"></ng-container>
+      </div>
     </mat-sidenav>
   </mat-sidenav-container>
 </div>

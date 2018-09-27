@@ -73,11 +73,20 @@ h1.main-app-name {
   @include mobile {
     width: 100%;
   }
-  .side-panel-close {
-    position: absolute;
-    z-index: 10;
-    top: 10px;
-    right: 10px;
+  display: flex;
+  flex-direction: column;
+
+  .side-panel-header {
+    padding-right: 1em;
+    padding-top: 1em;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .side-panel-container {
+    flex: 1;
+    margin-left: 2em;
+    margin-top: 1em;
   }
 }
 

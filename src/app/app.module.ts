@@ -20,6 +20,7 @@ import { AppComponent } from './app.component'
 import { AuthentRedirectComponent } from './authent-redirect.component'
 import { LoginComponent } from './login.component'
 import { MainComponent } from './main.component'
+import { SidePanelService } from './side-panel.service'
 import { MOBILE_MEDIA_QUERY } from './tokens'
 import { UserService } from './user.service'
 
@@ -52,6 +53,14 @@ import { UserService } from './user.service'
     // App modules
     RouterModule.forRoot([
       {
+        path: 'login',
+        component: LoginComponent,
+      },
+      {
+        path: 'authent-redirect',
+        component: AuthentRedirectComponent,
+      },
+      {
         path: '',
         component: MainComponent,
         children: [
@@ -62,16 +71,12 @@ import { UserService } from './user.service'
           },
         ],
       },
-      { path: 'login', component: LoginComponent },
-      {
-        path: 'authent-redirect',
-        component: AuthentRedirectComponent,
-      },
     ]),
   ],
   providers: [
     { provide: MOBILE_MEDIA_QUERY, useValue: '(max-width: 720px)' },
     UserService,
+    SidePanelService,
   ],
   bootstrap: [AppComponent],
 })
