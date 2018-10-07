@@ -1,0 +1,7 @@
+@import './layouts/login-theme.component.scss';
+@import './layouts/main-theme.component.scss';
+
+@mixin app-theme-module($theme) {
+  @include login-theme($theme);
+  @include main-theme($theme);
+}

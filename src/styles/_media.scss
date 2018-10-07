@@ -3,13 +3,13 @@
 $breakpoint: 720px;
 
 @mixin mobile {
-  @media (max-width: $breakpoint) {
+  @media (max-width: #{$breakpoint - 1}) {
     @content;
   }
 }
 
 @mixin desktop {
-  @media (min-width: #{$breakpoint + 1}) {
+  @media (min-width: $breakpoint) {
     @content;
   }
 }

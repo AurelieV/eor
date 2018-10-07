@@ -15,14 +15,14 @@ import { BrowserModule } from '@angular/platform-browser'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { RouterModule } from '@angular/router'
 import { InlineSVGModule } from 'ng-inline-svg'
-import { environment } from '../environments/environment'
+import { environment } from '../../environments/environment'
+import { MOBILE_MEDIA_QUERY } from '../tokens'
 import { AppComponent } from './app.component'
-import { AuthentRedirectComponent } from './authent-redirect.component'
-import { LoginComponent } from './login.component'
-import { MainComponent } from './main.component'
-import { SidePanelService } from './side-panel.service'
-import { MOBILE_MEDIA_QUERY } from './tokens'
-import { UserService } from './user.service'
+import { AuthentRedirectComponent } from './layouts/authent-redirect.component'
+import { LoginComponent } from './layouts/login.component'
+import { MainComponent } from './layouts/main.component'
+import { SidePanelService } from './services/side-panel.service'
+import { UserService } from './services/user.service'
 
 @NgModule({
   declarations: [
@@ -67,14 +67,14 @@ import { UserService } from './user.service'
           {
             path: 'tournament',
             loadChildren:
-              './modules/tournament/tournament.module#TournamentModule',
+              '../routed-modules/tournament/tournament.module#TournamentModule',
           },
         ],
       },
     ]),
   ],
   providers: [
-    { provide: MOBILE_MEDIA_QUERY, useValue: '(max-width: 720px)' },
+    { provide: MOBILE_MEDIA_QUERY, useValue: '(max-width: 719px)' },
     UserService,
     SidePanelService,
   ],

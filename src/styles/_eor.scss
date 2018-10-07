@@ -1,13 +1,9 @@
-@import './app/_app-theme.component';
-@import './app/_main-theme.component';
-@import './app/_login-theme.component';
-
 // TODO: load in asynchronously?
-@import './app/modules/tournament/_tournament-module-theme';
+@import '../app/routed-modules/tournament/tournament-theme.module';
+
+@import '../app/app-module/app-theme.module';
 
 @mixin eor-theme($theme) {
-  @include app-theme($theme);
-  @include main-theme($theme);
-  @include login-theme($theme);
-  @include tournament-module-theme($theme);
+  @include app-theme-module($theme);
+  @include tournament-theme-module($theme);
 }

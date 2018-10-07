@@ -6,7 +6,7 @@ import jwt_decode from 'jwt-decode'
 import * as Oidc from 'oidc-client'
 import { Observable, of } from 'rxjs'
 import { map, shareReplay, switchMap } from 'rxjs/operators'
-import { environment } from '../environments/environment'
+import { environment } from '../../../environments/environment'
 
 export interface AccountData {
   pseudo: string

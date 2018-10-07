@@ -11,9 +11,9 @@ import {
 } from '@angular/core'
 import { MatSidenav } from '@angular/material'
 import { Observable } from 'rxjs'
-import { SidePanelService } from './side-panel.service'
-import { MOBILE_MEDIA_QUERY } from './tokens'
-import { UserInfo, UserService } from './user.service'
+import { MOBILE_MEDIA_QUERY } from '../../tokens'
+import { SidePanelService } from '../services/side-panel.service'
+import { UserInfo, UserService } from '../services/user.service'
 
 @Component({
   selector: 'main',
