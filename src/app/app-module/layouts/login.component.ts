@@ -10,6 +10,7 @@ import { UserService } from '../services/user.service'
 })
 export class LoginComponent {
   config: Configuration = environment.configuration
+  isLoading: boolean = false
 
   constructor(private userService: UserService) {}
 
@@ -18,6 +19,7 @@ export class LoginComponent {
   }
 
   login() {
+    this.isLoading = true
     if (this.isUsingJudgeApps) {
       this.userService.loginWithJudgeApps()
     }

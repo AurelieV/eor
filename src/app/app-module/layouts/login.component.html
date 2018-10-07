@@ -11,7 +11,9 @@
           <p>We will use your <strong>JudgeApps</strong> account for identify you throw the app, and also grant you
             access based on information it provide.</p>
           <p class="actions">
-            <button (click)="login()" mat-flat-button color="primary">Sure, connect me !</button>
+            <custom-submit-button (click)="login()" color="primary" type="submit" [loading]="isLoading" spinnerText="Loading ...">
+              Sure, connect me !
+            </custom-submit-button>
           </p>
         </ng-template>
       </div>

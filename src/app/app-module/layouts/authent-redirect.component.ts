@@ -6,7 +6,33 @@ import { UserService } from '../services/user.service'
 
 @Component({
   selector: 'authent-redirect',
-  template: 'Loading ....',
+  template: `
+    <div class="loader">
+      <mat-progress-spinner color="accent" mode="indeterminate"></mat-progress-spinner>
+    </div>
+    <p>
+      Process authentification ...
+    </p>
+  `,
+  styles: [
+    `
+      :host {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        left: 0;
+
+        .loader {
+          margin-top: 2em;
+        }
+      }
+    `,
+  ],
 })
 export class AuthentRedirectComponent implements OnInit {
   constructor(

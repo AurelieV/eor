@@ -1,0 +1,14 @@
+@import '~@angular/material/theming';
+
+@mixin authent-redirect-theme($theme) {
+  $primary: map-get($theme, primary);
+  $accent: map-get($theme, accent);
+
+  authent-redirect {
+    background: mat-color($primary, 100);
+    p,
+    .loader {
+      background: mat-color($primary, 100);
+    }
+  }
+}

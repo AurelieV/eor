@@ -8,6 +8,7 @@ import {
   MatIconModule,
   MatInputModule,
   MatListModule,
+  MatProgressSpinnerModule,
   MatSidenavModule,
   MatSnackBarModule,
   MatToolbarModule,
@@ -17,6 +18,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { RouterModule } from '@angular/router'
 import { AuthGuard, NotAuthGuard, RoleGuard } from '@appModule/auth.guard'
 import { NotificationService } from '@appModule/services/notification.service'
+import { CustomFormModule } from '@sharedModules/custom-form/custom-form.module'
 import { InlineSVGModule } from 'ng-inline-svg'
 import { environment } from '../../environments/environment'
 import { MOBILE_MEDIA_QUERY } from '../tokens'
@@ -47,6 +49,7 @@ import { UserService } from './services/user.service'
     MatListModule,
     MatInputModule,
     MatSnackBarModule,
+    MatProgressSpinnerModule,
 
     // Other libraries
     InlineSVGModule.forRoot(),
@@ -55,6 +58,7 @@ import { UserService } from './services/user.service'
     AngularFireDatabaseModule,
 
     // App modules
+    CustomFormModule,
     RouterModule.forRoot([
       {
         path: 'login',

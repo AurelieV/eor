@@ -1,7 +1,9 @@
 @import './layouts/login-theme.component.scss';
 @import './layouts/main-theme.component.scss';
+@import './layouts/authent-redirect-theme.component.scss';
 
 @mixin app-theme-module($theme) {
   @include login-theme($theme);
   @include main-theme($theme);
+  @include authent-redirect-theme($theme);
 }
