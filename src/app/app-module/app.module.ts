@@ -16,6 +16,7 @@ import { BrowserModule } from '@angular/platform-browser'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { RouterModule } from '@angular/router'
 import { AuthGuard, NotAuthGuard, RoleGuard } from '@appModule/auth.guard'
+import { NotificationService } from '@appModule/services/notification.service'
 import { InlineSVGModule } from 'ng-inline-svg'
 import { environment } from '../../environments/environment'
 import { MOBILE_MEDIA_QUERY } from '../tokens'
@@ -85,6 +86,7 @@ import { UserService } from './services/user.service'
     AuthGuard,
     NotAuthGuard,
     RoleGuard,
+    NotificationService,
   ],
   bootstrap: [AppComponent],
 })
