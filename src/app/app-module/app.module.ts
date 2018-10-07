@@ -78,6 +78,17 @@ import { UserService } from './services/user.service'
             loadChildren:
               '../routed-modules/tournament/tournament.module#TournamentModule',
           },
+          {
+            path: 'administration',
+            loadChildren:
+              '../routed-modules/administration/administration.module#AdministrationModule',
+            canActivate: [RoleGuard],
+            data: {
+              roles: {
+                general: 'tournament-creation',
+              },
+            },
+          },
         ],
         canActivate: [AuthGuard],
       },

@@ -48,7 +48,7 @@ export class UserService {
           user
             ? {
                 name: user.judgeapps.name,
-                roles: user.roles || [],
+                roles: user.roles ? Object.keys(user.roles) : [],
               }
             : null
       )

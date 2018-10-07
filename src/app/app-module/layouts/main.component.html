@@ -16,15 +16,16 @@
       </div>
       <mat-nav-list>
         <a mat-list-item (click)="snav.close()" [routerLink]="['']">Homepage</a>
-        <a mat-list-item (click)="snav.close()" [routerLink]="['', 'tournament']">Tournament (to be deleted)</a>
       </mat-nav-list>
     </mat-sidenav>
     <mat-sidenav-content>
       <div class="container">
         <router-outlet></router-outlet>
+        <a mat-raised-button [routerLink]="['/administration']">Add</a>
       </div>
     </mat-sidenav-content>
-    <mat-sidenav [disableClose]="true" id="sidePanel" #sidePanel="matSidenav" position="end">
+    <mat-sidenav [disableClose]="
+          true" id="sidePanel" #sidePanel="matSidenav" position="end">
       <div class="side-panel-header">
         <button mat-icon-button color="accent" class="side-panel-close">
           <mat-icon (click)="closeSide()">close</mat-icon>

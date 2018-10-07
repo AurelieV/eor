@@ -5,6 +5,7 @@ import {
   Router,
   RouterStateSnapshot,
 } from '@angular/router'
+import { NotificationService } from '@appModule/services/notification.service'
 import { UserService } from '@appModule/services/user.service'
 import { map, take, tap } from 'rxjs/operators'
 import { environment } from '../../environments/environment'
@@ -52,7 +53,10 @@ export class NotAuthGuard implements CanActivate {
 
 @Injectable()
 export class RoleGuard implements CanActivate {
-  constructor(private userService: UserService) {}
+  constructor(
+    private userService: UserService,
+    private notificationService: NotificationService
+  ) {}
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     if (environment.configuration.loginMethod === LoginMethod.None) {
@@ -68,11 +72,19 @@ export class RoleGuard implements CanActivate {
           return true
         }
         if (typeof route.data.roles.general === 'string') {
+          console.log('test', userInfo, route.data.roles.general)
           return userInfo.roles.includes(route.data.roles.general)
         }
         return (route.data.roles.general as Array<string>).every((role) =>
           userInfo.roles.includes(role)
         )
+      }),
+      tap((isAuthorized) => {
+        if (!isAuthorized) {
+          this.notificationService.notify(
+            'You are not allowed on this section of the app'
+          )
+        }
       })
     )
   }
