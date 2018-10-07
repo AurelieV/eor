@@ -1,7 +1,9 @@
+import { LoginMethod } from '../app/interfaces'
+
 export const environment = {
   production: true,
   configuration: {
-    loginMethod: 'JUDGE_APPS',
+    loginMethod: LoginMethod.JudgeApps,
   },
   firebase: {
     apiKey: 'AIzaSyCkLTzy-75yAl71VPUrT_TZHmRZXwH3sn0',
@@ -15,8 +17,8 @@ export const environment = {
   authenticateSettings: {
     authority: 'https://apps.magicjudges.org/openid/',
     client_id: '495440',
-    redirect_uri: 'http://localhost:4200/authent-redirect',
-    post_logout_redirect_uri: 'http://localhost:4200',
+    redirect_uri: 'http://eor-beta/authent-redirect',
+    post_logout_redirect_uri: 'http://eor-beta',
     response_type: 'code',
     scope: 'openid profile dciprofile',
   },

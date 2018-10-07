@@ -1,3 +1,8 @@
 export interface Configuration {
-  loginMethod: string
+  loginMethod: LoginMethod
+}
+
+export enum LoginMethod {
+  JudgeApps = 'JUDGE_APPS',
+  None = 'NONE',
 }

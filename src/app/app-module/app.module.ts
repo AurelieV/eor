@@ -2,6 +2,7 @@ import { HttpClientModule } from '@angular/common/http'
 import { NgModule } from '@angular/core'
 import { AngularFireModule } from '@angular/fire'
 import { AngularFireAuthModule } from '@angular/fire/auth'
+import { AngularFireDatabaseModule } from '@angular/fire/database'
 import {
   MatButtonModule,
   MatIconModule,
@@ -14,6 +15,7 @@ import {
 import { BrowserModule } from '@angular/platform-browser'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { RouterModule } from '@angular/router'
+import { AuthGuard, NotAuthGuard, RoleGuard } from '@appModule/auth.guard'
 import { InlineSVGModule } from 'ng-inline-svg'
 import { environment } from '../../environments/environment'
 import { MOBILE_MEDIA_QUERY } from '../tokens'
@@ -49,12 +51,14 @@ import { UserService } from './services/user.service'
     InlineSVGModule.forRoot(),
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,
+    AngularFireDatabaseModule,
 
     // App modules
     RouterModule.forRoot([
       {
         path: 'login',
         component: LoginComponent,
+        canActivate: [NotAuthGuard],
       },
       {
         path: 'authent-redirect',
@@ -70,6 +74,7 @@ import { UserService } from './services/user.service'
               '../routed-modules/tournament/tournament.module#TournamentModule',
           },
         ],
+        canActivate: [AuthGuard],
       },
     ]),
   ],
@@ -77,6 +82,9 @@ import { UserService } from './services/user.service'
     { provide: MOBILE_MEDIA_QUERY, useValue: '(max-width: 719px)' },
     UserService,
     SidePanelService,
+    AuthGuard,
+    NotAuthGuard,
+    RoleGuard,
   ],
   bootstrap: [AppComponent],
 })

@@ -10,6 +10,7 @@ import {
   ViewChild,
 } from '@angular/core'
 import { MatSidenav } from '@angular/material'
+import { Router } from '@angular/router'
 import { Observable } from 'rxjs'
 import { MOBILE_MEDIA_QUERY } from '../../tokens'
 import { SidePanelService } from '../services/side-panel.service'
@@ -28,14 +29,15 @@ export class MainComponent implements OnDestroy, OnInit, AfterViewInit {
   @ViewChild('sidePanel')
   public sidePanel: MatSidenav
 
-  user$: Observable<UserInfo>
+  userInfo$: Observable<UserInfo>
 
   constructor(
-    private cdr: ChangeDetectorRef,
+    cdr: ChangeDetectorRef,
     media: MediaMatcher,
     @Inject(MOBILE_MEDIA_QUERY) mobileQuery: string,
     private userService: UserService,
-    private sidePanelService: SidePanelService
+    private sidePanelService: SidePanelService,
+    private router: Router
   ) {
     // Define a listener for responsive design
     this.mobileQuery = media.matchMedia(mobileQuery)
@@ -46,7 +48,7 @@ export class MainComponent implements OnDestroy, OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    this.user$ = this.userService.userInfo
+    this.userInfo$ = this.userService.userInfo$
   }
 
   ngAfterViewInit() {
@@ -54,7 +56,7 @@ export class MainComponent implements OnDestroy, OnInit, AfterViewInit {
   }
 
   logout() {
-    this.userService.logout()
+    this.userService.logout().then(() => this.router.navigate(['/login']))
   }
 
   get isOpen() {
