@@ -26,6 +26,8 @@ import { AppComponent } from './app.component'
 import { AuthentRedirectComponent } from './layouts/authent-redirect.component'
 import { LoginComponent } from './layouts/login.component'
 import { MainComponent } from './layouts/main.component'
+import { TournamentsListComponent } from './layouts/tournaments-list.component'
+import { HeaderService } from './services/header.service'
 import { SidePanelService } from './services/side-panel.service'
 import { UserService } from './services/user.service'
 
@@ -35,6 +37,7 @@ import { UserService } from './services/user.service'
     MainComponent,
     LoginComponent,
     AuthentRedirectComponent,
+    TournamentsListComponent,
   ],
   imports: [
     BrowserModule,
@@ -74,6 +77,10 @@ import { UserService } from './services/user.service'
         component: MainComponent,
         children: [
           {
+            path: '',
+            component: TournamentsListComponent,
+          },
+          {
             path: 'tournament',
             loadChildren:
               '../routed-modules/tournament/tournament.module#TournamentModule',
@@ -102,6 +109,7 @@ import { UserService } from './services/user.service'
     NotAuthGuard,
     RoleGuard,
     NotificationService,
+    HeaderService,
   ],
   bootstrap: [AppComponent],
 })

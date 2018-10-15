@@ -7,4 +7,5 @@
 @mixin eor-theme($theme) {
   @include app-theme-module($theme);
   @include tournament-theme-module($theme);
+  @include administration-theme-module($theme);
 }

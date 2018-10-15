@@ -4,7 +4,12 @@
       <button mat-icon-button (click)="snav.toggle()" [disabled]="sidePanel.opened">
         <mat-icon>menu</mat-icon>
       </button>
-      <h1 class="main-app-name">Purple Fox</h1>
+      <ng-template #defaultHeader>
+        <h1 class="main-app-name">Purple Fox</h1>
+      </ng-template>
+      <ng-container *ngIf="headerTemplate; else defaultHeader">
+        <ng-container *ngTemplateOutlet="headerTemplate; context: {disabled: snav.opened || sidePanel.opened}"></ng-container>
+      </ng-container>
     </mat-toolbar-row>
   </mat-toolbar>
 
@@ -21,7 +26,6 @@
     <mat-sidenav-content>
       <div class="container">
         <router-outlet></router-outlet>
-        <a mat-raised-button [routerLink]="['/administration']">Add</a>
       </div>
     </mat-sidenav-content>
     <mat-sidenav [disableClose]="

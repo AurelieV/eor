@@ -5,13 +5,13 @@ import {
   Component,
   Inject,
   OnDestroy,
-  OnInit,
   TemplateRef,
   ViewChild,
 } from '@angular/core'
 import { MatSidenav } from '@angular/material'
 import { Router } from '@angular/router'
-import { Observable } from 'rxjs'
+import { HeaderService } from '@appModule/services/header.service'
+import { Observable, Subscription } from 'rxjs'
 import { MOBILE_MEDIA_QUERY } from '../../tokens'
 import { SidePanelService } from '../services/side-panel.service'
 import { UserInfo, UserService } from '../services/user.service'
@@ -21,10 +21,12 @@ import { UserInfo, UserService } from '../services/user.service'
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.scss'],
 })
-export class MainComponent implements OnDestroy, OnInit, AfterViewInit {
+export class MainComponent implements OnDestroy, AfterViewInit {
   mobileQuery: MediaQueryList
   private _mobileQueryListener: () => void
   sidePanelTemplate$: Observable<TemplateRef<any>>
+  headerTemplate: TemplateRef<any>
+  subscriptions: Subscription[] = []
 
   @ViewChild('sidePanel')
   public sidePanel: MatSidenav
@@ -32,23 +34,29 @@ export class MainComponent implements OnDestroy, OnInit, AfterViewInit {
   userInfo$: Observable<UserInfo>
 
   constructor(
-    cdr: ChangeDetectorRef,
+    private cdr: ChangeDetectorRef,
     media: MediaMatcher,
     @Inject(MOBILE_MEDIA_QUERY) mobileQuery: string,
     private userService: UserService,
     private sidePanelService: SidePanelService,
-    private router: Router
+    private router: Router,
+    private headerService: HeaderService
   ) {
     // Define a listener for responsive design
     this.mobileQuery = media.matchMedia(mobileQuery)
     this._mobileQueryListener = () => cdr.detectChanges()
     this.mobileQuery.addListener(this._mobileQueryListener)
-
-    this.sidePanelTemplate$ = this.sidePanelService.templateRef$
   }
 
   ngOnInit() {
+    this.sidePanelTemplate$ = this.sidePanelService.templateRef$
     this.userInfo$ = this.userService.userInfo$
+    this.subscriptions.push(
+      this.headerService.templateRef$.subscribe((template) => {
+        this.headerTemplate = template
+        this.cdr.detectChanges()
+      })
+    )
   }
 
   ngAfterViewInit() {
@@ -69,5 +77,6 @@ export class MainComponent implements OnDestroy, OnInit, AfterViewInit {
 
   ngOnDestroy(): void {
     this.mobileQuery.removeListener(this._mobileQueryListener)
+    this.subscriptions.forEach((s) => s.unsubscribe())
   }
 }

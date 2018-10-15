@@ -16,7 +16,7 @@
   z-index: 2;
 }
 
-h1.main-app-name {
+.main-toolbar /deep/ h1.main-app-name {
   margin-left: 8px;
   flex: 1;
 }

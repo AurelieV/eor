@@ -72,7 +72,6 @@ export class RoleGuard implements CanActivate {
           return true
         }
         if (typeof route.data.roles.general === 'string') {
-          console.log('test', userInfo, route.data.roles.general)
           return userInfo.roles.includes(route.data.roles.general)
         }
         return (route.data.roles.general as Array<string>).every((role) =>
