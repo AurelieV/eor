@@ -1,7 +1,7 @@
-import { animate, style, transition, trigger } from '@angular/animations'
-import { AfterViewInit, Component, OnDestroy, ViewChild } from '@angular/core'
-import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms'
-import { HeaderService } from '@appModule/services/header.service'
+import { animate, style, transition, trigger } from '@angular/animations';
+import { AfterViewInit, Component, OnDestroy, ViewChild } from '@angular/core';
+import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
+import { HeaderService } from '@appModule/services/header.service';
 
 enum Step {
   Settings,
@@ -45,7 +45,7 @@ export class AdministrationComponent implements AfterViewInit, OnDestroy {
   @ViewChild('header')
   headerTemplateRef
 
-  currentStep: Step = Step.Zones
+  currentStep: Step = Step.Staff
   Step = Step
 
   data: TournamentData = {}

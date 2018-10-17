@@ -1,4 +1,5 @@
-@import '_media';
+@import 'utils/media';
+@import 'utils/colors';
 
 :host {
   display: flex;
@@ -24,6 +25,7 @@ h1.title,
 h2.title {
   text-transform: uppercase;
   font-weight: bold;
+  color: $primary;
 }
 h1.title {
   font-size: 20px;
@@ -35,6 +37,7 @@ h2.title {
 .zone-title {
   font-weight: bold;
   font-size: 18px;
+  color: $accent;
 }
 
 p.subtitle {
@@ -94,5 +97,6 @@ p.form-field {
 }
 
 mat-accordion {
-  margin-bottom: 2em;
+  display: block;
+  margin-bottom: 1.5em;
 }

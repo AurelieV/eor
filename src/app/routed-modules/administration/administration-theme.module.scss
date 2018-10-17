@@ -1,5 +1,0 @@
-@import './layouts/administration-theme.component.scss';
-
-@mixin administration-theme-module($theme) {
-  @include administration-theme($theme);
-}

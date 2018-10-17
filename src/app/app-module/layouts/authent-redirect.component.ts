@@ -14,25 +14,7 @@ import { UserService } from '../services/user.service'
       Process authentification ...
     </p>
   `,
-  styles: [
-    `
-      :host {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        right: 0;
-        left: 0;
-
-        .loader {
-          margin-top: 2em;
-        }
-      }
-    `,
-  ],
+  styleUrls: ['./authent-redirect.component.scss'],
 })
 export class AuthentRedirectComponent implements OnInit {
   constructor(

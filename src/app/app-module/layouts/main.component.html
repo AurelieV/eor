@@ -1,4 +1,4 @@
-<div class="main-container" [class.main-is-mobile]="mobileQuery.matches">
+<div class="main-container">
   <mat-toolbar color="primary" class="main-toolbar">
     <mat-toolbar-row>
       <button mat-icon-button (click)="snav.toggle()" [disabled]="sidePanel.opened">
@@ -13,8 +13,8 @@
     </mat-toolbar-row>
   </mat-toolbar>
 
-  <mat-sidenav-container (backdropClick)="closeSide()" class="main-sidenav-container" [style.marginTop.px]="mobileQuery.matches ? 56 : 0">
-    <mat-sidenav id="sidenav" #snav [fixedInViewport]="mobileQuery.matches" fixedTopGap="56">
+  <mat-sidenav-container (backdropClick)="closeSide()" class="main-sidenav-container" [style.marginTop.px]="56">
+    <mat-sidenav id="sidenav" #snav [fixedInViewport]="true" fixedTopGap="56">
       <div class="user" *ngIf="userInfo$ | async as userInfo">
         <strong class="name">{{userInfo.name}}</strong>
         <button mat-stroked-button color="accent" (click)="logout()" class="logout">Logout</button>
@@ -28,8 +28,8 @@
         <router-outlet></router-outlet>
       </div>
     </mat-sidenav-content>
-    <mat-sidenav [disableClose]="
-          true" id="sidePanel" #sidePanel="matSidenav" position="end">
+    <mat-sidenav [disableClose]="true" id="sidePanel" #sidePanel="matSidenav" position="end" [fixedInViewport]="true"
+      fixedTopGap="56">
       <div class="side-panel-header">
         <button mat-icon-button color="accent" class="side-panel-close">
           <mat-icon (click)="closeSide()">close</mat-icon>

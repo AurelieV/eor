@@ -1,0 +1,9 @@
+@import './_theme';
+
+$primaryPalette: map-get($eor-theme, primary);
+$accentPalette: map-get($eor-theme, accent);
+$warnPalette: map-get($eor-theme, warn);
+
+$primary: mat-color($primaryPalette);
+$accent: mat-color($accentPalette);
+$warn: mat-color($warnPalette);

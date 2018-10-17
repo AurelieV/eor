@@ -1,0 +1,8 @@
+@import '~@angular/material/theming';
+
+$eor-primary: mat-palette($mat-indigo);
+$eor-accent: mat-palette($mat-deep-purple);
+
+// The warn palette is optional (defaults to red).
+$eor-warn: mat-palette($mat-red);
+$eor-theme: mat-light-theme($eor-primary, $eor-accent, $eor-warn);

@@ -1,15 +1,2 @@
-@import './styles/_reset';
-@import '~@angular/material/theming';
-@import './styles/eor';
-
-@include mat-core();
-
-$eor-primary: mat-palette($mat-indigo);
-$eor-accent: mat-palette($mat-deep-purple);
-
-// The warn palette is optional (defaults to red).
-$eor-warn: mat-palette($mat-red);
-$eor-theme: mat-light-theme($eor-primary, $eor-accent, $eor-warn);
-
-@include angular-material-theme($eor-theme);
-@include eor-theme($eor-theme);
+@import './styles/reset';
+@import './styles/material';
