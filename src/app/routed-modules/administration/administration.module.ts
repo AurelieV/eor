@@ -2,9 +2,11 @@ import { CommonModule } from '@angular/common'
 import { NgModule } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import {
+  MatAutocompleteModule,
   MatButtonModule,
   MatCardModule,
   MatDatepickerModule,
+  MatDialogModule,
   MatExpansionModule,
   MatIconModule,
   MatInputModule,
@@ -12,10 +14,12 @@ import {
   MatSelectModule,
 } from '@angular/material'
 import { RouterModule } from '@angular/router'
+import { AdministrationService } from './administration.service'
+import { SelectUsersComponent } from './components/select-users.component'
 import { AdministrationComponent } from './layouts/administration.component'
 
 @NgModule({
-  declarations: [AdministrationComponent],
+  declarations: [AdministrationComponent, SelectUsersComponent],
   imports: [
     // Angular
     CommonModule,
@@ -31,6 +35,8 @@ import { AdministrationComponent } from './layouts/administration.component'
     MatCardModule,
     MatExpansionModule,
     MatIconModule,
+    MatDialogModule,
+    MatAutocompleteModule,
 
     // App
     RouterModule.forChild([
@@ -40,5 +46,6 @@ import { AdministrationComponent } from './layouts/administration.component'
       },
     ]),
   ],
+  providers: [AdministrationService],
 })
 export class AdministrationModule {}

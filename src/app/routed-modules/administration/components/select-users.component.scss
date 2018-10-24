@@ -1,0 +1,29 @@
+:host {
+  display: block;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.users {
+  max-width: 100%;
+}
+.user {
+  display: flex;
+  max-width: 100%;
+  align-items: center;
+
+  .name {
+    flex-grow: 1;
+    flex-shrink: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+.message {
+  font-size: smaller;
+  font-style: italic;
+}

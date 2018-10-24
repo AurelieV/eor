@@ -48,7 +48,7 @@
 </section>
 <section class="step" [@step] *ngIf="currentStep === Step.Zones">
   <h1 class="title">Zones</h1>
-  <p class="subtitle">You will be able to redefine them later if you want.</p>
+  <p class="subtitle">You will be able to redefine them later if you want (only between rounds).</p>
   <form [formGroup]="getForm(Step.Zones)">
     <mat-accordion formArrayName="zones">
       <mat-expansion-panel hideToggle [expanded]="zoneDisplayed === controlName" (opened)="zoneDisplayed = controlName"
@@ -98,9 +98,36 @@
 </section>
 <section class="step" [@step] *ngIf="currentStep === Step.Staff">
   <h1 class="title">Staff (Users access)</h1>
-  <p class="subtitle">You will be able to redefine them later if you want.</p>
+  <p class="subtitle">You will be able to redefine them later if you want (any time during the tournament).</p>
+  <form [formGroup]="getForm(Step.Staff)">
+    <div class="subheader">
+      <h2 class="title">Zone leader</h2>
+      <button mat-icon-button color="accent" (click)="displayHelp('Zone leaders will be able to edit table status and give this permission to other people')">
+        <mat-icon>help</mat-icon>
+      </button>
+    </div>
+    <select-users #zoneLeadersSelecter formControlName="zoneLeaders"></select-users>
+    <div class="subheader">
+      <h2 class="title">Scorekeepers</h2>
+      <button mat-icon-button color="accent" (click)="displayHelp('Scorekeepers will be able to import result and pairings on the app')">
+        <mat-icon>help</mat-icon>
+      </button>
+    </div>
+    <select-users #scorekeepersSelecter formControlName="scorekeepers"></select-users>
+    <div class="subheader">
+      <h2 class="title">Admin</h2>
+      <button mat-icon-button color="accent" (click)="displayHelp('Admins will have the same right as you (creator) on the tournament. All actions will be available')">
+        <mat-icon>help</mat-icon>
+      </button>
+    </div>
+    <select-users #adminsSelecter formControlName="admins"></select-users>
+  </form>
   <div class="actions">
     <button type="button" mat-stroked-button color="primary" (click)="previous()">Previous</button>
     <button type="button" mat-flat-button color="primary" (click)="create()">Create</button>
   </div>
 </section>
+
+<ng-template #help>
+  <p>{{helpText}}</p>
+</ng-template>

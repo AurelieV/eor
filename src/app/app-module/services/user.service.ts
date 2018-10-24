@@ -9,6 +9,12 @@ import { map, shareReplay, switchMap } from 'rxjs/operators'
 import { environment } from '../../../environments/environment'
 
 export type User = firebase.User
+
+export interface StoredUser {
+  roles: Array<string>
+  judgeapps: JudgeAppsInfo
+}
+
 export interface JudgeAppsInfo {
   name: string
   given_name: string
@@ -40,7 +46,9 @@ export class UserService {
     this.userInfo$ = this.user$.pipe(
       switchMap(
         (user) =>
-          user ? this.db.object(`/users/${user.uid}/`).valueChanges() : of(null)
+          user
+            ? this.db.object<StoredUser>(`/users/${user.uid}/`).valueChanges()
+            : of(null)
       ),
       /// TODO: handle other way to connect
       map(

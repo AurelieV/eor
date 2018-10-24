@@ -1,7 +1,16 @@
-import { animate, style, transition, trigger } from '@angular/animations';
-import { AfterViewInit, Component, OnDestroy, ViewChild } from '@angular/core';
-import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
-import { HeaderService } from '@appModule/services/header.service';
+import { animate, style, transition, trigger } from '@angular/animations'
+import {
+  AfterViewInit,
+  Component,
+  OnDestroy,
+  TemplateRef,
+  ViewChild,
+} from '@angular/core'
+import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms'
+import { MatDialog } from '@angular/material'
+import { HeaderService } from '@appModule/services/header.service'
+import { AdministrationService, UserWithId } from '../administration.service'
+import { SelectUsersComponent } from '../components/select-users.component'
 
 enum Step {
   Settings,
@@ -23,6 +32,20 @@ interface TournamentSettings {
 }
 interface TournamentData {
   settings?: TournamentSettings
+  scorekeepers: UserWithId[]
+  zoneLeaders: UserWithId[]
+  admins: UserWithId[]
+  zones: Zone[]
+}
+
+interface Zone {
+  name: string
+  sections: Section[]
+}
+
+interface Section {
+  start: number
+  end: number
 }
 
 @Component({
@@ -43,16 +66,30 @@ interface TournamentData {
 })
 export class AdministrationComponent implements AfterViewInit, OnDestroy {
   @ViewChild('header')
-  headerTemplateRef
+  headerTemplateRef: TemplateRef<any>
+
+  @ViewChild('help')
+  helpTemplateRef: TemplateRef<any>
+
+  @ViewChild('scorekeepersSelecter')
+  scorekeepersSelecterComp: SelectUsersComponent
+  @ViewChild('zoneLeadersSelecter')
+  zoneLeadersSelecterComp: SelectUsersComponent
+  @ViewChild('adminsSelecter')
+  adminsSelecterComp: SelectUsersComponent
 
   currentStep: Step = Step.Staff
   Step = Step
 
-  data: TournamentData = {}
   private forms = new Map<Step, FormGroup>()
   zoneDisplayed: number
+  helpText: string
 
-  constructor(private headerService: HeaderService) {
+  constructor(
+    private headerService: HeaderService,
+    private administration: AdministrationService,
+    private dialog: MatDialog
+  ) {
     this.forms.set(
       Step.Settings,
       new FormGroup({
@@ -66,6 +103,14 @@ export class AdministrationComponent implements AfterViewInit, OnDestroy {
       Step.Zones,
       new FormGroup({
         zones: new FormArray([]),
+      })
+    )
+    this.forms.set(
+      Step.Staff,
+      new FormGroup({
+        scorekeepers: new FormControl([]),
+        zoneLeaders: new FormControl([]),
+        admins: new FormControl([]),
       })
     )
   }
@@ -110,8 +155,12 @@ export class AdministrationComponent implements AfterViewInit, OnDestroy {
   getSummary(zone: FormGroup) {
     const form = zone.get('sections') as FormArray
 
-    return form.controls.map(section => section.get('start').value + '-' + section.get('end').value).join(' / ')
-   }
+    return form.controls
+      .map(
+        (section) => section.get('start').value + '-' + section.get('end').value
+      )
+      .join(' / ')
+  }
 
   deleteSection(zone: FormGroup, sectionIndex: number) {
     const form = zone.get('sections') as FormArray
@@ -121,6 +170,11 @@ export class AdministrationComponent implements AfterViewInit, OnDestroy {
   deleteZone(zoneIndex) {
     const form = this.forms.get(Step.Zones).get('zones') as FormArray
     form.removeAt(zoneIndex)
+  }
+
+  displayHelp(text: string) {
+    this.helpText = text
+    this.dialog.open(this.helpTemplateRef)
   }
 
   next() {
@@ -139,6 +193,12 @@ export class AdministrationComponent implements AfterViewInit, OnDestroy {
 
   previous() {
     this.currentStep--
+  }
+
+  create() {
+    console.log('data', this.getForm(Step.Settings).value)
+    console.log('data', this.getForm(Step.Zones).value)
+    console.log('data', this.getForm(Step.Staff).value)
   }
 
   ngOnDestroy() {
