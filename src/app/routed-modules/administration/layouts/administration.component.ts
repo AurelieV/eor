@@ -9,6 +9,7 @@ import {
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms'
 import { MatDialog } from '@angular/material'
 import { HeaderService } from '@appModule/services/header.service'
+import { environment } from 'src/environments/environment'
 import { AdministrationService, UserWithId } from '../administration.service'
 import { SelectUsersComponent } from '../components/select-users.component'
 
@@ -65,25 +66,21 @@ interface Section {
   ],
 })
 export class AdministrationComponent implements AfterViewInit, OnDestroy {
-  @ViewChild('header')
-  headerTemplateRef: TemplateRef<any>
-
-  @ViewChild('help')
-  helpTemplateRef: TemplateRef<any>
-
+  @ViewChild('header') headerTemplateRef: TemplateRef<any>
+  @ViewChild('help') helpTemplateRef: TemplateRef<any>
   @ViewChild('scorekeepersSelecter')
   scorekeepersSelecterComp: SelectUsersComponent
   @ViewChild('zoneLeadersSelecter')
   zoneLeadersSelecterComp: SelectUsersComponent
-  @ViewChild('adminsSelecter')
-  adminsSelecterComp: SelectUsersComponent
-
-  currentStep: Step = Step.Staff
-  Step = Step
+  @ViewChild('adminsSelecter') adminsSelecterComp: SelectUsersComponent
 
   private forms = new Map<Step, FormGroup>()
+
   zoneDisplayed: number
   helpText: string
+  currentStep: Step = Step.Staff
+  Step = Step
+  softwares = environment.configuration.softwares
 
   constructor(
     private headerService: HeaderService,
@@ -96,7 +93,7 @@ export class AdministrationComponent implements AfterViewInit, OnDestroy {
         name: new FormControl('', [Validators.required]),
         endDate: new FormControl(null, [Validators.required]),
         isTeam: new FormControl(false),
-        software: new FormControl('WLT'),
+        software: new FormControl(this.softwares[0]),
       })
     )
     this.forms.set(

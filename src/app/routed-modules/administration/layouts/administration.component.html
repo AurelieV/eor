@@ -39,9 +39,9 @@
           placeholder="Software used by SK"
           formControlName="software"
         >
-          <mat-option value="WLT">Walter</mat-option>
-          <mat-option value="WER">Wizard Event Reporter</mat-option>
-          <mat-option [value]="null">None</mat-option>
+          <mat-option *ngFor="let software of softwares" [value]="software">
+            {{ software }}
+          </mat-option>
         </mat-select>
         <mat-hint>This will be used to configure import format</mat-hint>
       </mat-form-field>

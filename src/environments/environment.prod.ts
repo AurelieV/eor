@@ -1,9 +1,10 @@
-import { LoginMethod } from '../app/interfaces'
+import { Environnement, LoginMethod, Software } from '../app/interfaces'
 
-export const environment = {
+export const environment: Environnement = {
   production: true,
   configuration: {
     loginMethod: LoginMethod.JudgeApps,
+    softwares: [Software.WER, Software.WLTR],
   },
   firebase: {
     apiKey: 'AIzaSyCkLTzy-75yAl71VPUrT_TZHmRZXwH3sn0',

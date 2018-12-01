@@ -8,12 +8,13 @@
  * because it will have a performance impact when errors are thrown
  */
 import 'zone.js/dist/zone-error' // Included with Angular CLI.import
-import { LoginMethod } from '../app/interfaces'
+import { Environnement, LoginMethod, Software } from '../app/interfaces'
 
-export const environment = {
+export const environment: Environnement = {
   production: false,
   configuration: {
     loginMethod: LoginMethod.JudgeApps,
+    softwares: [Software.WER, Software.WLTR],
   },
   firebase: {
     apiKey: 'AIzaSyAEjaMLLL_VeuX9eyAqaLeMpll25Z7oTaE',
