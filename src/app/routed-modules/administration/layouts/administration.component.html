@@ -2,28 +2,43 @@
   <h1 class="main-app-name">Tournament Creation</h1>
 </ng-template>
 
-
 <section class="step" [@step] *ngIf="currentStep === Step.Settings">
   <h1 class="title">Settings</h1>
   <form [formGroup]="getForm(Step.Settings)" (ngSubmit)="next()">
     <p class="form-field">
-      <mat-form-field>
-        <input matInput type="text" placeholder="Name *" formControlName="name">
+      <mat-form-field class="full-width">
+        <input
+          matInput
+          type="text"
+          placeholder="Name *"
+          formControlName="name"
+        />
         <mat-hint>Ex: GP Barcelona (avoid long name)</mat-hint>
       </mat-form-field>
     </p>
     <p class="form-field">
       <mat-form-field class="full-width">
-        <input matInput (focus)="datepicker.open()" [matDatepicker]="datepicker" placeholder="Last day *"
-          formControlName="endDate">
-        <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
+        <input
+          matInput
+          (focus)="datepicker.open()"
+          [matDatepicker]="datepicker"
+          placeholder="Last day *"
+          formControlName="endDate"
+        />
+        <mat-datepicker-toggle
+          matSuffix
+          [for]="datepicker"
+        ></mat-datepicker-toggle>
         <mat-datepicker touchUi #datepicker disabled="false"></mat-datepicker>
         <mat-hint>This date is used for auto-clean old tournaments</mat-hint>
       </mat-form-field>
     </p>
     <p class="form-field">
       <mat-form-field class="full-width">
-        <mat-select placeholder="Software used by SK" formControlName="software">
+        <mat-select
+          placeholder="Software used by SK"
+          formControlName="software"
+        >
           <mat-option value="WLT">Walter</mat-option>
           <mat-option value="WER">Wizard Event Reporter</mat-option>
           <mat-option [value]="null">None</mat-option>
@@ -42,30 +57,56 @@
     </p>
     <div class="actions">
       <a mat-stroked-button color="primary" [routerLink]="['/']">Cancel</a>
-      <button type="submit" mat-flat-button color="primary" [disabled]="getForm(Step.Settings).invalid">Next</button>
+      <button
+        type="submit"
+        mat-flat-button
+        color="primary"
+        [disabled]="getForm(Step.Settings).invalid"
+      >
+        Next
+      </button>
     </div>
   </form>
 </section>
 <section class="step" [@step] *ngIf="currentStep === Step.Zones">
   <h1 class="title">Zones</h1>
-  <p class="subtitle">You will be able to redefine them later if you want (only between rounds).</p>
+  <p class="subtitle">
+    You will be able to redefine them later if you want (only between rounds).
+  </p>
   <form [formGroup]="getForm(Step.Zones)">
     <mat-accordion formArrayName="zones">
-      <mat-expansion-panel hideToggle [expanded]="zoneDisplayed === controlName" (opened)="zoneDisplayed = controlName"
-        *ngFor="let zone of getForm(Step.Zones).get('zones').controls; let controlName=index" [formGroupName]="controlName">
+      <mat-expansion-panel
+        hideToggle
+        [expanded]="zoneDisplayed === controlName"
+        (opened)="zoneDisplayed = controlName"
+        *ngFor="
+          let zone of getForm(Step.Zones).get('zones').controls;
+          let controlName = index
+        "
+        [formGroupName]="controlName"
+      >
         <mat-expansion-panel-header>
           <mat-panel-title class="zone-title">
-            {{zone.get('name').value}}
+            {{ zone.get('name').value }}
           </mat-panel-title>
           <mat-panel-description>
-            <div class="summary">{{getSummary(zone)}}</div>
-            <button mat-icon-button color="warn" (click)="deleteZone(controlName)">
+            <div class="summary">{{ getSummary(zone) }}</div>
+            <button
+              mat-icon-button
+              color="warn"
+              (click)="deleteZone(controlName)"
+            >
               <mat-icon>clear</mat-icon>
             </button>
           </mat-panel-description>
         </mat-expansion-panel-header>
         <mat-form-field>
-          <input matInput type="text" formControlName="name" placeholder="Name *">
+          <input
+            matInput
+            type="text"
+            formControlName="name"
+            placeholder="Name *"
+          />
         </mat-form-field>
         <div formArrayName="sections" class="sections">
           <div class="header">
@@ -74,60 +115,139 @@
               <mat-icon>add_circle</mat-icon>
             </button>
           </div>
-          <div class="section" *ngFor="let section of zone.get('sections').controls; let sectionName=index"
-            [formGroupName]="sectionName">
+          <div
+            class="section"
+            *ngFor="
+              let section of zone.get('sections').controls;
+              let sectionName = index
+            "
+            [formGroupName]="sectionName"
+          >
             <mat-form-field>
-              <input matInput type="number" formControlName="start" placeholder="First table">
+              <input
+                matInput
+                type="number"
+                formControlName="start"
+                placeholder="First table"
+              />
             </mat-form-field>
             <mat-form-field>
-              <input matInput type="number" formControlName="end" placeholder="Last table">
+              <input
+                matInput
+                type="number"
+                formControlName="end"
+                placeholder="Last table"
+              />
             </mat-form-field>
-            <button mat-icon-button color="warn" (click)="deleteSection(zone, sectionName)">
+            <button
+              mat-icon-button
+              color="warn"
+              (click)="deleteSection(zone, sectionName)"
+            >
               <mat-icon>clear</mat-icon>
             </button>
           </div>
         </div>
       </mat-expansion-panel>
     </mat-accordion>
-    <button type="button" (click)="addZone()" mat-flat-button color="primary">Add Zone</button>
+    <button type="button" (click)="addZone()" mat-flat-button color="primary">
+      Add Zone
+    </button>
   </form>
   <div class="actions">
-    <button type="button" mat-stroked-button color="primary" (click)="previous()">Previous</button>
-    <button type="button" mat-flat-button color="primary" (click)="next()" [disabled]="getForm(Step.Zones).invalid">Next</button>
+    <button
+      type="button"
+      mat-stroked-button
+      color="primary"
+      (click)="previous()"
+    >
+      Previous
+    </button>
+    <button
+      type="button"
+      mat-flat-button
+      color="primary"
+      (click)="next()"
+      [disabled]="getForm(Step.Zones).invalid"
+    >
+      Next
+    </button>
   </div>
 </section>
 <section class="step" [@step] *ngIf="currentStep === Step.Staff">
   <h1 class="title">Staff (Users access)</h1>
-  <p class="subtitle">You will be able to redefine them later if you want (any time during the tournament).</p>
+  <p class="subtitle">
+    You will be able to redefine them later if you want (any time during the
+    tournament).
+  </p>
   <form [formGroup]="getForm(Step.Staff)">
     <div class="subheader">
       <h2 class="title">Zone leader</h2>
-      <button mat-icon-button color="accent" (click)="displayHelp('Zone leaders will be able to edit table status and give this permission to other people')">
+      <button
+        mat-icon-button
+        color="accent"
+        (click)="
+          displayHelp(
+            'Zone leaders will be able to edit table status and give this permission to other people'
+          )
+        "
+      >
         <mat-icon>help</mat-icon>
       </button>
     </div>
-    <select-users #zoneLeadersSelecter formControlName="zoneLeaders"></select-users>
+    <select-users
+      #zoneLeadersSelecter
+      formControlName="zoneLeaders"
+    ></select-users>
     <div class="subheader">
       <h2 class="title">Scorekeepers</h2>
-      <button mat-icon-button color="accent" (click)="displayHelp('Scorekeepers will be able to import result and pairings on the app')">
+      <button
+        mat-icon-button
+        color="accent"
+        (click)="
+          displayHelp(
+            'Scorekeepers will be able to import result and pairings on the app'
+          )
+        "
+      >
         <mat-icon>help</mat-icon>
       </button>
     </div>
-    <select-users #scorekeepersSelecter formControlName="scorekeepers"></select-users>
+    <select-users
+      #scorekeepersSelecter
+      formControlName="scorekeepers"
+    ></select-users>
     <div class="subheader">
       <h2 class="title">Admin</h2>
-      <button mat-icon-button color="accent" (click)="displayHelp('Admins will have the same right as you (creator) on the tournament. All actions will be available')">
+      <button
+        mat-icon-button
+        color="accent"
+        (click)="
+          displayHelp(
+            'Admins will have the same right as you (creator) on the tournament. All actions will be available'
+          )
+        "
+      >
         <mat-icon>help</mat-icon>
       </button>
     </div>
     <select-users #adminsSelecter formControlName="admins"></select-users>
   </form>
   <div class="actions">
-    <button type="button" mat-stroked-button color="primary" (click)="previous()">Previous</button>
-    <button type="button" mat-flat-button color="primary" (click)="create()">Create</button>
+    <button
+      type="button"
+      mat-stroked-button
+      color="primary"
+      (click)="previous()"
+    >
+      Previous
+    </button>
+    <button type="button" mat-flat-button color="primary" (click)="create()">
+      Create
+    </button>
   </div>
 </section>
 
 <ng-template #help>
-  <p>{{helpText}}</p>
+  <p>{{ helpText }}</p>
 </ng-template>
