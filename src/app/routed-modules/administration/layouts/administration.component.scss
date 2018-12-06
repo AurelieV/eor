@@ -39,6 +39,9 @@ h2.title {
   font-weight: bold;
   font-size: 18px;
   color: $accent;
+  &.zone-title-error {
+    color: $warn;
+  }
 }
 
 p.subtitle {
@@ -112,4 +115,9 @@ mat-accordion {
 
 select-users {
   width: 100%;
+}
+
+.error {
+  color: $warn;
+  font-style: italic;
 }

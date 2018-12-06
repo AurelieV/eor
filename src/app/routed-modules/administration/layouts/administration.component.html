@@ -74,6 +74,14 @@
     You will be able to redefine them later if you want (only between rounds).
   </p>
   <form [formGroup]="getForm(Step.Zones)">
+    <p
+      class="error"
+      *ngIf="
+        getForm(Step.Zones).errors && getForm(Step.Zones).errors.atLeastOne
+      "
+    >
+      You must define at least one zone
+    </p>
     <mat-accordion formArrayName="zones">
       <mat-expansion-panel
         hideToggle
@@ -86,7 +94,10 @@
         [formGroupName]="controlName"
       >
         <mat-expansion-panel-header>
-          <mat-panel-title class="zone-title">
+          <mat-panel-title
+            class="zone-title"
+            [class.zone-title-error]="zone.errors"
+          >
             {{ zone.get('name').value }}
           </mat-panel-title>
           <mat-panel-description>
@@ -108,6 +119,9 @@
             placeholder="Name *"
           />
         </mat-form-field>
+        <p class="error" *ngIf="zone.errors && zone.errors.atLeastOne">
+          You must define at least one section
+        </p>
         <div formArrayName="sections" class="sections">
           <div class="header">
             <h2 class="title">Sections</h2>
@@ -115,38 +129,41 @@
               <mat-icon>add_circle</mat-icon>
             </button>
           </div>
-          <div
-            class="section"
+          <ng-container
             *ngFor="
               let section of zone.get('sections').controls;
               let sectionName = index
             "
-            [formGroupName]="sectionName"
           >
-            <mat-form-field>
-              <input
-                matInput
-                type="number"
-                formControlName="start"
-                placeholder="First table"
-              />
-            </mat-form-field>
-            <mat-form-field>
-              <input
-                matInput
-                type="number"
-                formControlName="end"
-                placeholder="Last table"
-              />
-            </mat-form-field>
-            <button
-              mat-icon-button
-              color="warn"
-              (click)="deleteSection(zone, sectionName)"
-            >
-              <mat-icon>clear</mat-icon>
-            </button>
-          </div>
+            <div class="section" [formGroupName]="sectionName">
+              <mat-form-field>
+                <input
+                  matInput
+                  type="number"
+                  formControlName="start"
+                  placeholder="First table"
+                />
+              </mat-form-field>
+              <mat-form-field>
+                <input
+                  matInput
+                  type="number"
+                  formControlName="end"
+                  placeholder="Last table"
+                />
+              </mat-form-field>
+              <button
+                mat-icon-button
+                color="warn"
+                (click)="deleteSection(zone, sectionName)"
+              >
+                <mat-icon>clear</mat-icon>
+              </button>
+            </div>
+            <p class="error" *ngIf="section.errors && section.errors.startEnd">
+              End table must be greater than the start table
+            </p>
+          </ng-container>
         </div>
       </mat-expansion-panel>
     </mat-accordion>

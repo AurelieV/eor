@@ -6,7 +6,13 @@ import {
   TemplateRef,
   ViewChild,
 } from '@angular/core'
-import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms'
+import {
+  AbstractControl,
+  FormArray,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms'
 import { MatDialog } from '@angular/material'
 import { HeaderService } from '@appModule/services/header.service'
 import { environment } from 'src/environments/environment'
@@ -78,7 +84,7 @@ export class AdministrationComponent implements AfterViewInit, OnDestroy {
 
   zoneDisplayed: number
   helpText: string
-  currentStep: Step = Step.Staff
+  currentStep: Step = Step.Zones
   Step = Step
   softwares = environment.configuration.softwares
 
@@ -98,9 +104,12 @@ export class AdministrationComponent implements AfterViewInit, OnDestroy {
     )
     this.forms.set(
       Step.Zones,
-      new FormGroup({
-        zones: new FormArray([]),
-      })
+      new FormGroup(
+        {
+          zones: new FormArray([]),
+        },
+        atLeastOneValidator('zones')
+      )
     )
     this.forms.set(
       Step.Staff,
@@ -110,6 +119,7 @@ export class AdministrationComponent implements AfterViewInit, OnDestroy {
         admins: new FormControl([]),
       })
     )
+    this.addZone()
   }
 
   ngAfterViewInit(): void {
@@ -121,17 +131,29 @@ export class AdministrationComponent implements AfterViewInit, OnDestroy {
   }
 
   private createZone(index: number) {
-    return new FormGroup({
-      name: new FormControl(`Zone ${index}`, [Validators.required]),
-      sections: new FormArray([this.createSection(0)]),
-    })
+    return new FormGroup(
+      {
+        name: new FormControl(`Zone ${index}`, [Validators.required]),
+        sections: new FormArray([this.createSection(0)]),
+      },
+      [atLeastOneValidator('sections')]
+    )
   }
 
   private createSection(start: number) {
-    return new FormGroup({
-      start: new FormControl(start + 1, [Validators.required]),
-      end: new FormControl(start + 100, [Validators.required]),
-    })
+    return new FormGroup(
+      {
+        start: new FormControl(start + 1, [
+          Validators.required,
+          positiveIntegerValidator,
+        ]),
+        end: new FormControl(start + 100, [
+          Validators.required,
+          positiveIntegerValidator,
+        ]),
+      },
+      [sectionValidator]
+    )
   }
 
   addZone() {
@@ -180,10 +202,16 @@ export class AdministrationComponent implements AfterViewInit, OnDestroy {
     }
     if (this.currentStep === Step.Zones) {
       const form = this.forms.get(this.currentStep).get('zones') as FormArray
-      const allSections = form.controls.reduce((sections, zone) => {
-        return sections.concat((zone.get('sections') as FormArray).controls)
-      }, [])
-      //TODO: control overlap
+      const allSections: Array<Section> = form.controls.reduce(
+        (sections, zone) => {
+          return sections.concat((zone.get('sections') as FormArray).value)
+        },
+        []
+      )
+      const hasOverlap = allSections.sort((a, b) =>
+        a.start < b.start ? 1 : -1
+      )
+      console.log('has', hasOverlap)
     }
     this.currentStep++
   }
@@ -200,5 +228,28 @@ export class AdministrationComponent implements AfterViewInit, OnDestroy {
 
   ngOnDestroy() {
     this.headerService.resetTemplate()
+  }
+}
+
+function sectionValidator(
+  control: AbstractControl
+): { [key: string]: boolean } | null {
+  if (!control.value.start || !control.value.end) {
+    return null
+  }
+  return control.value.start >= control.value.end ? { startEnd: true } : null
+}
+
+function positiveIntegerValidator(
+  control: AbstractControl
+): { [key: string]: boolean } | null {
+  if (!control.value) return null
+  return control.value > 0 ? null : { positive: true }
+}
+
+function atLeastOneValidator(arrayField: string) {
+  return (control: AbstractControl): { [key: string]: boolean } | null => {
+    const arrayForm = control.get(arrayField) as FormArray
+    return arrayForm && arrayForm.length > 0 ? null : { atLeastOne: true }
   }
 }
