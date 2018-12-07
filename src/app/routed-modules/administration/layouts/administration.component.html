@@ -82,6 +82,14 @@
     >
       You must define at least one zone
     </p>
+    <p
+      class="error"
+      *ngIf="
+        getForm(Step.Zones).errors && getForm(Step.Zones).errors.hasOverlap
+      "
+    >
+      Some sections have overlap
+    </p>
     <mat-accordion formArrayName="zones">
       <mat-expansion-panel
         hideToggle

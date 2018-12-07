@@ -108,7 +108,7 @@ export class AdministrationComponent implements AfterViewInit, OnDestroy {
         {
           zones: new FormArray([]),
         },
-        atLeastOneValidator('zones')
+        [atLeastOneValidator('zones'), noOverlapSectionValidator]
       )
     )
     this.forms.set(
@@ -200,19 +200,6 @@ export class AdministrationComponent implements AfterViewInit, OnDestroy {
     if (!this.forms.get(this.currentStep).valid) {
       return
     }
-    if (this.currentStep === Step.Zones) {
-      const form = this.forms.get(this.currentStep).get('zones') as FormArray
-      const allSections: Array<Section> = form.controls.reduce(
-        (sections, zone) => {
-          return sections.concat((zone.get('sections') as FormArray).value)
-        },
-        []
-      )
-      const hasOverlap = allSections.sort((a, b) =>
-        a.start < b.start ? 1 : -1
-      )
-      console.log('has', hasOverlap)
-    }
     this.currentStep++
   }
 
@@ -252,4 +239,20 @@ function atLeastOneValidator(arrayField: string) {
     const arrayForm = control.get(arrayField) as FormArray
     return arrayForm && arrayForm.length > 0 ? null : { atLeastOne: true }
   }
+}
+
+function noOverlapSectionValidator(
+  control: AbstractControl
+): { [key: string]: boolean } | null {
+  const form = control.get('zones') as FormArray
+  const allSections: Array<Section> = form.controls
+    .reduce((sections, zone) => {
+      return sections.concat((zone.get('sections') as FormArray).value)
+    }, [])
+    .sort((a, b) => (a.start < b.start ? -1 : 1))
+  const hasOverlap = allSections.some(
+    (section, index, sections) =>
+      index !== 0 && section.start <= sections[index - 1].end
+  )
+  return hasOverlap ? { hasOverlap: true } : null
 }
