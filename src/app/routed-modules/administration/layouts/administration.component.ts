@@ -1,22 +1,13 @@
 import { animate, style, transition, trigger } from '@angular/animations'
-import {
-  AfterViewInit,
-  Component,
-  OnDestroy,
-  TemplateRef,
-  ViewChild,
-} from '@angular/core'
-import {
-  AbstractControl,
-  FormArray,
-  FormControl,
-  FormGroup,
-  Validators,
-} from '@angular/forms'
+import { AfterViewInit, Component, OnDestroy, TemplateRef, ViewChild } from '@angular/core'
+import { AbstractControl, FormArray, FormControl, FormGroup, Validators } from '@angular/forms'
 import { MatDialog } from '@angular/material'
+import { Router } from '@angular/router'
 import { HeaderService } from '@appModule/services/header.service'
+import { NotificationService } from '@appModule/services/notification.service'
 import { environment } from 'src/environments/environment'
-import { AdministrationService, UserWithId } from '../administration.service'
+import { Section } from '../administration.models'
+import { AdministrationService } from '../administration.service'
 import { SelectUsersComponent } from '../components/select-users.component'
 
 enum Step {
@@ -31,67 +22,38 @@ const props = {
   [Step.Staff]: 'staff',
 }
 
-interface TournamentSettings {
-  name: string
-  endDate: Date
-  isTeam: boolean
-  software: string
-}
-interface TournamentData {
-  settings?: TournamentSettings
-  scorekeepers: UserWithId[]
-  zoneLeaders: UserWithId[]
-  admins: UserWithId[]
-  zones: Zone[]
-}
-
-interface Zone {
-  name: string
-  sections: Section[]
-}
-
-interface Section {
-  start: number
-  end: number
-}
-
 @Component({
   selector: 'administration',
   templateUrl: './administration.component.html',
   styleUrls: ['./administration.component.scss'],
   animations: [
     trigger('step', [
-      transition(':enter', [
-        style({ transform: 'translateX(100%)', opacity: 0 }),
-        animate(500),
-      ]),
-      transition(':leave', [
-        animate(500, style({ transform: 'translateX(-100%)', opacity: 0 })),
-      ]),
+      transition(':enter', [style({ transform: 'translateX(100%)', opacity: 0 }), animate(500)]),
+      transition(':leave', [animate(500, style({ transform: 'translateX(-100%)', opacity: 0 }))]),
     ]),
   ],
 })
 export class AdministrationComponent implements AfterViewInit, OnDestroy {
   @ViewChild('header') headerTemplateRef: TemplateRef<any>
   @ViewChild('help') helpTemplateRef: TemplateRef<any>
-  @ViewChild('scorekeepersSelecter')
-  scorekeepersSelecterComp: SelectUsersComponent
-  @ViewChild('zoneLeadersSelecter')
-  zoneLeadersSelecterComp: SelectUsersComponent
+  @ViewChild('scorekeepersSelecter') scorekeepersSelecterComp: SelectUsersComponent
+  @ViewChild('zoneLeadersSelecter') zoneLeadersSelecterComp: SelectUsersComponent
   @ViewChild('adminsSelecter') adminsSelecterComp: SelectUsersComponent
 
   private forms = new Map<Step, FormGroup>()
 
   zoneDisplayed: number
   helpText: string
-  currentStep: Step = Step.Zones
+  currentStep: Step = Step.Settings
   Step = Step
   softwares = environment.configuration.softwares
 
   constructor(
     private headerService: HeaderService,
     private administration: AdministrationService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private notifier: NotificationService,
+    private router: Router
   ) {
     this.forms.set(
       Step.Settings,
@@ -143,14 +105,8 @@ export class AdministrationComponent implements AfterViewInit, OnDestroy {
   private createSection(start: number) {
     return new FormGroup(
       {
-        start: new FormControl(start + 1, [
-          Validators.required,
-          positiveIntegerValidator,
-        ]),
-        end: new FormControl(start + 100, [
-          Validators.required,
-          positiveIntegerValidator,
-        ]),
+        start: new FormControl(start + 1, [Validators.required, positiveIntegerValidator]),
+        end: new FormControl(start + 100, [Validators.required, positiveIntegerValidator]),
       },
       [sectionValidator]
     )
@@ -175,9 +131,7 @@ export class AdministrationComponent implements AfterViewInit, OnDestroy {
     const form = zone.get('sections') as FormArray
 
     return form.controls
-      .map(
-        (section) => section.get('start').value + '-' + section.get('end').value
-      )
+      .map((section) => section.get('start').value + '-' + section.get('end').value)
       .join(' / ')
   }
 
@@ -208,9 +162,16 @@ export class AdministrationComponent implements AfterViewInit, OnDestroy {
   }
 
   create() {
-    console.log('data', this.getForm(Step.Settings).value)
-    console.log('data', this.getForm(Step.Zones).value)
-    console.log('data', this.getForm(Step.Staff).value)
+    const settings = this.getForm(Step.Settings).value
+    const zones = this.getForm(Step.Zones).value.zones
+    const staff = this.getForm(Step.Staff).value
+    this.administration.createTournament(settings, zones, staff).then(
+      (key) => {
+        this.notifier.notify(`Tournament ${settings.name} created successfully`)
+        this.router.navigate(['tournament', key])
+      },
+      () => this.notifier.notify(`Something goes wrong`, 5000)
+    )
   }
 
   ngOnDestroy() {
@@ -218,18 +179,14 @@ export class AdministrationComponent implements AfterViewInit, OnDestroy {
   }
 }
 
-function sectionValidator(
-  control: AbstractControl
-): { [key: string]: boolean } | null {
+function sectionValidator(control: AbstractControl): { [key: string]: boolean } | null {
   if (!control.value.start || !control.value.end) {
     return null
   }
   return control.value.start >= control.value.end ? { startEnd: true } : null
 }
 
-function positiveIntegerValidator(
-  control: AbstractControl
-): { [key: string]: boolean } | null {
+function positiveIntegerValidator(control: AbstractControl): { [key: string]: boolean } | null {
   if (!control.value) return null
   return control.value > 0 ? null : { positive: true }
 }
@@ -241,9 +198,7 @@ function atLeastOneValidator(arrayField: string) {
   }
 }
 
-function noOverlapSectionValidator(
-  control: AbstractControl
-): { [key: string]: boolean } | null {
+function noOverlapSectionValidator(control: AbstractControl): { [key: string]: boolean } | null {
   const form = control.get('zones') as FormArray
   const allSections: Array<Section> = form.controls
     .reduce((sections, zone) => {
@@ -251,8 +206,7 @@ function noOverlapSectionValidator(
     }, [])
     .sort((a, b) => (a.start < b.start ? -1 : 1))
   const hasOverlap = allSections.some(
-    (section, index, sections) =>
-      index !== 0 && section.start <= sections[index - 1].end
+    (section, index, sections) => index !== 0 && section.start <= sections[index - 1].end
   )
   return hasOverlap ? { hasOverlap: true } : null
 }

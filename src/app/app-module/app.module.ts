@@ -81,9 +81,8 @@ import { UserService } from './services/user.service'
             component: TournamentsListComponent,
           },
           {
-            path: 'tournament',
-            loadChildren:
-              '../routed-modules/tournament/tournament.module#TournamentModule',
+            path: 'tournament/:tournamentId',
+            loadChildren: '../routed-modules/tournament/tournament.module#TournamentModule',
           },
           {
             path: 'administration',

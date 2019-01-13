@@ -11,14 +11,12 @@
   "editor.formatOnSave": true,
   "files.insertFinalNewline": true,
   "files.trimTrailingWhitespace": true,
-
-  // Prettier & ESLint
-  "prettier.eslintIntegration": true,
   "prettier.arrowParens": "always",
   "prettier.singleQuote": true,
   "prettier.trailingComma": "es5",
   "prettier.semi": false,
   "javascript.format.enable": false,
+  "prettier.printWidth": 100,
 
   //Typescript
   "typescript.updateImportsOnFileMove.enabled": "always"

@@ -1,12 +1,9 @@
-import { Component, forwardRef, OnDestroy, OnInit } from '@angular/core'
-import {
-  ControlValueAccessor,
-  FormControl,
-  NG_VALUE_ACCESSOR,
-} from '@angular/forms'
-import { BehaviorSubject, Observable } from 'rxjs'
-import { combineLatest, filter, map, startWith } from 'rxjs/operators'
-import { AdministrationService, UserWithId } from '../administration.service'
+import { Component, forwardRef, OnDestroy, OnInit } from '@angular/core';
+import { ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { combineLatest, filter, map, startWith } from 'rxjs/operators';
+import { UserWithId } from '../administration.models';
+import { AdministrationService } from '../administration.service';
 
 @Component({
   selector: 'select-users',
