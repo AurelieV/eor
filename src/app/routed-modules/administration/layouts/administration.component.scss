@@ -118,6 +118,16 @@ select-users {
 }
 
 .error {
-  color: $warn;
-  font-style: italic;
+  color: mat-contrast($warnPalette, 500);
+  background: $warn;
+  display: flex;
+  align-items: center;
+  padding: 1em;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  margin-top: 1em;
+  &__text {
+    flex-grow: 1;
+    margin-left: 1em;
+  }
 }

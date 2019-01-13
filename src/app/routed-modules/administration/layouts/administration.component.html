@@ -7,12 +7,7 @@
   <form [formGroup]="getForm(Step.Settings)" (ngSubmit)="next()">
     <p class="form-field">
       <mat-form-field class="full-width">
-        <input
-          matInput
-          type="text"
-          placeholder="Name *"
-          formControlName="name"
-        />
+        <input matInput type="text" placeholder="Name *" formControlName="name" />
         <mat-hint>Ex: GP Barcelona (avoid long name)</mat-hint>
       </mat-form-field>
     </p>
@@ -25,20 +20,14 @@
           placeholder="Last day *"
           formControlName="endDate"
         />
-        <mat-datepicker-toggle
-          matSuffix
-          [for]="datepicker"
-        ></mat-datepicker-toggle>
+        <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
         <mat-datepicker touchUi #datepicker disabled="false"></mat-datepicker>
         <mat-hint>This date is used for auto-clean old tournaments</mat-hint>
       </mat-form-field>
     </p>
     <p class="form-field">
       <mat-form-field class="full-width">
-        <mat-select
-          placeholder="Software used by SK"
-          formControlName="software"
-        >
+        <mat-select placeholder="Software used by SK" formControlName="software">
           <mat-option *ngFor="let software of softwares" [value]="software">
             {{ software }}
           </mat-option>
@@ -70,62 +59,37 @@
 </section>
 <section class="step" [@step] *ngIf="currentStep === Step.Zones">
   <h1 class="title">Zones</h1>
-  <p class="subtitle">
-    You will be able to redefine them later if you want (only between rounds).
-  </p>
+  <p class="subtitle">You will be able to redefine them later if you want (only between rounds).</p>
   <form [formGroup]="getForm(Step.Zones)">
-    <p
-      class="error"
-      *ngIf="
-        getForm(Step.Zones).errors && getForm(Step.Zones).errors.atLeastOne
-      "
-    >
-      You must define at least one zone
-    </p>
-    <p
-      class="error"
-      *ngIf="
-        getForm(Step.Zones).errors && getForm(Step.Zones).errors.hasOverlap
-      "
-    >
-      Some sections have overlap
-    </p>
+    <div class="error" *ngIf="getForm(Step.Zones).errors && getForm(Step.Zones).errors.atLeastOne">
+      <mat-icon>warning</mat-icon>
+      <div class="error__text">You must define at least one zone</div>
+    </div>
+    <div class="error" *ngIf="getForm(Step.Zones).errors && getForm(Step.Zones).errors.hasOverlap">
+      <mat-icon>warning</mat-icon>
+      <div class="error__text">Some sections have overlap</div>
+    </div>
     <mat-accordion formArrayName="zones">
       <mat-expansion-panel
         hideToggle
         [expanded]="zoneDisplayed === controlName"
         (opened)="zoneDisplayed = controlName"
-        *ngFor="
-          let zone of getForm(Step.Zones).get('zones').controls;
-          let controlName = index
-        "
+        *ngFor="let zone of getForm(Step.Zones).get('zones').controls; let controlName = index"
         [formGroupName]="controlName"
       >
         <mat-expansion-panel-header>
-          <mat-panel-title
-            class="zone-title"
-            [class.zone-title-error]="zone.errors"
-          >
+          <mat-panel-title class="zone-title" [class.zone-title-error]="zone.errors">
             {{ zone.get('name').value }}
           </mat-panel-title>
           <mat-panel-description>
             <div class="summary">{{ getSummary(zone) }}</div>
-            <button
-              mat-icon-button
-              color="warn"
-              (click)="deleteZone(controlName)"
-            >
+            <button mat-icon-button color="warn" (click)="deleteZone(controlName)">
               <mat-icon>clear</mat-icon>
             </button>
           </mat-panel-description>
         </mat-expansion-panel-header>
         <mat-form-field>
-          <input
-            matInput
-            type="text"
-            formControlName="name"
-            placeholder="Name *"
-          />
+          <input matInput type="text" formControlName="name" placeholder="Name *" />
         </mat-form-field>
         <p class="error" *ngIf="zone.errors && zone.errors.atLeastOne">
           You must define at least one section
@@ -138,33 +102,16 @@
             </button>
           </div>
           <ng-container
-            *ngFor="
-              let section of zone.get('sections').controls;
-              let sectionName = index
-            "
+            *ngFor="let section of zone.get('sections').controls; let sectionName = index"
           >
             <div class="section" [formGroupName]="sectionName">
               <mat-form-field>
-                <input
-                  matInput
-                  type="number"
-                  formControlName="start"
-                  placeholder="First table"
-                />
+                <input matInput type="number" formControlName="start" placeholder="First table" />
               </mat-form-field>
               <mat-form-field>
-                <input
-                  matInput
-                  type="number"
-                  formControlName="end"
-                  placeholder="Last table"
-                />
+                <input matInput type="number" formControlName="end" placeholder="Last table" />
               </mat-form-field>
-              <button
-                mat-icon-button
-                color="warn"
-                (click)="deleteSection(zone, sectionName)"
-              >
+              <button mat-icon-button color="warn" (click)="deleteSection(zone, sectionName)">
                 <mat-icon>clear</mat-icon>
               </button>
             </div>
@@ -175,19 +122,10 @@
         </div>
       </mat-expansion-panel>
     </mat-accordion>
-    <button type="button" (click)="addZone()" mat-flat-button color="primary">
-      Add Zone
-    </button>
+    <button type="button" (click)="addZone()" mat-flat-button color="primary">Add Zone</button>
   </form>
   <div class="actions">
-    <button
-      type="button"
-      mat-stroked-button
-      color="primary"
-      (click)="previous()"
-    >
-      Previous
-    </button>
+    <button type="button" mat-stroked-button color="primary" (click)="previous()">Previous</button>
     <button
       type="button"
       mat-flat-button
@@ -202,8 +140,7 @@
 <section class="step" [@step] *ngIf="currentStep === Step.Staff">
   <h1 class="title">Staff (Users access)</h1>
   <p class="subtitle">
-    You will be able to redefine them later if you want (any time during the
-    tournament).
+    You will be able to redefine them later if you want (any time during the tournament).
   </p>
   <form [formGroup]="getForm(Step.Staff)">
     <div class="subheader">
@@ -220,28 +157,18 @@
         <mat-icon>help</mat-icon>
       </button>
     </div>
-    <select-users
-      #zoneLeadersSelecter
-      formControlName="zoneLeaders"
-    ></select-users>
+    <select-users #zoneLeadersSelecter formControlName="zoneLeaders"></select-users>
     <div class="subheader">
       <h2 class="title">Scorekeepers</h2>
       <button
         mat-icon-button
         color="accent"
-        (click)="
-          displayHelp(
-            'Scorekeepers will be able to import result and pairings on the app'
-          )
-        "
+        (click)="displayHelp('Scorekeepers will be able to import result and pairings on the app')"
       >
         <mat-icon>help</mat-icon>
       </button>
     </div>
-    <select-users
-      #scorekeepersSelecter
-      formControlName="scorekeepers"
-    ></select-users>
+    <select-users #scorekeepersSelecter formControlName="scorekeepers"></select-users>
     <div class="subheader">
       <h2 class="title">Admin</h2>
       <button
@@ -259,17 +186,8 @@
     <select-users #adminsSelecter formControlName="admins"></select-users>
   </form>
   <div class="actions">
-    <button
-      type="button"
-      mat-stroked-button
-      color="primary"
-      (click)="previous()"
-    >
-      Previous
-    </button>
-    <button type="button" mat-flat-button color="primary" (click)="create()">
-      Create
-    </button>
+    <button type="button" mat-stroked-button color="primary" (click)="previous()">Previous</button>
+    <button type="button" mat-flat-button color="primary" (click)="create()">Create</button>
   </div>
 </section>
 
