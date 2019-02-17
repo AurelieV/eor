@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core'
 import { AngularFireDatabase } from '@angular/fire/database'
-import { StoredUser } from '@appModule/services/user.service'
+import { StoredUser } from '@core/services/user.service'
 import { Observable } from 'rxjs'
 import { map } from 'rxjs/operators'
 import { Table } from 'src/app/models'
-import { TournamentSettings, TournamentStaff, UserWithId, Zone } from './administration.models'
+import { TournamentSettings, TournamentStaff, UserWithId, Zone } from '../administration.models'
 
 @Injectable()
 export class AdministrationService {

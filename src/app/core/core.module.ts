@@ -1,3 +1,4 @@
+import { MOBILE_MEDIA_QUERY } from '@/app/tokens'
 import { HttpClientModule } from '@angular/common/http'
 import { NgModule } from '@angular/core'
 import { AngularFireModule } from '@angular/fire'
@@ -16,29 +17,21 @@ import {
 import { BrowserModule } from '@angular/platform-browser'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { RouterModule } from '@angular/router'
-import { AuthGuard, NotAuthGuard, RoleGuard } from '@appModule/auth.guard'
-import { NotificationService } from '@appModule/services/notification.service'
-import { CustomFormModule } from '@sharedModules/custom-form/custom-form.module'
+import { CustomFormModule } from '@shared/custom-form/custom-form.module'
 import { InlineSVGModule } from 'ng-inline-svg'
-import { environment } from '../../environments/environment'
-import { MOBILE_MEDIA_QUERY } from '../tokens'
-import { AppComponent } from './app.component'
-import { AuthentRedirectComponent } from './layouts/authent-redirect.component'
-import { LoginComponent } from './layouts/login.component'
-import { MainComponent } from './layouts/main.component'
-import { TournamentsListComponent } from './layouts/tournaments-list.component'
+import { environment } from 'src/environments/environment'
+import { AuthGuard, NotAuthGuard, RoleGuard } from './guards/auth.guard'
+import { MainComponent } from './main.component'
+import { AuthentRedirectComponent } from './pages/authent-redirect/authent-redirect.component'
+import { LoginComponent } from './pages/login/login.component'
+import { TournamentsListComponent } from './pages/tournament-list/tournaments-list.component'
 import { HeaderService } from './services/header.service'
+import { NotificationService } from './services/notification.service'
 import { SidePanelService } from './services/side-panel.service'
 import { UserService } from './services/user.service'
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    MainComponent,
-    LoginComponent,
-    AuthentRedirectComponent,
-    TournamentsListComponent,
-  ],
+  declarations: [MainComponent, AuthentRedirectComponent, TournamentsListComponent, LoginComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -82,12 +75,11 @@ import { UserService } from './services/user.service'
           },
           {
             path: 'tournament/:tournamentId',
-            loadChildren: '../routed-modules/tournament/tournament.module#TournamentModule',
+            loadChildren: '@pages/tournament/tournament.module#TournamentModule',
           },
           {
             path: 'administration',
-            loadChildren:
-              '../routed-modules/administration/administration.module#AdministrationModule',
+            loadChildren: '@pages/administration/administration.module#AdministrationModule',
             canActivate: [RoleGuard],
             data: {
               roles: {
@@ -110,6 +102,5 @@ import { UserService } from './services/user.service'
     NotificationService,
     HeaderService,
   ],
-  bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class CoreModule {}

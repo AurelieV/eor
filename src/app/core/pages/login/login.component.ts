@@ -1,7 +1,7 @@
+import { Configuration } from '@/app/interfaces'
+import { environment } from '@/environments/environment'
 import { Component } from '@angular/core'
-import { environment } from '../../../environments/environment'
-import { Configuration } from '../../interfaces'
-import { UserService } from '../services/user.service'
+import { UserService } from '@core/services/user.service'
 
 @Component({
   selector: 'login',

@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common'
 import { NgModule } from '@angular/core'
 import { MatSidenavModule } from '@angular/material'
 import { RouterModule } from '@angular/router'
-import { TournamentComponent } from './layouts/tournament.component'
+import { TournamentComponent } from './tournament.component'
 
 @NgModule({
   declarations: [TournamentComponent],

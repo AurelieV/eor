@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { NotificationService } from '@appModule/services/notification.service'
+import { NotificationService } from '@core/services/notification.service'
+import { UserService } from '@core/services/user.service'
 import { take } from 'rxjs/operators'
-import { UserService } from '../services/user.service'
 
 @Component({
   selector: 'authent-redirect',
@@ -10,9 +10,7 @@ import { UserService } from '../services/user.service'
     <div class="loader">
       <mat-progress-spinner color="accent" mode="indeterminate"></mat-progress-spinner>
     </div>
-    <p>
-      Process authentification ...
-    </p>
+    <p>Process authentification ...</p>
   `,
   styleUrls: ['./authent-redirect.component.scss'],
 })
@@ -35,9 +33,7 @@ export class AuthentRedirectComponent implements OnInit {
           this.router.navigate(['/'])
         },
         () => {
-          this.notificationService.notify(
-            'Impossible to process authentification'
-          )
+          this.notificationService.notify('Impossible to process authentification')
           this.router.navigate(['/'])
         }
       )

@@ -14,9 +14,9 @@ import {
   MatSelectModule,
 } from '@angular/material'
 import { RouterModule } from '@angular/router'
-import { AdministrationService } from './administration.service'
+import { AdministrationComponent } from './administration.component'
 import { SelectUsersComponent } from './components/select-users.component'
-import { AdministrationComponent } from './layouts/administration.component'
+import { AdministrationService } from './services/administration.service'
 
 @NgModule({
   declarations: [AdministrationComponent, SelectUsersComponent],

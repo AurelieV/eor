@@ -8,10 +8,10 @@ import {
 } from '@angular/core'
 import { MatSidenav } from '@angular/material'
 import { Router } from '@angular/router'
-import { HeaderService } from '@appModule/services/header.service'
+import { HeaderService } from '@core/services/header.service'
 import { Observable, Subscription } from 'rxjs'
-import { SidePanelService } from '../services/side-panel.service'
-import { UserInfo, UserService } from '../services/user.service'
+import { SidePanelService } from './services/side-panel.service'
+import { UserInfo, UserService } from './services/user.service'
 
 @Component({
   selector: 'main',

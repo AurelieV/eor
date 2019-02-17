@@ -1,15 +1,10 @@
+import { LoginMethod } from '@/app/interfaces'
+import { environment } from '@/environments/environment'
 import { Injectable } from '@angular/core'
-import {
-  ActivatedRouteSnapshot,
-  CanActivate,
-  Router,
-  RouterStateSnapshot,
-} from '@angular/router'
-import { NotificationService } from '@appModule/services/notification.service'
-import { UserService } from '@appModule/services/user.service'
+import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router'
+import { NotificationService } from '@core/services/notification.service'
+import { UserService } from '@core/services/user.service'
 import { map, take, tap } from 'rxjs/operators'
-import { environment } from '../../environments/environment'
-import { LoginMethod } from '../interfaces'
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -53,10 +48,7 @@ export class NotAuthGuard implements CanActivate {
 
 @Injectable()
 export class RoleGuard implements CanActivate {
-  constructor(
-    private userService: UserService,
-    private notificationService: NotificationService
-  ) {}
+  constructor(private userService: UserService, private notificationService: NotificationService) {}
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     if (environment.configuration.loginMethod === LoginMethod.None) {
@@ -80,9 +72,7 @@ export class RoleGuard implements CanActivate {
       }),
       tap((isAuthorized) => {
         if (!isAuthorized) {
-          this.notificationService.notify(
-            'You are not allowed on this section of the app'
-          )
+          this.notificationService.notify('You are not allowed on this section of the app')
         }
       })
     )

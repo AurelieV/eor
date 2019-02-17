@@ -3,12 +3,12 @@ import { AfterViewInit, Component, OnDestroy, TemplateRef, ViewChild } from '@an
 import { AbstractControl, FormArray, FormControl, FormGroup, Validators } from '@angular/forms'
 import { MatDialog } from '@angular/material'
 import { Router } from '@angular/router'
-import { HeaderService } from '@appModule/services/header.service'
-import { NotificationService } from '@appModule/services/notification.service'
+import { HeaderService } from '@core/services/header.service'
+import { NotificationService } from '@core/services/notification.service'
 import { environment } from 'src/environments/environment'
-import { Section } from '../administration.models'
-import { AdministrationService } from '../administration.service'
-import { SelectUsersComponent } from '../components/select-users.component'
+import { Section } from './administration.models'
+import { SelectUsersComponent } from './components/select-users.component'
+import { AdministrationService } from './services/administration.service'
 
 enum Step {
   Settings,

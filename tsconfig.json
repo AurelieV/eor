@@ -13,10 +13,11 @@
     "typeRoots": ["node_modules/@types"],
     "lib": ["es2017", "dom"],
     "paths": {
-      "@appModule/*": ["src/app/app-module/*"],
-      "@routedModules/*": ["src/app/routed-modules/*"],
-      "@sharedModules/*": ["src/app/shared-modules/*"],
-      "@styles/*": ["src/styles/*"]
+      "@core/*": ["src/app/core/*"],
+      "@pages/*": ["src/app/pages/*"],
+      "@shared/*": ["src/app/shared/*"],
+      "@styles/*": ["src/styles/*"],
+      "@/*": ["src/*"]
     }
   }
 }

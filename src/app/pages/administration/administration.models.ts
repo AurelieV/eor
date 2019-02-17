@@ -1,4 +1,4 @@
-import { JudgeAppsInfo } from '@appModule/services/user.service'
+import { JudgeAppsInfo } from '@core/services/user.service'
 
 export interface Zone {
   name: string

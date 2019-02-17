@@ -1,9 +1,9 @@
-import { Component, forwardRef, OnDestroy, OnInit } from '@angular/core';
-import { ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { combineLatest, filter, map, startWith } from 'rxjs/operators';
-import { UserWithId } from '../administration.models';
-import { AdministrationService } from '../administration.service';
+import { Component, forwardRef, OnDestroy, OnInit } from '@angular/core'
+import { ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR } from '@angular/forms'
+import { BehaviorSubject, Observable } from 'rxjs'
+import { combineLatest, filter, map, startWith } from 'rxjs/operators'
+import { UserWithId } from '../administration.models'
+import { AdministrationService } from '../services/administration.service'
 
 @Component({
   selector: 'select-users',
@@ -17,8 +17,7 @@ import { AdministrationService } from '../administration.service';
     },
   ],
 })
-export class SelectUsersComponent
-  implements OnInit, OnDestroy, ControlValueAccessor {
+export class SelectUsersComponent implements OnInit, OnDestroy, ControlValueAccessor {
   inputControl = new FormControl()
   filteredUsers$: Observable<UserWithId[]>
   selectedUsers$ = new BehaviorSubject<Array<UserWithId>>([])
@@ -57,9 +56,7 @@ export class SelectUsersComponent
   }
 
   unSelect(userId: string) {
-    const selectedUsers = this.selectedUsers$
-      .getValue()
-      .filter((u) => u.id !== userId)
+    const selectedUsers = this.selectedUsers$.getValue().filter((u) => u.id !== userId)
     this.selectedUsers$.next(selectedUsers)
   }
 

@@ -1,3 +1,4 @@
+import { environment } from '@/environments/environment'
 import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { AngularFireAuth } from '@angular/fire/auth'
@@ -6,7 +7,6 @@ import * as firebase from 'firebase'
 import * as Oidc from 'oidc-client'
 import { from, Observable, of } from 'rxjs'
 import { map, shareReplay, switchMap } from 'rxjs/operators'
-import { environment } from '../../../environments/environment'
 
 export type User = firebase.User
 
@@ -44,21 +44,17 @@ export class UserService {
   ) {
     this.user$ = this.afAuth.authState
     this.userInfo$ = this.user$.pipe(
-      switchMap(
-        (user) =>
-          user
-            ? this.db.object<StoredUser>(`/users/${user.uid}/`).valueChanges()
-            : of(null)
+      switchMap((user) =>
+        user ? this.db.object<StoredUser>(`/users/${user.uid}/`).valueChanges() : of(null)
       ),
       /// TODO: handle other way to connect
-      map(
-        (user) =>
-          user
-            ? {
-                name: user.judgeapps.name,
-                roles: user.roles ? Object.keys(user.roles) : [],
-              }
-            : null
+      map((user) =>
+        user
+          ? {
+              name: user.judgeapps.name,
+              roles: user.roles ? Object.keys(user.roles) : [],
+            }
+          : null
       )
     )
   }
@@ -85,9 +81,7 @@ export class UserService {
       .pipe(
         map((res: any) => res.token),
         shareReplay(1),
-        switchMap((token) =>
-          from(this.afAuth.auth.signInWithCustomToken(token))
-        )
+        switchMap((token) => from(this.afAuth.auth.signInWithCustomToken(token)))
       )
   }
 }
