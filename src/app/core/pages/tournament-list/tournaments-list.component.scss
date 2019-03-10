@@ -4,13 +4,16 @@
   color: $primary;
   font-size: 1.5rem;
   font-weight: bold;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
 }
 
 .label {
   color: $accent;
   font-weight: bold;
-  margin-bottom: 0.5rem;
+}
+
+.info {
+  margin-bottom: 0.5em;
 }
 
 .actions {

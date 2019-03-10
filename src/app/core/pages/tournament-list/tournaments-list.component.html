@@ -1,19 +1,23 @@
 <mat-nav-list>
   <a mat-list-item *ngFor="let tournament of (tournaments$ | async)">
-    <p matLine>
-      <span class="heading">{{ tournament.name }}</span>
-    </p>
-    <p matLine>
-      <span class="label">Last day: </span> <span>{{ tournament.endDate | date }}</span>
-    </p>
-    <p matLine>
-      <span class="label">Admins: </span>
-      <ng-container *ngFor="let admin of tournament.staff.admins; let last = last">
-        <span>{{ admin.given_name }}</span>
-        <span style="text-transform: uppercase"> {{ admin.family_name }}</span>
-        <span *ngIf="!last">, </span>
-      </ng-container>
-    </p>
+    <div matLine>
+      <p class="heading">{{ tournament.name }}</p>
+    </div>
+    <div matLine>
+      <p class="info">
+        <span class="label">Last day: </span> <span>{{ tournament.endDate | date }}</span>
+      </p>
+    </div>
+    <div matLine>
+      <p class="info">
+        <span class="label">Admins: </span>
+        <ng-container *ngFor="let admin of tournament.staff.admins; let last = last">
+          <span>{{ admin.given_name }}</span>
+          <span style="text-transform: uppercase"> {{ admin.family_name }}</span>
+          <span *ngIf="!last">, </span>
+        </ng-container>
+      </p>
+    </div>
   </a>
 </mat-nav-list>
 <div class="actions">
