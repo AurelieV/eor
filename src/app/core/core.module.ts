@@ -28,6 +28,7 @@ import { TournamentsListComponent } from './pages/tournament-list/tournaments-li
 import { HeaderService } from './services/header.service'
 import { NotificationService } from './services/notification.service'
 import { SidePanelService } from './services/side-panel.service'
+import { TournamentService } from './services/tournament.service'
 import { UserService } from './services/user.service'
 
 @NgModule({
@@ -101,6 +102,7 @@ import { UserService } from './services/user.service'
     RoleGuard,
     NotificationService,
     HeaderService,
+    TournamentService,
   ],
 })
 export class CoreModule {}

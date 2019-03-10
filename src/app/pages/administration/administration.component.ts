@@ -163,6 +163,7 @@ export class AdministrationComponent implements AfterViewInit, OnDestroy {
 
   create() {
     const settings = this.getForm(Step.Settings).value
+    settings.endDate = settings.endDate.getTime()
     const zones = this.getForm(Step.Zones).value.zones
     const staff = this.getForm(Step.Staff).value
     this.administration.createTournament(settings, zones, staff).then(

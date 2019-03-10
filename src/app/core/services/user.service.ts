@@ -1,3 +1,4 @@
+import { JudgeAppsInfo } from '@/app/models'
 import { environment } from '@/environments/environment'
 import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
@@ -13,18 +14,6 @@ export type User = firebase.User
 export interface StoredUser {
   roles: Array<string>
   judgeapps: JudgeAppsInfo
-}
-
-export interface JudgeAppsInfo {
-  name: string
-  given_name: string
-  family_name: string
-  nickname: string
-  preferred_username: string
-  level: number
-  dci_number: number
-  region: string
-  picture: string
 }
 
 export interface UserInfo {
@@ -83,5 +72,10 @@ export class UserService {
         shareReplay(1),
         switchMap((token) => from(this.afAuth.auth.signInWithCustomToken(token)))
       )
+  }
+
+  hasRole(role: string) {
+    // TODO: handle hierarchy
+    return this.userInfo$.pipe(map((info) => info.roles.includes(role)))
   }
 }

@@ -1,5 +1,3 @@
-import { JudgeAppsInfo } from '@core/services/user.service'
-
 export interface Zone {
   name: string
   sections: Section[]
@@ -16,11 +14,3 @@ export interface TournamentSettings {
   isTeam: boolean
   software: string
 }
-
-export interface TournamentStaff {
-  admins: UserWithId[]
-  scorekeepers: UserWithId[]
-  zoneLeaders: UserWithId[]
-}
-
-export type UserWithId = JudgeAppsInfo & { id: string }

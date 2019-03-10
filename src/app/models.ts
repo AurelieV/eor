@@ -36,3 +36,32 @@ export interface Result {
   }
   draw: number
 }
+
+export interface Tournament {
+  key: string
+  name: string
+  endDate: Date
+  isTeam: boolean
+  software: string
+  staff: TournamentStaff
+}
+
+export interface TournamentStaff {
+  admins: UserWithId[]
+  scorekeepers: UserWithId[]
+  zoneLeaders: UserWithId[]
+}
+
+export type UserWithId = JudgeAppsInfo & { id: string }
+
+export interface JudgeAppsInfo {
+  name: string
+  given_name: string
+  family_name: string
+  nickname: string
+  preferred_username: string
+  level: number
+  dci_number: number
+  region: string
+  picture: string
+}

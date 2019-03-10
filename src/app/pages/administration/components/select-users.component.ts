@@ -1,8 +1,8 @@
+import { UserWithId } from '@/app/models'
 import { Component, forwardRef, OnDestroy, OnInit } from '@angular/core'
 import { ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { BehaviorSubject, Observable } from 'rxjs'
 import { combineLatest, filter, map, startWith } from 'rxjs/operators'
-import { UserWithId } from '../administration.models'
 import { AdministrationService } from '../services/administration.service'
 
 @Component({

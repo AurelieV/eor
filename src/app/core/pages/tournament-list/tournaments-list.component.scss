@@ -1,0 +1,20 @@
+@import 'utils/colors';
+
+.heading {
+  color: $primary;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.label {
+  color: $accent;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.actions {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: center;
+}

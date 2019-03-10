@@ -19,5 +19,11 @@
   "prettier.printWidth": 100,
 
   //Typescript
-  "typescript.updateImportsOnFileMove.enabled": "always"
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "workbench.colorCustomizations": {
+    "titleBar.activeBackground": "#54a37f",
+    "titleBar.inactiveBackground": "#2a5240",
+    "titleBar.activeForeground": "#15202b",
+    "titleBar.inactiveForeground": "#254140"
+  }
 }

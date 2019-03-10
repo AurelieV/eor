@@ -3,8 +3,8 @@ import { AngularFireDatabase } from '@angular/fire/database'
 import { StoredUser } from '@core/services/user.service'
 import { Observable } from 'rxjs'
 import { map } from 'rxjs/operators'
-import { Table } from 'src/app/models'
-import { TournamentSettings, TournamentStaff, UserWithId, Zone } from '../administration.models'
+import { Table, TournamentStaff, UserWithId } from 'src/app/models'
+import { TournamentSettings, Zone } from '../administration.models'
 
 @Injectable()
 export class AdministrationService {
