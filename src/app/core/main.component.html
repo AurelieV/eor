@@ -19,8 +19,8 @@
     [style.marginTop.px]="56"
   >
     <mat-sidenav id="sidenav" #snav [fixedInViewport]="true" fixedTopGap="56">
-      <div class="user" *ngIf="(userInfo$ | async) as userInfo">
-        <strong class="name">{{ userInfo.name }}</strong>
+      <div class="user" *ngIf="(user$ | async) as user">
+        <strong class="name"> {{ user | user }} </strong>
         <button mat-stroked-button color="accent" (click)="logout()" class="logout">Logout</button>
       </div>
       <mat-nav-list>

@@ -65,3 +65,9 @@ export interface JudgeAppsInfo {
   region: string
   picture: string
 }
+
+// TODO: handle when not judgeApps
+export interface StoredUser {
+  roles: { [role: string]: boolean }
+  judgeapps: JudgeAppsInfo
+}

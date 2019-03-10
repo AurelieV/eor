@@ -25,14 +25,21 @@ import { MainComponent } from './main.component'
 import { AuthentRedirectComponent } from './pages/authent-redirect/authent-redirect.component'
 import { LoginComponent } from './pages/login/login.component'
 import { TournamentsListComponent } from './pages/tournament-list/tournaments-list.component'
+import { UserPipe } from './pipes/user.pipe'
+import { AuthenticationService } from './services/authentication.service'
 import { HeaderService } from './services/header.service'
 import { NotificationService } from './services/notification.service'
 import { SidePanelService } from './services/side-panel.service'
 import { TournamentService } from './services/tournament.service'
-import { UserService } from './services/user.service'
 
 @NgModule({
-  declarations: [MainComponent, AuthentRedirectComponent, TournamentsListComponent, LoginComponent],
+  declarations: [
+    MainComponent,
+    AuthentRedirectComponent,
+    TournamentsListComponent,
+    LoginComponent,
+    UserPipe,
+  ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -95,7 +102,7 @@ import { UserService } from './services/user.service'
   ],
   providers: [
     { provide: MOBILE_MEDIA_QUERY, useValue: '(max-width: 719px)' },
-    UserService,
+    AuthenticationService,
     SidePanelService,
     AuthGuard,
     NotAuthGuard,

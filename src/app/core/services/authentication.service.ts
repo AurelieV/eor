@@ -1,50 +1,35 @@
-import { JudgeAppsInfo } from '@/app/models'
+import { JudgeAppsInfo, StoredUser } from '@/app/models'
 import { environment } from '@/environments/environment'
 import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { AngularFireAuth } from '@angular/fire/auth'
 import { AngularFireDatabase } from '@angular/fire/database'
-import * as firebase from 'firebase'
 import * as Oidc from 'oidc-client'
 import { from, Observable, of } from 'rxjs'
 import { map, shareReplay, switchMap } from 'rxjs/operators'
 
-export type User = firebase.User
-
-export interface StoredUser {
-  roles: Array<string>
-  judgeapps: JudgeAppsInfo
-}
-
-export interface UserInfo {
-  name: string
-  roles: Array<string>
-}
+// TODO: handle when no judgeapps
+export type ConnectedUser = JudgeAppsInfo
 
 @Injectable()
-export class UserService {
-  userInfo$: Observable<UserInfo>
-  user$: Observable<User>
+export class AuthenticationService {
+  user$: Observable<ConnectedUser>
+  roles$: Observable<string[]>
 
   constructor(
     private afAuth: AngularFireAuth,
     private http: HttpClient,
     private db: AngularFireDatabase
   ) {
-    this.user$ = this.afAuth.authState
-    this.userInfo$ = this.user$.pipe(
+    const storedUser$: Observable<StoredUser> = this.afAuth.authState.pipe(
       switchMap((user) =>
         user ? this.db.object<StoredUser>(`/users/${user.uid}/`).valueChanges() : of(null)
-      ),
-      /// TODO: handle other way to connect
-      map((user) =>
-        user
-          ? {
-              name: user.judgeapps.name,
-              roles: user.roles ? Object.keys(user.roles) : [],
-            }
-          : null
       )
+    )
+    this.user$ = storedUser$.pipe(map((user) => user.judgeapps))
+    this.roles$ = storedUser$.pipe(
+      /// TODO: handle other way to connect
+      map((user) => (user ? (user.roles ? Object.keys(user.roles) : []) : []))
     )
   }
 
@@ -76,6 +61,6 @@ export class UserService {
 
   hasRole(role: string) {
     // TODO: handle hierarchy
-    return this.userInfo$.pipe(map((info) => info.roles.includes(role)))
+    return this.roles$.pipe(map((roles) => roles.includes(role)))
   }
 }

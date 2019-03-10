@@ -10,8 +10,8 @@ import { MatSidenav } from '@angular/material'
 import { Router } from '@angular/router'
 import { HeaderService } from '@core/services/header.service'
 import { Observable, Subscription } from 'rxjs'
+import { AuthenticationService, ConnectedUser } from './services/authentication.service'
 import { SidePanelService } from './services/side-panel.service'
-import { UserInfo, UserService } from './services/user.service'
 
 @Component({
   selector: 'main',
@@ -26,11 +26,11 @@ export class MainComponent implements OnDestroy, AfterViewInit {
   @ViewChild('sidePanel')
   public sidePanel: MatSidenav
 
-  userInfo$: Observable<UserInfo>
+  user$: Observable<ConnectedUser>
 
   constructor(
     private cdr: ChangeDetectorRef,
-    private userService: UserService,
+    private authent: AuthenticationService,
     private sidePanelService: SidePanelService,
     private router: Router,
     private headerService: HeaderService
@@ -38,7 +38,7 @@ export class MainComponent implements OnDestroy, AfterViewInit {
 
   ngOnInit() {
     this.sidePanelTemplate$ = this.sidePanelService.templateRef$
-    this.userInfo$ = this.userService.userInfo$
+    this.user$ = this.authent.user$
     this.subscriptions.push(
       this.headerService.templateRef$.subscribe((template) => {
         this.headerTemplate = template
@@ -52,7 +52,7 @@ export class MainComponent implements OnDestroy, AfterViewInit {
   }
 
   logout() {
-    this.userService.logout().then(() => this.router.navigate(['/login']))
+    this.authent.logout().then(() => this.router.navigate(['/login']))
   }
 
   get isOpen() {

@@ -2,21 +2,21 @@ import { LoginMethod } from '@/app/interfaces'
 import { environment } from '@/environments/environment'
 import { Injectable } from '@angular/core'
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router'
+import { AuthenticationService } from '@core/services/authentication.service'
 import { NotificationService } from '@core/services/notification.service'
-import { UserService } from '@core/services/user.service'
 import { map, take, tap } from 'rxjs/operators'
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-  constructor(private userService: UserService, private router: Router) {}
+  constructor(private authent: AuthenticationService, private router: Router) {}
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     if (environment.configuration.loginMethod === LoginMethod.None) {
       return true
     }
-    return this.userService.userInfo$.pipe(
+    return this.authent.user$.pipe(
       take(1),
-      map((userInfo) => Boolean(userInfo)),
+      map((user) => Boolean(user)),
       tap((isConnected) => {
         if (!isConnected) {
           this.router.navigate(['/login'])
@@ -28,15 +28,15 @@ export class AuthGuard implements CanActivate {
 
 @Injectable()
 export class NotAuthGuard implements CanActivate {
-  constructor(private userService: UserService, private router: Router) {}
+  constructor(private authent: AuthenticationService, private router: Router) {}
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     if (environment.configuration.loginMethod === LoginMethod.None) {
       return true
     }
-    return this.userService.userInfo$.pipe(
+    return this.authent.user$.pipe(
       take(1),
-      map((userInfo) => !Boolean(userInfo)),
+      map((user) => !Boolean(user)),
       tap((isNotConnected) => {
         if (!isNotConnected) {
           this.router.navigate(['/'])
@@ -48,27 +48,25 @@ export class NotAuthGuard implements CanActivate {
 
 @Injectable()
 export class RoleGuard implements CanActivate {
-  constructor(private userService: UserService, private notificationService: NotificationService) {}
+  constructor(
+    private authent: AuthenticationService,
+    private notificationService: NotificationService
+  ) {}
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     if (environment.configuration.loginMethod === LoginMethod.None) {
       return true
     }
-    return this.userService.userInfo$.pipe(
+    return this.authent.roles$.pipe(
       take(1),
-      map((userInfo) => {
-        if (!userInfo) {
-          return false
-        }
+      map((roles) => {
         if (!route.data.roles.general) {
           return true
         }
         if (typeof route.data.roles.general === 'string') {
-          return userInfo.roles.includes(route.data.roles.general)
+          return roles.includes(route.data.roles.general)
         }
-        return (route.data.roles.general as Array<string>).every((role) =>
-          userInfo.roles.includes(role)
-        )
+        return (route.data.roles.general as Array<string>).every((role) => roles.includes(role))
       }),
       tap((isAuthorized) => {
         if (!isAuthorized) {

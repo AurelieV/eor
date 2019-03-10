@@ -1,5 +1,9 @@
 <mat-nav-list>
-  <a mat-list-item *ngFor="let tournament of (tournaments$ | async)">
+  <a
+    mat-list-item
+    *ngFor="let tournament of (tournaments$ | async)"
+    [routerLink]="['tournament', tournament.key]"
+  >
     <div matLine>
       <p class="heading">{{ tournament.name }}</p>
     </div>
@@ -12,9 +16,7 @@
       <p class="info">
         <span class="label">Admins: </span>
         <ng-container *ngFor="let admin of tournament.staff.admins; let last = last">
-          <span>{{ admin.given_name }}</span>
-          <span style="text-transform: uppercase"> {{ admin.family_name }}</span>
-          <span *ngIf="!last">, </span>
+          <span>{{ admin | user }}</span> <span *ngIf="!last">, </span>
         </ng-container>
       </p>
     </div>

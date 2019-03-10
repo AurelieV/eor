@@ -1,7 +1,7 @@
 import { Tournament } from '@/app/models'
 import { Component, OnInit } from '@angular/core'
+import { AuthenticationService } from '@core/services/authentication.service'
 import { TournamentService } from '@core/services/tournament.service'
-import { UserService } from '@core/services/user.service'
 import { Observable } from 'rxjs'
 
 @Component({
@@ -13,10 +13,10 @@ export class TournamentsListComponent implements OnInit {
   tournaments$: Observable<Tournament[]>
   canCreateTournament$: Observable<boolean>
 
-  constructor(private tournaments: TournamentService, private userService: UserService) {}
+  constructor(private tournaments: TournamentService, private authent: AuthenticationService) {}
 
   ngOnInit() {
     this.tournaments$ = this.tournaments.getAll()
-    this.canCreateTournament$ = this.userService.hasRole('tournament-creation')
+    this.canCreateTournament$ = this.authent.hasRole('tournament-creation')
   }
 }

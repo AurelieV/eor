@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
+import { AuthenticationService } from '@core/services/authentication.service'
 import { NotificationService } from '@core/services/notification.service'
-import { UserService } from '@core/services/user.service'
 import { take } from 'rxjs/operators'
 
 @Component({
@@ -18,7 +18,7 @@ export class AuthentRedirectComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private userService: UserService,
+    private authent: AuthenticationService,
     private notificationService: NotificationService
   ) {}
 
@@ -28,7 +28,7 @@ export class AuthentRedirectComponent implements OnInit {
         this.notificationService.notify('Incorrect authentification')
         return this.router.navigate(['/'])
       }
-      this.userService.processJudgeAppsToken(params.get('code')).subscribe(
+      this.authent.processJudgeAppsToken(params.get('code')).subscribe(
         () => {
           this.router.navigate(['/'])
         },
