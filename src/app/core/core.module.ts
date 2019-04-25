@@ -31,6 +31,7 @@ import { HeaderService } from './services/header.service'
 import { NotificationService } from './services/notification.service'
 import { SidePanelService } from './services/side-panel.service'
 import { TournamentService } from './services/tournament.service'
+import { WindowVisibility } from './services/window-visibility.service'
 
 @NgModule({
   declarations: [
@@ -110,6 +111,7 @@ import { TournamentService } from './services/tournament.service'
     NotificationService,
     HeaderService,
     TournamentService,
+    WindowVisibility,
   ],
 })
 export class CoreModule {}

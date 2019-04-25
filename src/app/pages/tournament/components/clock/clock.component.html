@@ -1,0 +1,29 @@
+<form #form="ngForm" (ngSubmit)="onSubmit()">
+  <mat-form-field>
+    <input
+      matInput
+      placeholder="MM"
+      required
+      [(ngModel)]="clockMinutes"
+      name="clock-minutes"
+      type="number"
+      max="100"
+      min="0"
+    /> </mat-form-field
+  >:
+  <mat-form-field>
+    <input
+      matInput
+      placeholder="SS"
+      required
+      [(ngModel)]="clockSeconds"
+      name="clock-seconds"
+      type="number"
+      max="59"
+      min="0"
+    />
+  </mat-form-field>
+  <button type="submit" mat-flat-button color="primary">Set</button>
+</form>
+
+<button type="button" mat-flat-button color="warn" (click)="onReset()">Reset</button>

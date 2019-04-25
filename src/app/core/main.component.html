@@ -5,11 +5,11 @@
         <mat-icon>menu</mat-icon>
       </button>
       <ng-template #defaultHeader> <h1 class="main-app-name">Purple Fox EOR</h1> </ng-template>
-      <ng-container *ngIf="headerTemplate; else defaultHeader">
+      <div class="header_container" *ngIf="headerTemplate; else defaultHeader">
         <ng-container
           *ngTemplateOutlet="headerTemplate; context: { disabled: snav.opened || sidePanel.opened }"
         ></ng-container>
-      </ng-container>
+      </div>
     </mat-toolbar-row>
   </mat-toolbar>
 
@@ -19,6 +19,9 @@
     [style.marginTop.px]="56"
   >
     <mat-sidenav id="sidenav" #snav [fixedInViewport]="true" fixedTopGap="56">
+      <div class="sidenav_header_container" *ngIf="menuHeaderTemplate">
+        <ng-container *ngTemplateOutlet="menuHeaderTemplate"></ng-container>
+      </div>
       <div class="user" *ngIf="(user$ | async) as user">
         <strong class="name"> {{ user | user }} </strong>
         <button mat-stroked-button color="accent" (click)="logout()" class="logout">Logout</button>

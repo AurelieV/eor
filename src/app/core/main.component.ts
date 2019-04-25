@@ -21,6 +21,7 @@ import { SidePanelService } from './services/side-panel.service'
 export class MainComponent implements OnDestroy, AfterViewInit {
   sidePanelTemplate$: Observable<TemplateRef<any>>
   headerTemplate: TemplateRef<any>
+  menuHeaderTemplate: TemplateRef<any>
   subscriptions: Subscription[] = []
 
   @ViewChild('sidePanel')
@@ -42,6 +43,12 @@ export class MainComponent implements OnDestroy, AfterViewInit {
     this.subscriptions.push(
       this.headerService.templateRef$.subscribe((template) => {
         this.headerTemplate = template
+        this.cdr.detectChanges()
+      })
+    )
+    this.subscriptions.push(
+      this.headerService.menuTemplateRef$.subscribe((template) => {
+        this.menuHeaderTemplate = template
         this.cdr.detectChanges()
       })
     )

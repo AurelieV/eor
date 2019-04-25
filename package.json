@@ -26,6 +26,7 @@
     "core-js": "^2.5.4",
     "firebase": "^5.6.0",
     "jwt-decode": "^2.2.0",
+    "moment": "^2.24.0",
     "ng-inline-svg": "^8.0.2",
     "oidc-client": "^1.5.2",
     "rxjs": "^6.3.3",

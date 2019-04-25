@@ -30,8 +30,17 @@
 
 #sidenav {
   width: 250px;
+  .sidenav_header_container {
+    padding: 1rem 1rem 1rem;
+    max-width: 250px;
+    background-color: mat-color($primaryPalette, 50);
+    color: $primary;
+    font-size: 20px;
+    text-transform: capitalize;
+    font-weight: bold;
+  }
   .user {
-    padding: 1em 1em 1em;
+    padding: 1rem 1rem 1rem;
     max-width: 250px;
     display: flex;
     flex-direction: column;
@@ -81,9 +90,12 @@
 
   .side-panel-container {
     flex: 1;
-    margin-left: 2em;
-    margin-top: 1em;
+    padding: 2em 1em;
   }
+}
+
+.header_container {
+  flex: 1 1 auto;
 }
 
 .container {

@@ -7,3 +7,8 @@ $warnPalette: map-get($eor-theme, warn);
 $primary: mat-color($primaryPalette);
 $accent: mat-color($accentPalette);
 $warn: mat-color($warnPalette);
+
+$unknown: white;
+$done: #4cb25d;
+$playing: #e14a31;
+$covered: #eba91d;

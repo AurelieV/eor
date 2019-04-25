@@ -1,0 +1,18 @@
+@import 'utils/_colors';
+
+:host {
+  display: flex;
+  border: 1px solid black;
+  justify-content: center;
+  align-items: center;
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  cursor: pointer;
+
+  box-sizing: border-box;
+  padding: 0.5em;
+  width: 64px;
+  height: 64px;
+}

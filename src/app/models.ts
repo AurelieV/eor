@@ -11,6 +11,8 @@ export class Table {
   result: Result
   isPaperOnStage: boolean
   assignated: string
+  sectionIndex: string
+  zoneIndex: string
 }
 
 export interface TeamTime {

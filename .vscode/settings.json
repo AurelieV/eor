@@ -22,8 +22,8 @@
   "typescript.updateImportsOnFileMove.enabled": "always",
   "workbench.colorCustomizations": {
     "titleBar.activeBackground": "#54a37f",
-    "titleBar.inactiveBackground": "#2a5240",
+    "titleBar.inactiveBackground": "#54a37f99",
     "titleBar.activeForeground": "#15202b",
-    "titleBar.inactiveForeground": "#254140"
+    "titleBar.inactiveForeground": "#15202b99"
   }
 }

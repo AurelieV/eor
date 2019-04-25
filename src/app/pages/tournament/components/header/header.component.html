@@ -1,0 +1,12 @@
+<div
+  *ngIf="(canEditClock$ | async); else nonInteractiveClock"
+  class="clock interactive"
+  (click)="onClockClick()"
+>
+  {{ clock$ | async }}
+</div>
+<ng-template #nonInteractiveClock>
+  <div class="clock">{{ clock$ | async }}</div>
+</ng-template>
+<button mat-icon-button><mat-icon svgIcon="chat"></mat-icon></button>
+<button mat-icon-button><mat-icon>settings</mat-icon></button>

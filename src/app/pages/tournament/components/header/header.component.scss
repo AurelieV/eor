@@ -1,0 +1,11 @@
+:host {
+  display: flex;
+  align-items: center;
+}
+.clock {
+  flex: 1;
+  text-align: center;
+  &.interactive {
+    cursor: pointer;
+  }
+}

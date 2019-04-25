@@ -15,6 +15,7 @@ export type ConnectedUser = JudgeAppsInfo
 export class AuthenticationService {
   user$: Observable<ConnectedUser>
   roles$: Observable<string[]>
+  userId$: Observable<string>
 
   constructor(
     private afAuth: AngularFireAuth,
@@ -31,6 +32,7 @@ export class AuthenticationService {
       /// TODO: handle other way to connect
       map((user) => (user ? (user.roles ? Object.keys(user.roles) : []) : []))
     )
+    this.userId$ = this.afAuth.authState.pipe(map(({ uid }) => uid))
   }
 
   logout(): Promise<any> {

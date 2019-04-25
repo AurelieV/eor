@@ -1,0 +1,33 @@
+@import 'utils/_colors';
+@import 'utils/_media';
+
+.zones {
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+}
+
+.zone {
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+
+  border-radius: 10px;
+  &:not(:last-child) {
+    margin-bottom: 2em;
+  }
+  &_title {
+    font-size: 16px;
+    font-weight: bold;
+    color: $primary;
+    margin-bottom: 1em;
+  }
+}
+
+.section {
+  display: flex;
+  flex-wrap: wrap;
+  margin-right: auto;
+  margin-left: auto;
+  &:not(:last-child) {
+    margin-bottom: 0.5em;
+  }
+}
