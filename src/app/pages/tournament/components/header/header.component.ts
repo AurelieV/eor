@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core'
+import { Component, EventEmitter, Input, Output } from '@angular/core'
 import { TournamentStore } from '@pages/tournament/services/tournament-store.service'
 import { Observable } from 'rxjs'
 import { map } from 'rxjs/operators'
@@ -10,6 +10,8 @@ import { map } from 'rxjs/operators'
 })
 export class HeaderComponent {
   @Output() editClock = new EventEmitter()
+  @Input() disabled: boolean
+
   clock$: Observable<string>
   canEditClock$: Observable<boolean>
 
@@ -34,6 +36,8 @@ export class HeaderComponent {
   }
 
   onClockClick() {
-    this.editClock.emit()
+    if (!this.disabled) {
+      this.editClock.emit()
+    }
   }
 }

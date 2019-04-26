@@ -13,8 +13,8 @@
 
 <div class="block playing"></div>
 <div class=""></div>
-<ng-template #header>
-  <tournament-header (editClock)="onEditClock()"></tournament-header>
+<ng-template #header let-disabled="disabled">
+  <tournament-header [disabled]="disabled" (editClock)="onEditClock()"></tournament-header>
 </ng-template>
 <ng-template #menuHeader>{{ (tournament$ | async)?.name }}</ng-template>
 <ng-template #clock><clock (clockSet)="closePanel()"></clock></ng-template>

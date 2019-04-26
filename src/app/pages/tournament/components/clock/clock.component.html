@@ -1,3 +1,4 @@
+<h1>Clock</h1>
 <form #form="ngForm" (ngSubmit)="onSubmit()">
   <mat-form-field>
     <input
@@ -23,7 +24,17 @@
       min="0"
     />
   </mat-form-field>
-  <button type="submit" mat-flat-button color="primary">Set</button>
+  <button type="submit" mat-flat-button color="primary">
+    <mat-icon>alarm</mat-icon>
+    <span>Set</span>
+  </button>
 </form>
 
-<button type="button" mat-flat-button color="warn" (click)="onReset()">Reset</button>
+<hr />
+
+<div class="actions">
+  <button type="button" mat-flat-button color="warn" (click)="onReset()">
+    <mat-icon>alarm_off</mat-icon>
+    <span>Reset</span>
+  </button>
+</div>

@@ -1,7 +1,16 @@
+@import 'utils/colors';
+
 :host {
   display: flex;
   flex-direction: column;
 }
+
+h1 {
+  color: $primary;
+  font-size: 1.5rem;
+  margin-bottom: 2em;
+}
+
 form {
   display: flex;
   align-items: center;
@@ -9,4 +18,14 @@ form {
   .mat-form-field {
     width: 80px;
   }
+}
+
+button mat-icon {
+  margin-right: 0.5em;
+}
+
+.actions {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
 }
