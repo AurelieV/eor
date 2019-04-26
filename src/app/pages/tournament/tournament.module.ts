@@ -10,9 +10,9 @@ import {
   MatSidenavModule,
 } from '@angular/material'
 import { RouterModule } from '@angular/router'
-import { ClockComponent } from './components/clock/clock.component'
 import { HeaderComponent } from './components/header/header.component'
 import { TableComponent } from './components/table/table.component'
+import { ClockComponent } from './panels/clock/clock.component'
 import { TournamentStore } from './services/tournament-store.service'
 import { TournamentComponent } from './tournament.component'
 
