@@ -12,12 +12,20 @@ import {
 import { RouterModule } from '@angular/router'
 import { HeaderComponent } from './components/header/header.component'
 import { TableComponent } from './components/table/table.component'
-import { ClockComponent } from './panels/clock/clock.component'
+import { ClockPanelComponent } from './panels/clock/clock.component'
+import { SettingsPanelComponent } from './panels/settings/settings.component'
+import { TableService } from './services/table.service'
 import { TournamentStore } from './services/tournament-store.service'
 import { TournamentComponent } from './tournament.component'
 
 @NgModule({
-  declarations: [TournamentComponent, TableComponent, HeaderComponent, ClockComponent],
+  declarations: [
+    TournamentComponent,
+    TableComponent,
+    HeaderComponent,
+    ClockPanelComponent,
+    SettingsPanelComponent,
+  ],
   imports: [
     // Angular
     CommonModule,
@@ -40,6 +48,6 @@ import { TournamentComponent } from './tournament.component'
       },
     ]),
   ],
-  providers: [TournamentStore],
+  providers: [TournamentStore, TableService],
 })
 export class TournamentModule {}

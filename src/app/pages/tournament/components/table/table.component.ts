@@ -1,5 +1,6 @@
 import { Table } from '@/app/models'
-import { Component, HostBinding, Input } from '@angular/core'
+import { Component, HostBinding, HostListener, Input } from '@angular/core'
+import { TableService } from '@pages/tournament/services/table.service'
 
 @Component({
   selector: 'table',
@@ -8,9 +9,22 @@ import { Component, HostBinding, Input } from '@angular/core'
 })
 export class TableComponent {
   @Input() table: Table
+  @Input() canInteractWithFeaturedTables: boolean = true
 
   @HostBinding('class')
   get status() {
-    return `block ${'playing' || (this.table && this.table.status)}`
+    return `block ${this.table && this.table.status}`
+  }
+
+  constructor(private tableService: TableService) {}
+
+  @HostListener('tap')
+  mainAction() {
+    this.tableService.changeStatus(this.table)
+  }
+
+  @HostListener('press')
+  secondaryAction() {
+    console.log('secondary')
   }
 }

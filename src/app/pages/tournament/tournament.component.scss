@@ -23,10 +23,6 @@
 }
 
 .section {
-  display: flex;
-  flex-wrap: wrap;
-  margin-right: auto;
-  margin-left: auto;
   &:not(:last-child) {
     margin-bottom: 0.5em;
   }

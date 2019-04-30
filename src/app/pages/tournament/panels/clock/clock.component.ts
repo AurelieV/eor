@@ -3,11 +3,11 @@ import { TournamentStore } from '@pages/tournament/services/tournament-store.ser
 import * as moment from 'moment'
 
 @Component({
-  selector: 'clock',
+  selector: 'clock-panel',
   templateUrl: './clock.component.html',
   styleUrls: ['./clock.component.scss'],
 })
-export class ClockComponent {
+export class ClockPanelComponent {
   @Output()
   clockSet = new EventEmitter()
   clockMinutes: number = 50

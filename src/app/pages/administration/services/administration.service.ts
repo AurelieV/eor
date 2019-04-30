@@ -74,7 +74,7 @@ export class AdministrationService {
       status: 'unknown',
       isFeatured: false,
       time: null,
-      doneTime: null,
+      updateStatusTime: null,
       result: null,
       isPaperOnStage: false,
       assignated: '',

@@ -7,7 +7,7 @@ export class Table {
     time: TeamTime
     status: TeamTablesStatus
   }
-  doneTime: number
+  updateStatusTime: number
   result: Result
   isPaperOnStage: boolean
   assignated: string
@@ -72,4 +72,8 @@ export interface JudgeAppsInfo {
 export interface StoredUser {
   roles: { [role: string]: boolean }
   judgeapps: JudgeAppsInfo
+}
+
+export interface Settings {
+  statusOrder: TableStatus[]
 }
