@@ -5,7 +5,7 @@
       <table
         [table]="table"
         class="table"
-        *ngFor="let table of (zoneTables[zoneIndex][sectionIndex] | async)"
+        *ngFor="let table of (zoneTables[zoneIndex][sectionIndex] | async); trackBy: trackTableFn"
       ></table>
     </div>
   </div>

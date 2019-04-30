@@ -1,0 +1,16 @@
+<div class="actions" *ngIf="settings">
+  <button mat-flat-button color="primary" (click)="toggleIsGreenFirst()">
+    <span *ngIf="settings.statusOrder.isGreenFirst">Red first</span
+    ><span *ngIf="!settings.statusOrder.isGreenFirst">Green first</span>
+  </button>
+  <button mat-flat-button color="primary" (click)="toggleIsUnknownHidden()">
+    <span *ngIf="settings.statusOrder.isUnknownHidden">With Unknown</span
+    ><span *ngIf="!settings.statusOrder.isUnknownHidden">No Unknown</span>
+  </button>
+</div>
+<div class="summary">
+  <ng-template ngFor [ngForOf]="displayedStatus" let-status let-last="last">
+    <div [class]="'block ' + status"></div>
+    <div *ngIf="!last"><mat-icon>arrow_forward</mat-icon></div>
+  </ng-template>
+</div>

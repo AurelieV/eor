@@ -17,7 +17,7 @@ export class TableService {
   ) {}
 
   changeStatus(table: Table) {
-    this.settings.value$.pipe(take(1)).subscribe(({ statusOrder }) => {
+    this.settings.statusOrder$.pipe(take(1)).subscribe((statusOrder) => {
       const currentIndex = statusOrder.findIndex((status) => status === table.status)
       const newStatus = statusOrder[(currentIndex + 1) % statusOrder.length]
       const update = { status: newStatus, updateStatusTime: moment.utc().valueOf() }
@@ -28,7 +28,6 @@ export class TableService {
 
   update(table: Table, update: any): Promise<any> {
     try {
-      console.log(update, this.tablePath(table))
       return this.db.object(this.tablePath(table)).update(update)
     } catch (e) {
       this.errorService.raise(e.toString())

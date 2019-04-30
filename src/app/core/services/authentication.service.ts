@@ -27,7 +27,7 @@ export class AuthenticationService {
         user ? this.db.object<StoredUser>(`/users/${user.uid}/`).valueChanges() : of(null)
       )
     )
-    this.user$ = storedUser$.pipe(map((user) => user.judgeapps))
+    this.user$ = storedUser$.pipe(map((user) => user && user.judgeapps))
     this.roles$ = storedUser$.pipe(
       /// TODO: handle other way to connect
       map((user) => (user ? (user.roles ? Object.keys(user.roles) : []) : []))

@@ -11,6 +11,7 @@ import {
 } from '@angular/material'
 import { RouterModule } from '@angular/router'
 import { HeaderComponent } from './components/header/header.component'
+import { StatusOrderComponent } from './components/status-order/status-order.component'
 import { TableComponent } from './components/table/table.component'
 import { ClockPanelComponent } from './panels/clock/clock.component'
 import { SettingsPanelComponent } from './panels/settings/settings.component'
@@ -25,6 +26,7 @@ import { TournamentComponent } from './tournament.component'
     HeaderComponent,
     ClockPanelComponent,
     SettingsPanelComponent,
+    StatusOrderComponent,
   ],
   imports: [
     // Angular

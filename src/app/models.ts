@@ -75,5 +75,10 @@ export interface StoredUser {
 }
 
 export interface Settings {
-  statusOrder: TableStatus[]
+  statusOrder: {
+    isGreenFirst: boolean
+    isUnknownHidden: boolean
+  }
 }
+
+export type StatusOrder = Array<TableStatus>

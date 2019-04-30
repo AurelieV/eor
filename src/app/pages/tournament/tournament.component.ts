@@ -65,6 +65,10 @@ export class TournamentComponent implements OnInit, OnDestroy, AfterViewInit {
     this.sidePanel.close()
   }
 
+  trackTableFn(table) {
+    return table.id
+  }
+
   ngOnDestroy() {
     this.subscriptions.forEach((s) => s.unsubscribe())
     this.headerService.resetAll()
