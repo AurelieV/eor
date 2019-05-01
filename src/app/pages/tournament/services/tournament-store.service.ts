@@ -1,4 +1,4 @@
-import { Table, Tournament, TournamentStaff } from '@/app/models'
+import { Table, Tournament, TournamentStaff, ZoneInfo } from '@/app/models'
 import { Injectable } from '@angular/core'
 import { AngularFireDatabase } from '@angular/fire/database'
 import { AuthenticationService } from '@core/services/authentication.service'
@@ -20,6 +20,7 @@ export class TournamentStore {
   clock$: Observable<moment.Duration>
   roles$: Observable<Array<String>>
   staff$: Observable<TournamentStaff>
+  zoneInfos$: Observable<Observable<ZoneInfo>[]>
 
   constructor(
     private db: AngularFireDatabase,
@@ -43,6 +44,34 @@ export class TournamentStore {
                   .valueChanges()
               )
             )
+          )
+        )
+      )
+    )
+    this.zoneInfos$ = this.zones$.pipe(
+      map((zones) =>
+        zones.map((zone, zoneIndex) =>
+          this.key$.pipe(
+            switchMap((key) =>
+              this.db.list<Table[]>(`/zoneTables/${key}/${zoneIndex}`).valueChanges()
+            ),
+            map((sections) => {
+              const tables = sections.reduce(
+                (tables, sectionTables) => tables.concat(sectionTables),
+                []
+              )
+              return {
+                nbPlaying: 10,
+                nbExtraTimed: 10,
+                nbCovered: 10,
+                nbStillPlaying: 10,
+                maxTimeExtension: 10,
+                nbDone: 10,
+                nbTotal: 10,
+                name: zone.name,
+                id: zoneIndex,
+              }
+            })
           )
         )
       )
@@ -71,6 +100,9 @@ export class TournamentStore {
       combineLatest(this.staff$, this.auth.userId$),
       map(([roles, staff, userId]) => {
         const allRoles = [...roles]
+        if (!staff) {
+          return allRoles
+        }
         const isLeader =
           staff.zoneLeaders && staff.zoneLeaders.findIndex(({ id }) => id === userId) > -1
         const isAdmin = staff.admins && staff.admins.findIndex(({ id }) => id === userId) > -1

@@ -1,3 +1,4 @@
+import { ScrollDispatchModule } from '@angular/cdk/scrolling'
 import { CommonModule } from '@angular/common'
 import { NgModule } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
@@ -13,6 +14,7 @@ import { RouterModule } from '@angular/router'
 import { HeaderComponent } from './components/header/header.component'
 import { StatusOrderComponent } from './components/status-order/status-order.component'
 import { TableComponent } from './components/table/table.component'
+import { ZoneInfoComponent } from './components/zone-info/zone-info.component'
 import { ClockPanelComponent } from './panels/clock/clock.component'
 import { SettingsPanelComponent } from './panels/settings/settings.component'
 import { TableService } from './services/table.service'
@@ -27,6 +29,7 @@ import { TournamentComponent } from './tournament.component'
     ClockPanelComponent,
     SettingsPanelComponent,
     StatusOrderComponent,
+    ZoneInfoComponent,
   ],
   imports: [
     // Angular
@@ -41,6 +44,7 @@ import { TournamentComponent } from './tournament.component'
     MatListModule,
     MatFormFieldModule,
     MatInputModule,
+    ScrollDispatchModule,
 
     // App
     RouterModule.forChild([

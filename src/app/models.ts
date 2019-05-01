@@ -82,3 +82,15 @@ export interface Settings {
 }
 
 export type StatusOrder = Array<TableStatus>
+
+export class ZoneInfo {
+  id: number
+  nbPlaying: number
+  nbExtraTimed: number
+  nbCovered: number
+  nbStillPlaying: number
+  maxTimeExtension: number
+  nbDone: number
+  nbTotal: number
+  name: string
+}
