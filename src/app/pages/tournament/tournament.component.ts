@@ -20,6 +20,7 @@ export class TournamentComponent implements OnInit, OnDestroy, AfterViewInit {
   zoneTables$: Observable<ZonesTables>
   tournament$: Observable<Tournament>
   zoneInfos$: Observable<Observable<ZoneInfo>[]>
+  allInfo$: Observable<ZoneInfo>
 
   zoneInfoSelected: number = null
   zoneInfoItemWidthRatio = 0.82
@@ -57,6 +58,7 @@ export class TournamentComponent implements OnInit, OnDestroy, AfterViewInit {
     this.zoneTables$ = this.store.zonesTables$
     this.tournament$ = this.store.tournament$
     this.zoneInfos$ = this.store.zoneInfos$
+    this.allInfo$ = this.store.allInfo$
     this.scroller
       .scrolled()
       .pipe(debounceTime(300))
@@ -93,6 +95,7 @@ export class TournamentComponent implements OnInit, OnDestroy, AfterViewInit {
 
   onZoneInfoClick(zoneIndex, arrayIndex) {
     this.zoneInfoSelected = zoneIndex
+    window.scrollTo(0, 0)
 
     // Make visible
     const width = this.zoneInfoContainer.getElementRef().nativeElement.clientWidth

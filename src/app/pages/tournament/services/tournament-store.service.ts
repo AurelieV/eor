@@ -5,7 +5,7 @@ import { AuthenticationService } from '@core/services/authentication.service'
 import { WindowVisibility } from '@core/services/window-visibility.service'
 import { Zone } from '@pages/administration/administration.models'
 import * as moment from 'moment'
-import { BehaviorSubject, Observable, of, timer } from 'rxjs'
+import { BehaviorSubject, combineLatest as combine, Observable, of, timer } from 'rxjs'
 import { combineLatest, filter, map, switchMap } from 'rxjs/operators'
 
 export type SectionsTables = Observable<Table[]>[]
@@ -21,6 +21,7 @@ export class TournamentStore {
   roles$: Observable<Array<String>>
   staff$: Observable<TournamentStaff>
   zoneInfos$: Observable<Observable<ZoneInfo>[]>
+  allInfo$: Observable<ZoneInfo>
 
   constructor(
     private db: AngularFireDatabase,
@@ -73,6 +74,35 @@ export class TournamentStore {
               }
             })
           )
+        )
+      )
+    )
+    this.allInfo$ = this.zoneInfos$.pipe(
+      switchMap((zoneInfos) => combine(...zoneInfos)),
+      map((zoneInfos) =>
+        zoneInfos.reduce(
+          (allInfo, zoneInfo) => ({
+            id: null,
+            name: 'All',
+            nbPlaying: allInfo.nbPlaying + zoneInfo.nbPlaying,
+            nbExtraTimed: allInfo.nbExtraTimed + zoneInfo.nbExtraTimed,
+            nbCovered: allInfo.nbCovered + zoneInfo.nbCovered,
+            nbStillPlaying: allInfo.nbStillPlaying + zoneInfo.nbStillPlaying,
+            maxTimeExtension: Math.max(allInfo.maxTimeExtension, allInfo.maxTimeExtension),
+            nbDone: allInfo.nbDone + zoneInfo.nbDone,
+            nbTotal: allInfo.nbTotal + zoneInfo.nbTotal,
+          }),
+          {
+            id: null,
+            name: 'All',
+            nbPlaying: 10,
+            nbExtraTimed: 10,
+            nbCovered: 10,
+            nbStillPlaying: 10,
+            maxTimeExtension: 10,
+            nbDone: 10,
+            nbTotal: 10,
+          }
         )
       )
     )

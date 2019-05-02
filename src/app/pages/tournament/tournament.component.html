@@ -1,11 +1,19 @@
 <div class="zone-infos" *ngIf="(zoneInfos$ | async) as zoneInfos" cdk-scrollable>
+  <ng-container *ngIf="(allInfo$ | async) as allInfo">
+    <zone-info
+      [info]="allInfo"
+      [selected]="zoneInfoSelected === null"
+      class="zone-info"
+      (click)="onZoneInfoClick(null, 0)"
+    ></zone-info>
+  </ng-container>
   <ng-container *ngFor="let info$ of zoneInfos; let arrayIndex = index; trackBy: trackbyIndexFn">
     <ng-container *ngIf="(info$ | async) as info">
       <zone-info
         [info]="info"
         [selected]="info.id === zoneInfoSelected"
         class="zone-info"
-        (click)="onZoneInfoClick(info.id, arrayIndex)"
+        (click)="onZoneInfoClick(info.id, arrayIndex + 1)"
       ></zone-info>
     </ng-container>
   </ng-container>
