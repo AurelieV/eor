@@ -11,7 +11,43 @@
   }
 }
 
-.name {
-  font-weight: bold;
+.header {
   color: $primary;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  .name {
+    font-weight: bold;
+  }
+}
+
+.content {
+  display: flex;
+  margin-top: 5px;
+  align-items: center;
+  .summary {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: $accent;
+    .count {
+      font-size: 1.8rem;
+      font-weight: bold;
+    }
+    :not(.count) {
+      font-size: 0.8rem;
+    }
+  }
+  .counters {
+    flex: 1 0 auto;
+  }
+  .counter {
+    margin-top: 5px;
+    display: flex;
+    align-items: center;
+    .count {
+      flex: 1 0 auto;
+      margin-left: 5px;
+    }
+  }
 }

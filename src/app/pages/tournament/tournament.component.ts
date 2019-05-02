@@ -1,4 +1,4 @@
-import { Tournament, ZoneInfo } from '@/app/models'
+import { Filters, Tournament, ZoneInfo } from '@/app/models'
 import { CdkScrollable, ScrollDispatcher } from '@angular/cdk/scrolling'
 import { AfterViewInit, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
@@ -21,6 +21,7 @@ export class TournamentComponent implements OnInit, OnDestroy, AfterViewInit {
   tournament$: Observable<Tournament>
   zoneInfos$: Observable<Observable<ZoneInfo>[]>
   allInfo$: Observable<ZoneInfo>
+  filters$: Observable<Filters>
 
   zoneInfoSelected: number = null
   zoneInfoItemWidthRatio = 0.82
@@ -33,6 +34,8 @@ export class TournamentComponent implements OnInit, OnDestroy, AfterViewInit {
   private clockTemplateRef: TemplateRef<any>
   @ViewChild('settings')
   private settingsTemplateRef: TemplateRef<any>
+  @ViewChild('filters')
+  private filtersTemplateRef: TemplateRef<any>
 
   @ViewChild(CdkScrollable)
   private zoneInfoContainer: CdkScrollable
@@ -59,6 +62,7 @@ export class TournamentComponent implements OnInit, OnDestroy, AfterViewInit {
     this.tournament$ = this.store.tournament$
     this.zoneInfos$ = this.store.zoneInfos$
     this.allInfo$ = this.store.allInfo$
+    this.filters$ = this.store.filters$
     this.scroller
       .scrolled()
       .pipe(debounceTime(300))
@@ -91,6 +95,10 @@ export class TournamentComponent implements OnInit, OnDestroy, AfterViewInit {
 
   onEditSettings() {
     this.sidePanel.open(this.settingsTemplateRef)
+  }
+
+  onEditFilter() {
+    this.sidePanel.open(this.filtersTemplateRef)
   }
 
   onZoneInfoClick(zoneIndex, arrayIndex) {

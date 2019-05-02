@@ -1,0 +1,28 @@
+:host {
+  display: block;
+}
+
+.filter {
+  display: inline-flex;
+  align-items: center;
+  flex: 1 0 auto;
+  width: 50%;
+  box-sizing: border-box;
+  padding: 0.5rem 0;
+  &:not(.active) {
+    opacity: 0.5;
+  }
+}
+
+.label {
+  margin-left: 5px;
+}
+
+.status {
+  margin-bottom: 2rem;
+  .block {
+    width: 24px;
+    height: 24px;
+    border: 1px solid black;
+  }
+}

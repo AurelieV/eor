@@ -76,7 +76,7 @@ export class AdministrationService {
       time: null,
       updateStatusTime: null,
       result: null,
-      isPaperOnStage: false,
+      stageHasPaper: false,
       assignated: '',
       zoneIndex,
       sectionIndex,

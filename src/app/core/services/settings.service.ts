@@ -30,7 +30,7 @@ export class SettingsService {
       map(({ statusOrder }) => {
         let order: TableStatus[]
         if (statusOrder.isGreenFirst) {
-          order = ['done', 'covered', 'playing']
+          order = ['done', 'playing', 'covered']
         } else {
           order = ['playing', 'covered', 'done']
         }

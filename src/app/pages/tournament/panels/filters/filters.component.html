@@ -1,0 +1,35 @@
+<div class="panel-title">Filters</div>
+<div class="panel-subtitle">Status</div>
+<div class="status">
+  <button class="filter" [class.active]="filters.displayUnknown" (click)="toggle('displayUnknown')">
+    <div class="block"></div>
+    <div class="label">Unknown</div>
+  </button>
+  <button class="filter" [class.active]="filters.displayPlaying" (click)="toggle('displayPlaying')">
+    <div class="block playing"></div>
+    <div class="label">Playing</div>
+  </button>
+  <button class="filter" [class.active]="filters.displayCovered" (click)="toggle('displayCovered')">
+    <div class="block covered"></div>
+    <div class="label">Covered</div>
+  </button>
+  <button class="filter" [class.active]="filters.displayDone" (click)="toggle('displayDone')">
+    <div class="block done"></div>
+    <div class="label">Done</div>
+  </button>
+</div>
+<div class="panel-subtitle">Extras</div>
+<div class="extras">
+  <button class="filter" [class.active]="filters.onlyExtraTimed" (click)="toggle('onlyExtraTimed')">
+    <mat-icon>alarm</mat-icon>
+    <div class="label">Only time</div>
+  </button>
+  <button
+    class="filter"
+    [class.active]="filters.onlyStageHasNotPaper"
+    (click)="toggle('onlyStageHasNotPaper')"
+  >
+    <mat-icon>desktop_access_disabled</mat-icon>
+    <div class="label">Only missing</div>
+  </button>
+</div>

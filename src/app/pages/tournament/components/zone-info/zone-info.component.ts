@@ -13,4 +13,8 @@ export class ZoneInfoComponent {
   @HostBinding('class.selected')
   @Input()
   selected: boolean
+
+  get sections() {
+    return this.info.sections.map((section) => `${section.start}-${section.end}`).join(' / ')
+  }
 }

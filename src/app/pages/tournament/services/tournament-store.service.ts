@@ -1,4 +1,4 @@
-import { Table, Tournament, TournamentStaff, ZoneInfo } from '@/app/models'
+import { Filters, Table, Tournament, TournamentStaff, ZoneInfo } from '@/app/models'
 import { Injectable } from '@angular/core'
 import { AngularFireDatabase } from '@angular/fire/database'
 import { AuthenticationService } from '@core/services/authentication.service'
@@ -22,6 +22,14 @@ export class TournamentStore {
   staff$: Observable<TournamentStaff>
   zoneInfos$: Observable<Observable<ZoneInfo>[]>
   allInfo$: Observable<ZoneInfo>
+  filters$ = new BehaviorSubject<Filters>({
+    displayUnknown: true,
+    displayCovered: true,
+    displayPlaying: true,
+    displayDone: true,
+    onlyExtraTimed: false,
+    onlyStageHasNotPaper: false,
+  })
 
   constructor(
     private db: AngularFireDatabase,
@@ -34,6 +42,33 @@ export class TournamentStore {
     this.zones$ = this.key$.pipe(
       switchMap((key) => this.db.list<Zone>(`/zones/${key}`).valueChanges())
     )
+    const filterFunc$: Observable<(table: Table) => boolean> = this.filters$.pipe(
+      map((filters) => {
+        return (table) => {
+          let result = true
+          if (!filters.displayCovered) {
+            result = result && table.status !== 'covered'
+          }
+          if (!filters.displayUnknown) {
+            result = result && table.status !== 'unknown'
+          }
+          if (!filters.displayDone) {
+            result = result && table.status !== 'done'
+          }
+          if (!filters.displayPlaying) {
+            result = result && table.status !== 'playing'
+          }
+          if (filters.onlyExtraTimed) {
+            result = result && table.time > 0
+          }
+          if (!filters.onlyStageHasNotPaper) {
+            result = result && !table.stageHasPaper
+          }
+
+          return result
+        }
+      })
+    )
     this.zonesTables$ = this.zones$.pipe(
       map((zones) =>
         zones.map((zone, zoneIndex) =>
@@ -43,7 +78,11 @@ export class TournamentStore {
                 this.db
                   .list<Table>(`/zoneTables/${key}/${zoneIndex}/${sectionIndex}`)
                   .valueChanges()
-              )
+              ),
+              combineLatest(filterFunc$),
+              map(([tables, fn]) => {
+                return tables.filter(fn)
+              })
             )
           )
         )
@@ -58,19 +97,21 @@ export class TournamentStore {
             ),
             map((sections) => {
               const tables = sections.reduce(
-                (tables, sectionTables) => tables.concat(sectionTables),
+                (tables, sectionTables) => tables.concat(Object.values(sectionTables)),
                 []
               )
+              const notDoneTables = tables.filter(({ status }) => status !== 'done')
+              const extraTimesTables = notDoneTables.filter((table) => table.time > 0)
+
               return {
-                nbPlaying: 10,
-                nbExtraTimed: 10,
-                nbCovered: 10,
-                nbStillPlaying: 10,
-                maxTimeExtension: 10,
-                nbDone: 10,
-                nbTotal: 10,
-                name: zone.name,
                 id: zoneIndex,
+                name: zone.name,
+                sections: zone.sections,
+                nbExtraTimed: extraTimesTables.length,
+                maxTimeExtension: Math.max(...extraTimesTables.map((table) => table.time)),
+                nbStillPlaying: notDoneTables.length,
+                nbStageHasNotPaper: tables.filter((table) => !table.stageHasPaper).length,
+                nbTotal: tables.length,
               }
             })
           )
@@ -84,24 +125,33 @@ export class TournamentStore {
           (allInfo, zoneInfo) => ({
             id: null,
             name: 'All',
-            nbPlaying: allInfo.nbPlaying + zoneInfo.nbPlaying,
+            sections: [
+              {
+                start: Math.min(
+                  allInfo.sections[0].start,
+                  Math.min(...zoneInfo.sections.map((s) => s.start))
+                ),
+                end: Math.max(
+                  allInfo.sections[0].end,
+                  Math.max(...zoneInfo.sections.map((s) => s.end))
+                ),
+              },
+            ],
             nbExtraTimed: allInfo.nbExtraTimed + zoneInfo.nbExtraTimed,
-            nbCovered: allInfo.nbCovered + zoneInfo.nbCovered,
+            maxTimeExtension: Math.max(allInfo.maxTimeExtension, zoneInfo.maxTimeExtension),
             nbStillPlaying: allInfo.nbStillPlaying + zoneInfo.nbStillPlaying,
-            maxTimeExtension: Math.max(allInfo.maxTimeExtension, allInfo.maxTimeExtension),
-            nbDone: allInfo.nbDone + zoneInfo.nbDone,
+            nbStageHasNotPaper: allInfo.nbStageHasNotPaper + zoneInfo.nbStageHasNotPaper,
             nbTotal: allInfo.nbTotal + zoneInfo.nbTotal,
           }),
           {
             id: null,
             name: 'All',
-            nbPlaying: 10,
-            nbExtraTimed: 10,
-            nbCovered: 10,
-            nbStillPlaying: 10,
-            maxTimeExtension: 10,
-            nbDone: 10,
-            nbTotal: 10,
+            sections: [{ start: Infinity, end: -Infinity }],
+            nbExtraTimed: 0,
+            maxTimeExtension: 0,
+            nbStillPlaying: 0,
+            nbStageHasNotPaper: 0,
+            nbTotal: 0,
           }
         )
       )
@@ -162,5 +212,9 @@ export class TournamentStore {
 
   setClock(value: number): Promise<any> {
     return this.db.object<number>(`endTime/${this.key}`).set(value)
+  }
+
+  setFilters(filters: Filters) {
+    this.filters$.next(filters)
   }
 }

@@ -11,6 +11,7 @@ import { map } from 'rxjs/operators'
 export class HeaderComponent {
   @Output() editClock = new EventEmitter()
   @Output() editSettings = new EventEmitter()
+  @Output() editFilters = new EventEmitter()
   @Input() disabled: boolean
 
   clock$: Observable<string>
@@ -45,6 +46,12 @@ export class HeaderComponent {
   onSettingsClick() {
     if (!this.disabled) {
       this.editSettings.emit()
+    }
+  }
+
+  onFiltersClick() {
+    if (!this.disabled) {
+      this.editFilters.emit()
     }
   }
 }

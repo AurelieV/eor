@@ -25,4 +25,8 @@
     background: $done;
     color: white;
   }
+  &.extra-timed {
+    background: white;
+    border: 2px solid $extra-timed;
+  }
 }

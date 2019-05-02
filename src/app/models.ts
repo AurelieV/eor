@@ -1,3 +1,5 @@
+import { Section } from '@pages/administration/administration.models'
+
 export class Table {
   id: string
   status: TableStatus
@@ -9,7 +11,7 @@ export class Table {
   }
   updateStatusTime: number
   result: Result
-  isPaperOnStage: boolean
+  stageHasPaper: boolean
   assignated: string
   sectionIndex: string
   zoneIndex: string
@@ -85,12 +87,20 @@ export type StatusOrder = Array<TableStatus>
 
 export class ZoneInfo {
   id: number
-  nbPlaying: number
-  nbExtraTimed: number
-  nbCovered: number
-  nbStillPlaying: number
-  maxTimeExtension: number
-  nbDone: number
-  nbTotal: number
   name: string
+  sections: Section[]
+  nbExtraTimed: number
+  maxTimeExtension: number
+  nbStillPlaying: number
+  nbStageHasNotPaper: number
+  nbTotal: number
+}
+
+export class Filters {
+  displayUnknown: boolean
+  displayCovered: boolean
+  displayPlaying: boolean
+  displayDone: boolean
+  onlyExtraTimed: boolean
+  onlyStageHasNotPaper: boolean
 }

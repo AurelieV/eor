@@ -1,24 +1,27 @@
-<div class="zone-infos" *ngIf="(zoneInfos$ | async) as zoneInfos" cdk-scrollable>
-  <ng-container *ngIf="(allInfo$ | async) as allInfo">
-    <zone-info
-      [info]="allInfo"
-      [selected]="zoneInfoSelected === null"
-      class="zone-info"
-      (click)="onZoneInfoClick(null, 0)"
-    ></zone-info>
-  </ng-container>
-  <ng-container *ngFor="let info$ of zoneInfos; let arrayIndex = index; trackBy: trackbyIndexFn">
-    <ng-container *ngIf="(info$ | async) as info">
+<div class="filters">
+  <div class="zone-infos" *ngIf="(zoneInfos$ | async) as zoneInfos" cdk-scrollable>
+    <ng-container *ngIf="(allInfo$ | async) as allInfo">
       <zone-info
-        [info]="info"
-        [selected]="info.id === zoneInfoSelected"
+        [info]="allInfo"
+        [selected]="zoneInfoSelected === null"
         class="zone-info"
-        (click)="onZoneInfoClick(info.id, arrayIndex + 1)"
+        (click)="onZoneInfoClick(null, 0)"
       ></zone-info>
     </ng-container>
-  </ng-container>
-  <div class="push"></div>
+    <ng-container *ngFor="let info$ of zoneInfos; let arrayIndex = index; trackBy: trackbyIndexFn">
+      <ng-container *ngIf="(info$ | async) as info">
+        <zone-info
+          [info]="info"
+          [selected]="info.id === zoneInfoSelected"
+          class="zone-info"
+          (click)="onZoneInfoClick(info.id, arrayIndex + 1)"
+        ></zone-info>
+      </ng-container>
+    </ng-container>
+    <div class="push"></div>
+  </div>
 </div>
+
 <div class="zones" *ngIf="(zoneTables$ | async) as zoneTables">
   <ng-container *ngFor="let zone of (zones$ | async); let zoneIndex = index">
     <div class="zone" *ngIf="zoneInfoSelected === null || zoneInfoSelected === zoneIndex">
@@ -41,8 +44,10 @@
     [disabled]="disabled"
     (editClock)="onEditClock()"
     (editSettings)="onEditSettings()"
+    (editFilters)="onEditFilter()"
   ></tournament-header>
 </ng-template>
 <ng-template #menuHeader>{{ (tournament$ | async)?.name }}</ng-template>
 <ng-template #clock><clock-panel (clockSet)="closePanel()"></clock-panel></ng-template>
 <ng-template #settings><settings-panel></settings-panel></ng-template>
+<ng-template #filters><filters-panel [filters]="filters$ | async"></filters-panel></ng-template>

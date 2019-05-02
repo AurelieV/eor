@@ -1,1 +1,24 @@
-<div class="name">{{ info && info.name }}</div>
+<div class="header">
+  <span class="name">{{ info && info.name }}</span>
+  <span class="sections" *ngIf="sections"> ({{ sections }})</span>
+</div>
+<div class="content">
+  <div class="counters">
+    <div class="counter">
+      <mat-icon>alarm</mat-icon>
+      <div class="count">
+        {{ info.nbExtraTimed }}
+        <ng-container *ngIf="info.nbExtraTimed > 0">(+{{ info.maxTimeExtension }}min)</ng-container>
+      </div>
+    </div>
+    <div class="counter">
+      <mat-icon>desktop_access_disabled</mat-icon>
+      <div class="count">{{ info.nbStageHasNotPaper }}</div>
+    </div>
+  </div>
+  <div class="summary">
+    <div class="count">{{ info.nbStillPlaying }}</div>
+    <div>still</div>
+    <div>playing</div>
+  </div>
+</div>
