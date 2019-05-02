@@ -1,14 +1,17 @@
-@import '~@angular/material/theming';
+@import 'utils/_colors';
 
 :host {
   display: block;
-  height: 150px;
   background: white;
   padding: 1rem;
   border-radius: 10px;
-  box-sizing: border-box;
   @include mat-elevation(2);
   &.selected {
     @include mat-elevation(0);
   }
+}
+
+.name {
+  font-weight: bold;
+  color: $primary;
 }

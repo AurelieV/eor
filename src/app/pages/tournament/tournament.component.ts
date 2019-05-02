@@ -21,7 +21,7 @@ export class TournamentComponent implements OnInit, OnDestroy, AfterViewInit {
   tournament$: Observable<Tournament>
   zoneInfos$: Observable<Observable<ZoneInfo>[]>
 
-  zoneInfoSelected: number = 0
+  zoneInfoSelected: number = null
   zoneInfoItemWidthRatio = 0.82
 
   @ViewChild('header')

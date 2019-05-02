@@ -1,5 +1,5 @@
 <div class="zone-infos" *ngIf="(zoneInfos$ | async) as zoneInfos" cdk-scrollable>
-  <ng-container *ngFor="let info$ of zoneInfos; let arrayIndex = index; trackBy: trackByIndexFn">
+  <ng-container *ngFor="let info$ of zoneInfos; let arrayIndex = index; trackBy: trackbyIndexFn">
     <ng-container *ngIf="(info$ | async) as info">
       <zone-info
         [info]="info"
@@ -12,16 +12,18 @@
   <div class="push"></div>
 </div>
 <div class="zones" *ngIf="(zoneTables$ | async) as zoneTables">
-  <div class="zone" *ngFor="let zone of (zones$ | async); let zoneIndex = index">
-    <div class="zone_title">{{ zone.name }}</div>
-    <div class="section" *ngFor="let section of zone.sections; let sectionIndex = index">
-      <table
-        [table]="table"
-        class="table"
-        *ngFor="let table of (zoneTables[zoneIndex][sectionIndex] | async); trackBy: trackbyIdFn"
-      ></table>
+  <ng-container *ngFor="let zone of (zones$ | async); let zoneIndex = index">
+    <div class="zone" *ngIf="zoneInfoSelected === null || zoneInfoSelected === zoneIndex">
+      <div class="zone_title">{{ zone.name }}</div>
+      <div class="section" *ngFor="let section of zone.sections; let sectionIndex = index">
+        <table
+          [table]="table"
+          class="table"
+          *ngFor="let table of (zoneTables[zoneIndex][sectionIndex] | async); trackBy: trackbyIdFn"
+        ></table>
+      </div>
     </div>
-  </div>
+  </ng-container>
 </div>
 
 <div class="block playing"></div>
