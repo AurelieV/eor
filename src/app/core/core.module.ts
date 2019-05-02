@@ -15,7 +15,11 @@ import {
   MatSnackBarModule,
   MatToolbarModule,
 } from '@angular/material'
-import { BrowserModule } from '@angular/platform-browser'
+import {
+  BrowserModule,
+  HammerGestureConfig,
+  HAMMER_GESTURE_CONFIG,
+} from '@angular/platform-browser'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { RouterModule } from '@angular/router'
 import { CustomFormModule } from '@shared/custom-form/custom-form.module'
@@ -36,6 +40,20 @@ import { SettingsService } from './services/settings.service'
 import { SidePanelService } from './services/side-panel.service'
 import { TournamentService } from './services/tournament.service'
 import { WindowVisibility } from './services/window-visibility.service'
+
+export class CustomHammerGestureConfig extends HammerGestureConfig {
+  overrides = {
+    pan: {
+      direction: 6,
+    },
+    pinch: {
+      enable: false,
+    },
+    rotate: {
+      enable: false,
+    },
+  }
+}
 
 @NgModule({
   declarations: [
@@ -111,6 +129,10 @@ import { WindowVisibility } from './services/window-visibility.service'
   ],
   providers: [
     { provide: MOBILE_MEDIA_QUERY, useValue: '(max-width: 719px)' },
+    {
+      provide: HAMMER_GESTURE_CONFIG,
+      useClass: CustomHammerGestureConfig,
+    },
     AuthenticationService,
     SidePanelService,
     AuthGuard,
