@@ -43,11 +43,9 @@
   <tournament-header
     [disabled]="disabled"
     (editClock)="onEditClock()"
-    (editSettings)="onEditSettings()"
     (editFilters)="onEditFilter()"
   ></tournament-header>
 </ng-template>
 <ng-template #menuHeader>{{ (tournament$ | async)?.name }}</ng-template>
 <ng-template #clock><clock-panel (clockSet)="closePanel()"></clock-panel></ng-template>
-<ng-template #settings><settings-panel></settings-panel></ng-template>
 <ng-template #filters><filters-panel [filters]="filters$ | async"></filters-panel></ng-template>

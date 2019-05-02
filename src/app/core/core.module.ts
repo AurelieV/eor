@@ -122,6 +122,10 @@ export class CustomHammerGestureConfig extends HammerGestureConfig {
               },
             },
           },
+          {
+            path: 'settings',
+            loadChildren: '@pages/settings/settings.module#SettingsModule',
+          },
         ],
         canActivate: [AuthGuard],
       },

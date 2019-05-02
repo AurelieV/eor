@@ -4,11 +4,11 @@ import { SettingsService } from '@core/services/settings.service'
 import { Observable } from 'rxjs'
 
 @Component({
-  selector: 'settings-panel',
+  selector: 'settings',
   templateUrl: './settings.component.html',
   styleUrls: ['./settings.component.scss'],
 })
-export class SettingsPanelComponent {
+export class SettingsComponent {
   statusOrder$: Observable<StatusOrder>
   settings$: Observable<Settings>
 

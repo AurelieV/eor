@@ -12,12 +12,10 @@ import {
 } from '@angular/material'
 import { RouterModule } from '@angular/router'
 import { HeaderComponent } from './components/header/header.component'
-import { StatusOrderComponent } from './components/status-order/status-order.component'
 import { TableComponent } from './components/table/table.component'
 import { ZoneInfoComponent } from './components/zone-info/zone-info.component'
 import { ClockPanelComponent } from './panels/clock/clock.component'
 import { FiltersPanelComponent } from './panels/filters/filters.component'
-import { SettingsPanelComponent } from './panels/settings/settings.component'
 import { TableService } from './services/table.service'
 import { TournamentStore } from './services/tournament-store.service'
 import { TournamentComponent } from './tournament.component'
@@ -28,8 +26,6 @@ import { TournamentComponent } from './tournament.component'
     TableComponent,
     HeaderComponent,
     ClockPanelComponent,
-    SettingsPanelComponent,
-    StatusOrderComponent,
     ZoneInfoComponent,
     FiltersPanelComponent,
   ],

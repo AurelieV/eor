@@ -32,8 +32,6 @@ export class TournamentComponent implements OnInit, OnDestroy, AfterViewInit {
   private menuHeaderTemplateRef: TemplateRef<any>
   @ViewChild('clock')
   private clockTemplateRef: TemplateRef<any>
-  @ViewChild('settings')
-  private settingsTemplateRef: TemplateRef<any>
   @ViewChild('filters')
   private filtersTemplateRef: TemplateRef<any>
 
@@ -91,10 +89,6 @@ export class TournamentComponent implements OnInit, OnDestroy, AfterViewInit {
 
   onEditClock() {
     this.sidePanel.open(this.clockTemplateRef)
-  }
-
-  onEditSettings() {
-    this.sidePanel.open(this.settingsTemplateRef)
   }
 
   onEditFilter() {
