@@ -85,7 +85,7 @@ export interface Settings {
 
 export type StatusOrder = Array<TableStatus>
 
-export class ZoneInfo {
+export interface ZoneInfo {
   id: number
   name: string
   sections: Section[]
@@ -96,11 +96,16 @@ export class ZoneInfo {
   nbTotal: number
 }
 
-export class Filters {
+export interface Filters {
   displayUnknown: boolean
   displayCovered: boolean
   displayPlaying: boolean
   displayDone: boolean
   onlyExtraTimed: boolean
   onlyStageHasNotPaper: boolean
+}
+
+export interface Action {
+  label: string
+  key: string
 }

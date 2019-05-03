@@ -34,6 +34,8 @@ export class TournamentComponent implements OnInit, OnDestroy, AfterViewInit {
   private clockTemplateRef: TemplateRef<any>
   @ViewChild('filters')
   private filtersTemplateRef: TemplateRef<any>
+  @ViewChild('actions')
+  private actionsTemplateRef: TemplateRef<any>
 
   @ViewChild(CdkScrollable)
   private zoneInfoContainer: CdkScrollable
@@ -93,6 +95,10 @@ export class TournamentComponent implements OnInit, OnDestroy, AfterViewInit {
 
   onEditFilter() {
     this.sidePanel.open(this.filtersTemplateRef)
+  }
+
+  onOpenActions() {
+    this.sidePanel.open(this.actionsTemplateRef)
   }
 
   onZoneInfoClick(zoneIndex, arrayIndex) {

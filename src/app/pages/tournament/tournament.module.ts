@@ -14,6 +14,7 @@ import { RouterModule } from '@angular/router'
 import { HeaderComponent } from './components/header/header.component'
 import { TableComponent } from './components/table/table.component'
 import { ZoneInfoComponent } from './components/zone-info/zone-info.component'
+import { ActionsPanelComponent } from './panels/actions/actions.component'
 import { ClockPanelComponent } from './panels/clock/clock.component'
 import { FiltersPanelComponent } from './panels/filters/filters.component'
 import { TableService } from './services/table.service'
@@ -28,6 +29,7 @@ import { TournamentComponent } from './tournament.component'
     ClockPanelComponent,
     ZoneInfoComponent,
     FiltersPanelComponent,
+    ActionsPanelComponent,
   ],
   imports: [
     // Angular
