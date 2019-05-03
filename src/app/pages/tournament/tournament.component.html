@@ -50,4 +50,4 @@
 <ng-template #menuHeader>{{ (tournament$ | async)?.name }}</ng-template>
 <ng-template #clock><clock-panel (clockSet)="closePanel()"></clock-panel></ng-template>
 <ng-template #filters><filters-panel [filters]="filters$ | async"></filters-panel></ng-template>
-<ng-template #actions><actions-panel [actions]="[]"></actions-panel></ng-template>
+<ng-template #actions><actions-panel [actions]="actions$ | async"></actions-panel></ng-template>

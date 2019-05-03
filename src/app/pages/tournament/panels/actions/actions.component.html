@@ -1,0 +1,51 @@
+<div class="panel-title">Actions</div>
+
+<div class="blocks">
+  <div class="actions-block" *ngIf="groupActions.scorekeeper.length > 0">
+    <div class="panel-subtitle">Scorekeeper</div>
+    <button
+      mat-flat-button
+      (click)="do(action.key)"
+      [color]="action.color"
+      *ngFor="let action of groupActions.scorekeeper || []"
+    >
+      {{ action.label }}
+    </button>
+  </div>
+
+  <div class="actions-block" *ngIf="groupActions.all.length > 0">
+    <div class="panel-subtitle">All</div>
+    <button
+      mat-flat-button
+      (click)="do(action.key)"
+      [color]="action.color"
+      *ngFor="let action of groupActions.all || []"
+    >
+      {{ action.label }}
+    </button>
+  </div>
+
+  <div class="actions-block" *ngIf="groupActions.teamlead.length > 0">
+    <div class="panel-subtitle">Team Lead</div>
+    <button
+      mat-flat-button
+      (click)="do(action.key)"
+      [color]="action.color"
+      *ngFor="let action of groupActions.teamlead || []"
+    >
+      {{ action.label }}
+    </button>
+  </div>
+
+  <div class="actions-block" *ngIf="groupActions.zonelead.length > 0">
+    <div class="panel-subtitle">Zone lead</div>
+    <button
+      mat-flat-button
+      (click)="do(action.key)"
+      [color]="action.color"
+      *ngFor="let action of groupActions.zonelead || []"
+    >
+      {{ action.label }}
+    </button>
+  </div>
+</div>

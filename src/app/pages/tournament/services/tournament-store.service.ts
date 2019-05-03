@@ -1,4 +1,4 @@
-import { Filters, Table, Tournament, TournamentStaff, ZoneInfo } from '@/app/models'
+import { Action, Filters, Table, Tournament, TournamentStaff, ZoneInfo } from '@/app/models'
 import { Injectable } from '@angular/core'
 import { AngularFireDatabase } from '@angular/fire/database'
 import { AuthenticationService } from '@core/services/authentication.service'
@@ -30,6 +30,7 @@ export class TournamentStore {
     onlyExtraTimed: false,
     onlyStageHasNotPaper: false,
   })
+  actions$: Observable<Action[]>
 
   constructor(
     private db: AngularFireDatabase,
@@ -198,6 +199,18 @@ export class TournamentStore {
           allRoles.push('scorekeeper')
         }
         return allRoles
+      })
+    )
+    this.actions$ = this.roles$.pipe(
+      map((roles) => {
+        const actions: Action[] = [
+          { label: 'Add time', key: 'time', role: 'all', color: 'primary' },
+          { label: 'Go to outstanding', key: 'go-outstanding', role: 'teamlead', color: 'warn' },
+          { label: 'Go to next round', key: 'end-round', role: 'teamlead', color: 'warn' },
+          { label: 'Assign judge', key: 'assign', role: 'all', color: 'primary' },
+        ]
+
+        return actions
       })
     )
   }

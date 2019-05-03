@@ -1,0 +1,13 @@
+.actions-block {
+  &:not(:first-child) {
+    margin-top: 2rem;
+  }
+  display: flex;
+  flex-direction: column;
+
+  button {
+    &:not(:first-child) {
+      margin-top: 5px;
+    }
+  }
+}

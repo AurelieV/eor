@@ -1,4 +1,4 @@
-import { Filters, Tournament, ZoneInfo } from '@/app/models'
+import { Action, Filters, Tournament, ZoneInfo } from '@/app/models'
 import { CdkScrollable, ScrollDispatcher } from '@angular/cdk/scrolling'
 import { AfterViewInit, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
@@ -22,6 +22,7 @@ export class TournamentComponent implements OnInit, OnDestroy, AfterViewInit {
   zoneInfos$: Observable<Observable<ZoneInfo>[]>
   allInfo$: Observable<ZoneInfo>
   filters$: Observable<Filters>
+  actions$: Observable<Action[]>
 
   zoneInfoSelected: number = null
   zoneInfoItemWidthRatio = 0.82
@@ -63,6 +64,7 @@ export class TournamentComponent implements OnInit, OnDestroy, AfterViewInit {
     this.zoneInfos$ = this.store.zoneInfos$
     this.allInfo$ = this.store.allInfo$
     this.filters$ = this.store.filters$
+    this.actions$ = this.store.actions$
     this.scroller
       .scrolled()
       .pipe(debounceTime(300))

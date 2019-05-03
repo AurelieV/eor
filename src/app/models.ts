@@ -108,4 +108,6 @@ export interface Filters {
 export interface Action {
   label: string
   key: string
+  role: 'scorekeeper' | 'zonelead' | 'teamlead' | 'all'
+  color: 'primary' | 'accent' | 'warn'
 }
