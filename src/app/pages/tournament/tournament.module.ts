@@ -15,6 +15,7 @@ import { HeaderComponent } from './components/header/header.component'
 import { TableComponent } from './components/table/table.component'
 import { ZoneInfoComponent } from './components/zone-info/zone-info.component'
 import { ActionsPanelComponent } from './panels/actions/actions.component'
+import { AddTimePanelComponent } from './panels/add-time/add-time.component'
 import { ClockPanelComponent } from './panels/clock/clock.component'
 import { FiltersPanelComponent } from './panels/filters/filters.component'
 import { TableService } from './services/table.service'
@@ -30,6 +31,7 @@ import { TournamentComponent } from './tournament.component'
     ZoneInfoComponent,
     FiltersPanelComponent,
     ActionsPanelComponent,
+    AddTimePanelComponent,
   ],
   imports: [
     // Angular

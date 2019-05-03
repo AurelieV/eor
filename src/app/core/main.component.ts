@@ -20,6 +20,7 @@ import { SidePanelService } from './services/side-panel.service'
 })
 export class MainComponent implements OnDestroy, AfterViewInit {
   sidePanelTemplate$: Observable<TemplateRef<any>>
+  sidePanelBackTemplate$: Observable<TemplateRef<any>>
   headerTemplate: TemplateRef<any>
   menuHeaderTemplate: TemplateRef<any>
   subscriptions: Subscription[] = []
@@ -39,6 +40,7 @@ export class MainComponent implements OnDestroy, AfterViewInit {
 
   ngOnInit() {
     this.sidePanelTemplate$ = this.sidePanelService.templateRef$
+    this.sidePanelBackTemplate$ = this.sidePanelService.backTemplateRef$
     this.user$ = this.authent.user$
     this.subscriptions.push(
       this.headerService.templateRef$.subscribe((template) => {
@@ -68,6 +70,10 @@ export class MainComponent implements OnDestroy, AfterViewInit {
 
   closeSide() {
     this.sidePanelService.close()
+  }
+
+  backSide() {
+    this.sidePanelService.back()
   }
 
   ngOnDestroy(): void {

@@ -45,7 +45,11 @@
       fixedTopGap="56"
     >
       <div class="side-panel-header">
-        <button mat-icon-button color="accent" class="side-panel-close">
+        <button mat-icon-button color="accent" *ngIf="(sidePanelBackTemplate$ | async)">
+          <mat-icon (click)="backSide()">arrow_back</mat-icon>
+        </button>
+        <div class="push"></div>
+        <button mat-icon-button color="accent">
           <mat-icon (click)="closeSide()">close</mat-icon>
         </button>
       </div>

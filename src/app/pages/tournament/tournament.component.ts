@@ -37,6 +37,8 @@ export class TournamentComponent implements OnInit, OnDestroy, AfterViewInit {
   private filtersTemplateRef: TemplateRef<any>
   @ViewChild('actions')
   private actionsTemplateRef: TemplateRef<any>
+  @ViewChild('addTime')
+  private addTimeTemplateRef: TemplateRef<any>
 
   @ViewChild(CdkScrollable)
   private zoneInfoContainer: CdkScrollable
@@ -101,6 +103,16 @@ export class TournamentComponent implements OnInit, OnDestroy, AfterViewInit {
 
   onOpenActions() {
     this.sidePanel.open(this.actionsTemplateRef)
+  }
+
+  onActionClick(key: string) {
+    switch (key) {
+      case 'add-time':
+        this.sidePanel.open(this.addTimeTemplateRef, this.actionsTemplateRef)
+        break
+      default:
+        console.log('todo')
+    }
   }
 
   onZoneInfoClick(zoneIndex, arrayIndex) {

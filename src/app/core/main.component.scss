@@ -79,14 +79,15 @@
   flex-direction: column;
 
   .side-panel-header {
-    padding-right: 1em;
-    padding-top: 1em;
+    padding: 1rem;
     display: flex;
-    justify-content: flex-end;
+    .push {
+      flex: 1 0 auto;
+    }
   }
 
   .side-panel-container {
-    flex: 1;
+    flex: 1 0 auto;
     padding: 0 2em;
   }
 }

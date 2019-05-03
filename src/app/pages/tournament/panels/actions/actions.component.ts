@@ -1,5 +1,5 @@
 import { Action } from '@/app/models'
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core'
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core'
 
 @Component({
   selector: 'actions-panel',
@@ -9,6 +9,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core'
 })
 export class ActionsPanelComponent {
   @Input() actions: Action[]
+  @Output() actionClick = new EventEmitter()
 
   get groupActions() {
     if (!this.actions) {
@@ -27,5 +28,7 @@ export class ActionsPanelComponent {
     }
   }
 
-  do(key: string) {}
+  do(key: string) {
+    this.actionClick.emit(key)
+  }
 }

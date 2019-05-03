@@ -1,4 +1,3 @@
-import { Location } from '@angular/common'
 import { Injectable, TemplateRef } from '@angular/core'
 import { MatSidenav } from '@angular/material'
 import { BehaviorSubject } from 'rxjs'
@@ -7,12 +6,17 @@ import { BehaviorSubject } from 'rxjs'
 export class SidePanelService {
   sidePanel: MatSidenav
   _templateRef$ = new BehaviorSubject<TemplateRef<any>>(null)
+  _backTemplateRef$ = new BehaviorSubject<TemplateRef<any>>(null)
 
   get templateRef$() {
     return this._templateRef$.asObservable()
   }
 
-  constructor(private location: Location) {
+  get backTemplateRef$() {
+    return this._backTemplateRef$.asObservable()
+  }
+
+  constructor() {
     window.addEventListener('popstate', (event) => {
       if (event.state && event.state.beforeSidePanel) {
         this.sidePanel.close()
@@ -21,13 +25,14 @@ export class SidePanelService {
     })
   }
 
-  open(template: TemplateRef<any>) {
+  open(template: TemplateRef<any>, backTemplate: TemplateRef<any> = null) {
     if (this.sidePanel) {
       this.sidePanel.open()
       history.replaceState({ beforeSidePanel: true }, null)
       history.pushState({ sidePanel: true }, null)
     }
     this._templateRef$.next(template)
+    this._backTemplateRef$.next(backTemplate)
   }
 
   close() {
@@ -35,6 +40,16 @@ export class SidePanelService {
       history.go(-1)
     }
     this._templateRef$.next(null)
+  }
+
+  back() {
+    const backTemplate = this._backTemplateRef$.getValue()
+    if (!backTemplate) {
+      this.close()
+    } else {
+      this._templateRef$.next(backTemplate)
+      this._backTemplateRef$.next(null)
+    }
   }
 
   get isOpen() {

@@ -204,7 +204,7 @@ export class TournamentStore {
     this.actions$ = this.roles$.pipe(
       map((roles) => {
         const actions: Action[] = [
-          { label: 'Add time', key: 'time', role: 'all', color: 'primary' },
+          { label: 'Add time', key: 'add-time', role: 'all', color: 'primary' },
           { label: 'Go to outstanding', key: 'go-outstanding', role: 'teamlead', color: 'warn' },
           { label: 'Go to next round', key: 'end-round', role: 'teamlead', color: 'warn' },
           { label: 'Assign judge', key: 'assign', role: 'all', color: 'primary' },
