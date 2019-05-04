@@ -29,6 +29,7 @@
       <div class="section" *ngFor="let section of zone.sections; let sectionIndex = index">
         <table
           [table]="table"
+          (openTable)="onOpenTable(table)"
           class="table"
           *ngFor="let table of (zoneTables[zoneIndex][sectionIndex] | async); trackBy: trackbyIdFn"
         ></table>
@@ -53,4 +54,7 @@
 <ng-template #actions
   ><actions-panel [actions]="actions$ | async" (actionClick)="onActionClick($event)"></actions-panel
 ></ng-template>
-<ng-template #addTime><add-time-panel></add-time-panel></ng-template>
+<ng-template #addTime><add-time-panel [table]="selectedTable"></add-time-panel></ng-template>
+<ng-template #table
+  ><table-panel [table]="selectedTable" (addTime)="onAddTime(selectedTable)"></table-panel
+></ng-template>

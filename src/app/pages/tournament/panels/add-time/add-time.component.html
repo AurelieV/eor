@@ -1,1 +1,39 @@
 <div class="panel-title">Add time</div>
+<form #form="ngForm" (ngSubmit)="onSubmit()">
+  <div class="table">
+    <mat-form-field>
+      <input
+        matInput
+        placeholder="Table"
+        required
+        [(ngModel)]="tableNumber"
+        name="tableNumber"
+        type="number"
+        min="0"
+        #tableNumberInput
+      />
+    </mat-form-field>
+    <div class="push"></div>
+    <div class="table-info">Current: 10min</div>
+  </div>
+  <div class="time">
+    <mat-form-field>
+      <input
+        matInput
+        placeholder="Time"
+        required
+        [(ngModel)]="time"
+        name="time"
+        type="number"
+        max="100"
+        min="0"
+        #timeInput
+      />
+    </mat-form-field>
+    <div class="push"></div>
+    <button type="submit" mat-flat-button color="primary">
+      <mat-icon>alarm</mat-icon>
+      <span>Add</span>
+    </button>
+  </div>
+</form>

@@ -7,6 +7,7 @@ export class SidePanelService {
   sidePanel: MatSidenav
   _templateRef$ = new BehaviorSubject<TemplateRef<any>>(null)
   _backTemplateRef$ = new BehaviorSubject<TemplateRef<any>>(null)
+  _onClose$ = new BehaviorSubject<void>(null)
 
   get templateRef$() {
     return this._templateRef$.asObservable()
@@ -14,6 +15,10 @@ export class SidePanelService {
 
   get backTemplateRef$() {
     return this._backTemplateRef$.asObservable()
+  }
+
+  get onClose$() {
+    return this._onClose$.asObservable()
   }
 
   constructor() {
@@ -40,6 +45,7 @@ export class SidePanelService {
       history.go(-1)
     }
     this._templateRef$.next(null)
+    this._onClose$.next(null)
   }
 
   back() {

@@ -1,0 +1,25 @@
+.time {
+  display: flex;
+  align-items: center;
+  .push {
+    flex: 1 0 auto;
+  }
+  .mat-form-field {
+    width: 100px;
+  }
+}
+
+.table {
+  display: flex;
+  align-items: baseline;
+  .push {
+    flex: 1 0 auto;
+  }
+  .mat-form-field {
+    width: 40%;
+  }
+}
+
+button mat-icon {
+  margin-right: 0.5em;
+}

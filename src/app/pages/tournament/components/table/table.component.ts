@@ -1,5 +1,13 @@
 import { Table } from '@/app/models'
-import { ChangeDetectionStrategy, Component, HostBinding, HostListener, Input } from '@angular/core'
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  HostBinding,
+  HostListener,
+  Input,
+  Output,
+} from '@angular/core'
 import { TableService } from '@pages/tournament/services/table.service'
 
 @Component({
@@ -11,6 +19,7 @@ import { TableService } from '@pages/tournament/services/table.service'
 export class TableComponent {
   @Input() table: Table
   @Input() canInteractWithFeaturedTables: boolean = true
+  @Output() openTable = new EventEmitter()
 
   @HostBinding('class')
   get status() {
@@ -26,6 +35,6 @@ export class TableComponent {
 
   @HostListener('press')
   secondaryAction() {
-    console.log('secondary')
+    this.openTable.emit()
   }
 }

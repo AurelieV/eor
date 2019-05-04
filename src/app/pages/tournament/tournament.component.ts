@@ -1,4 +1,4 @@
-import { Action, Filters, Tournament, ZoneInfo } from '@/app/models'
+import { Action, Filters, Table, Tournament, ZoneInfo } from '@/app/models'
 import { CdkScrollable, ScrollDispatcher } from '@angular/cdk/scrolling'
 import { AfterViewInit, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
@@ -27,6 +27,8 @@ export class TournamentComponent implements OnInit, OnDestroy, AfterViewInit {
   zoneInfoSelected: number = null
   zoneInfoItemWidthRatio = 0.82
 
+  selectedTable: Table = null
+
   @ViewChild('header')
   private headerTemplateRef: TemplateRef<any>
   @ViewChild('menuHeader')
@@ -39,6 +41,8 @@ export class TournamentComponent implements OnInit, OnDestroy, AfterViewInit {
   private actionsTemplateRef: TemplateRef<any>
   @ViewChild('addTime')
   private addTimeTemplateRef: TemplateRef<any>
+  @ViewChild('table')
+  private tableTemplateRef: TemplateRef<any>
 
   @ViewChild(CdkScrollable)
   private zoneInfoContainer: CdkScrollable
@@ -86,6 +90,7 @@ export class TournamentComponent implements OnInit, OnDestroy, AfterViewInit {
           }
         }
       })
+    this.subscriptions.push(this.sidePanel.onClose$.subscribe(() => (this.selectedTable = null)))
   }
 
   ngAfterViewInit() {
@@ -103,6 +108,15 @@ export class TournamentComponent implements OnInit, OnDestroy, AfterViewInit {
 
   onOpenActions() {
     this.sidePanel.open(this.actionsTemplateRef)
+  }
+
+  onOpenTable(table) {
+    this.selectedTable = table
+    this.sidePanel.open(this.tableTemplateRef)
+  }
+
+  onAddTime() {
+    this.sidePanel.open(this.addTimeTemplateRef, this.tableTemplateRef)
   }
 
   onActionClick(key: string) {

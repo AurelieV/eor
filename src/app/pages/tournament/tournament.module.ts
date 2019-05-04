@@ -18,6 +18,7 @@ import { ActionsPanelComponent } from './panels/actions/actions.component'
 import { AddTimePanelComponent } from './panels/add-time/add-time.component'
 import { ClockPanelComponent } from './panels/clock/clock.component'
 import { FiltersPanelComponent } from './panels/filters/filters.component'
+import { TablePanelComponent } from './panels/table/table.component'
 import { TableService } from './services/table.service'
 import { TournamentStore } from './services/tournament-store.service'
 import { TournamentComponent } from './tournament.component'
@@ -32,6 +33,7 @@ import { TournamentComponent } from './tournament.component'
     FiltersPanelComponent,
     ActionsPanelComponent,
     AddTimePanelComponent,
+    TablePanelComponent,
   ],
   imports: [
     // Angular

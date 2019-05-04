@@ -1,0 +1,23 @@
+.status {
+  text-transform: capitalize;
+  display: inline-flex;
+  align-items: center;
+  width: 50%;
+  box-sizing: border-box;
+  padding: 0.5rem 0;
+  .block {
+    width: 24px;
+    height: 24px;
+    border: 1px solid black;
+  }
+  .label {
+    margin-left: 5px;
+    font-size: 11px;
+  }
+}
+
+.status-block {
+  display: flex;
+  justify-items: center;
+  flex-wrap: wrap;
+}
