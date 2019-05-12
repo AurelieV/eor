@@ -119,6 +119,10 @@ export class TournamentComponent implements OnInit, OnDestroy, AfterViewInit {
     this.sidePanel.open(this.addTimeTemplateRef, this.tableTemplateRef)
   }
 
+  onTimeAdded() {
+    this.sidePanel.back()
+  }
+
   onActionClick(key: string) {
     switch (key) {
       case 'add-time':

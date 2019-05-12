@@ -1,22 +1,28 @@
-<ng-container *ngIf="table">
-  <div class="panel-title">Table {{ table.id }}</div>
+<ng-container *ngIf="(table$ | async) as t">
+  <div class="panel-title">Table {{ t.id }}</div>
   <div class="panel-subtitle">Status</div>
   <div class="status-block">
-    <button class="status" (click)="changeStatus()">
-      <div [class]="'block ' + table.status"></div>
-      <div class="label">{{ table.status }}</div>
+    <button class="status" [matMenuTriggerFor]="statusMenu">
+      <div [class]="'block ' + t.status"></div>
+      <div class="label">{{ t.status }}</div>
     </button>
-    <div class="status" *ngIf="!table.stageHasPaper">
+    <mat-menu #statusMenu="matMenu">
+      <button class="status" mat-menu-item *ngFor="let s of status" (click)="updateStatus(t, s)">
+        <div [class]="'block ' + s"></div>
+        <div class="label">{{ s }}</div>
+      </button>
+    </mat-menu>
+    <div class="status" *ngIf="!t.stageHasPaper">
       <mat-icon>desktop_access_disabled</mat-icon>
       <div class="label">Paper not on stage</div>
     </div>
-    <div class="status" *ngIf="table.stageHasPaper">
+    <div class="status" *ngIf="t.stageHasPaper">
       <mat-icon>desktop_windows</mat-icon>
       <div class="label">Paper on stage</div>
     </div>
     <button class="status" (click)="onTimeClick()">
       <mat-icon>alarm</mat-icon>
-      <div class="label">10min</div>
+      <div class="label">{{ t.time || 0 }}min</div>
     </button>
   </div>
 

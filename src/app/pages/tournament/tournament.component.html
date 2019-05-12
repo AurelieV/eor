@@ -54,7 +54,9 @@
 <ng-template #actions
   ><actions-panel [actions]="actions$ | async" (actionClick)="onActionClick($event)"></actions-panel
 ></ng-template>
-<ng-template #addTime><add-time-panel [table]="selectedTable"></add-time-panel></ng-template>
+<ng-template #addTime
+  ><add-time-panel [table]="selectedTable" (timeAdded)="onTimeAdded()"></add-time-panel
+></ng-template>
 <ng-template #table
   ><table-panel [table]="selectedTable" (addTime)="onAddTime(selectedTable)"></table-panel
 ></ng-template>

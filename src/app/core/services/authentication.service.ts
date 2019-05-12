@@ -16,6 +16,7 @@ export class AuthenticationService {
   user$: Observable<ConnectedUser>
   roles$: Observable<string[]>
   userId$: Observable<string>
+  user: ConnectedUser
 
   constructor(
     private afAuth: AngularFireAuth,
@@ -28,6 +29,7 @@ export class AuthenticationService {
       )
     )
     this.user$ = storedUser$.pipe(map((user) => user && user.judgeapps))
+    this.user$.subscribe((user) => (this.user = user))
     this.roles$ = storedUser$.pipe(
       /// TODO: handle other way to connect
       map((user) => (user ? (user.roles ? Object.keys(user.roles) : []) : []))

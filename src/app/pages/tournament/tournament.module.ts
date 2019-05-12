@@ -8,6 +8,7 @@ import {
   MatIconModule,
   MatInputModule,
   MatListModule,
+  MatMenuModule,
   MatSidenavModule,
 } from '@angular/material'
 import { RouterModule } from '@angular/router'
@@ -49,6 +50,7 @@ import { TournamentComponent } from './tournament.component'
     MatFormFieldModule,
     MatInputModule,
     ScrollDispatchModule,
+    MatMenuModule,
 
     // App
     RouterModule.forChild([

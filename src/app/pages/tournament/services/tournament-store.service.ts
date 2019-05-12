@@ -166,7 +166,7 @@ export class TournamentStore {
           switchMap((visibility) => {
             return timer(1, 1000).pipe(
               map((tick) => {
-                const now = new Date().getTime()
+                const now = moment.utc().valueOf()
                 return moment.duration(endTime - now)
               })
             )
@@ -221,6 +221,10 @@ export class TournamentStore {
 
   get key() {
     return this.key$.getValue()
+  }
+
+  get k$() {
+    return this.key$.asObservable()
   }
 
   setClock(value: number): Promise<any> {

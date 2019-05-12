@@ -111,3 +111,10 @@ export interface Action {
   role: 'scorekeeper' | 'zonelead' | 'teamlead' | 'all'
   color: 'primary' | 'accent' | 'warn'
 }
+
+export interface Log {
+  user: JudgeAppsInfo
+  time: number
+  date: number
+  addOrUpdate: 'add' | 'update'
+}
