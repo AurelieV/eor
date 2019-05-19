@@ -1,4 +1,4 @@
-import { Log, Table } from '@/app/models'
+import { Table, TimeLog } from '@/app/models'
 import { Injectable } from '@angular/core'
 import { AngularFireDatabase } from '@angular/fire/database'
 import { AuthenticationService } from '@core/services/authentication.service'
@@ -67,7 +67,7 @@ export class TableService {
 
   addTime(table: Table, time: number, replace: boolean = false): Promise<any> {
     let promise
-    const log: Log = {
+    const log: TimeLog = {
       user: this.authentication.user,
       time,
       date: moment.utc().valueOf(),
@@ -79,7 +79,7 @@ export class TableService {
       promise = this.update(table, { time: (table.time || 0) + time })
     }
     promise.then(() => {
-      this.db.list<Log>(`log/${this.store.key}/${table.id}`).push(log)
+      this.db.list<TimeLog>(`log/${this.store.key}/${table.id}`).push(log)
       this.notificationService.notify(`Table ${table.id} updated`)
     })
 

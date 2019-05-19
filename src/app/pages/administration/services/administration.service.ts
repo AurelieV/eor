@@ -2,25 +2,18 @@ import { Injectable } from '@angular/core'
 import { AngularFireDatabase } from '@angular/fire/database'
 import { Observable } from 'rxjs'
 import { map } from 'rxjs/operators'
-import { StoredUser, Table, TournamentStaff, UserWithId } from 'src/app/models'
+import { StoredUser, Table, TournamentStaff, User } from 'src/app/models'
 import { TournamentSettings, Zone } from '../administration.models'
 
 @Injectable()
 export class AdministrationService {
   constructor(private db: AngularFireDatabase) {}
 
-  getUsers(): Observable<UserWithId[]> {
+  getUsers(): Observable<User[]> {
     return this.db
       .list<StoredUser>(`users`)
-      .snapshotChanges()
-      .pipe(
-        map((actions) =>
-          actions.map((action) => ({
-            ...action.payload.val().judgeapps,
-            id: action.payload.key,
-          }))
-        )
-      )
+      .valueChanges()
+      .pipe(map((users) => users.map((u) => u.judgeapps)))
   }
 
   async createTournament(

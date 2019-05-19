@@ -10,7 +10,8 @@ import { MatSidenav } from '@angular/material'
 import { Router } from '@angular/router'
 import { HeaderService } from '@core/services/header.service'
 import { Observable, Subscription } from 'rxjs'
-import { AuthenticationService, ConnectedUser } from './services/authentication.service'
+import { User } from '../models'
+import { AuthenticationService } from './services/authentication.service'
 import { SidePanelService } from './services/side-panel.service'
 
 @Component({
@@ -28,7 +29,7 @@ export class MainComponent implements OnDestroy, AfterViewInit {
   @ViewChild('sidePanel')
   public sidePanel: MatSidenav
 
-  user$: Observable<ConnectedUser>
+  user$: Observable<User>
 
   constructor(
     private cdr: ChangeDetectorRef,

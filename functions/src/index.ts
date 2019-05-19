@@ -3,7 +3,7 @@ import * as functions from 'firebase-functions'
 
 admin.initializeApp(functions.config().firebase)
 
-const tournamentFields = ['zones', 'staff', 'zoneTables']
+const tournamentFields = ['zones', 'staff', 'zoneTables', 'log']
 exports.deleteTournament = functions.database
   .ref('/tournaments/{id}')
   .onDelete((snapshot, { params }) => {

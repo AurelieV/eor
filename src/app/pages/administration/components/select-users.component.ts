@@ -1,4 +1,4 @@
-import { UserWithId } from '@/app/models'
+import { User } from '@/app/models'
 import { Component, forwardRef, OnDestroy, OnInit } from '@angular/core'
 import { ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { BehaviorSubject, Observable } from 'rxjs'
@@ -19,8 +19,8 @@ import { AdministrationService } from '../services/administration.service'
 })
 export class SelectUsersComponent implements OnInit, OnDestroy, ControlValueAccessor {
   inputControl = new FormControl()
-  filteredUsers$: Observable<UserWithId[]>
-  selectedUsers$ = new BehaviorSubject<Array<UserWithId>>([])
+  filteredUsers$: Observable<User[]>
+  selectedUsers$ = new BehaviorSubject<Array<User>>([])
 
   constructor(private admin: AdministrationService) {}
 
@@ -45,7 +45,7 @@ export class SelectUsersComponent implements OnInit, OnDestroy, ControlValueAcce
     )
     this.inputControl.valueChanges
       .pipe(filter((user) => user && user.id))
-      .subscribe((user: UserWithId) => {
+      .subscribe((user: User) => {
         let selectedUsers = this.selectedUsers$.getValue()
         if (!selectedUsers.some(({ id }) => id === user.id)) {
           selectedUsers = selectedUsers.concat(user)
@@ -60,7 +60,7 @@ export class SelectUsersComponent implements OnInit, OnDestroy, ControlValueAcce
     this.selectedUsers$.next(selectedUsers)
   }
 
-  displayFn(user: UserWithId) {
+  displayFn(user: User) {
     return user ? `${user.name} (${user.level} - ${user.region})` : undefined
   }
 

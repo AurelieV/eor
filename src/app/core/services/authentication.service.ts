@@ -1,4 +1,4 @@
-import { JudgeAppsInfo, StoredUser } from '@/app/models'
+import { StoredUser, User } from '@/app/models'
 import { environment } from '@/environments/environment'
 import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
@@ -8,15 +8,12 @@ import * as Oidc from 'oidc-client'
 import { from, Observable, of } from 'rxjs'
 import { map, shareReplay, switchMap } from 'rxjs/operators'
 
-// TODO: handle when no judgeapps
-export type ConnectedUser = JudgeAppsInfo
-
 @Injectable()
 export class AuthenticationService {
-  user$: Observable<ConnectedUser>
+  user$: Observable<User>
   roles$: Observable<string[]>
   userId$: Observable<string>
-  user: ConnectedUser
+  user: User
 
   constructor(
     private afAuth: AngularFireAuth,

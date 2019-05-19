@@ -51,14 +51,12 @@ export interface Tournament {
 }
 
 export interface TournamentStaff {
-  admins: UserWithId[]
-  scorekeepers: UserWithId[]
-  zoneLeaders: UserWithId[]
+  admins: User[]
+  scorekeepers: User[]
+  zoneLeaders: User[]
 }
 
-export type UserWithId = JudgeAppsInfo & { id: string }
-
-export interface JudgeAppsInfo {
+export interface User {
   name: string
   given_name: string
   family_name: string
@@ -68,12 +66,13 @@ export interface JudgeAppsInfo {
   dci_number: number
   region: string
   picture: string
+  id: string
 }
 
 // TODO: handle when not judgeApps
 export interface StoredUser {
   roles: { [role: string]: boolean }
-  judgeapps: JudgeAppsInfo
+  judgeapps: User
 }
 
 export interface Settings {
@@ -112,8 +111,8 @@ export interface Action {
   color: 'primary' | 'accent' | 'warn'
 }
 
-export interface Log {
-  user: JudgeAppsInfo
+export interface TimeLog {
+  user: User
   time: number
   date: number
   addOrUpdate: 'add' | 'update'

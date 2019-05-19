@@ -27,10 +27,7 @@ app.post('/authenticate', async function(req, res) {
       client_secret: config.judgeAppCredential.client_secret,
     })
     client.CLOCK_TOLERANCE = 5
-    const tokenSet = await client.authorizationCallback(
-      config.authentRedirectUrl,
-      { code }
-    )
+    const tokenSet = await client.authorizationCallback(config.authentRedirectUrl, { code })
     const info = await client.userinfo(tokenSet.access_token)
     const uid = info.sub
     delete info.sub
@@ -45,6 +42,7 @@ app.post('/authenticate', async function(req, res) {
       .ref(`users/${uid}/judgeapps`)
       .set({
         ...info,
+        id: uid,
       })
     const token = await admin.auth().createCustomToken(uid)
 
