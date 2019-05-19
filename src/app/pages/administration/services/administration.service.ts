@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core'
 import { AngularFireDatabase } from '@angular/fire/database'
+import { AuthenticationService } from '@core/services/authentication.service'
 import { Observable } from 'rxjs'
 import { map } from 'rxjs/operators'
 import { StoredUser, Table, TournamentStaff, User } from 'src/app/models'
@@ -7,7 +8,7 @@ import { TournamentSettings, Zone } from '../administration.models'
 
 @Injectable()
 export class AdministrationService {
-  constructor(private db: AngularFireDatabase) {}
+  constructor(private db: AngularFireDatabase, private authentification: AuthenticationService) {}
 
   getUsers(): Observable<User[]> {
     return this.db
@@ -23,6 +24,10 @@ export class AdministrationService {
   ): Promise<string> {
     try {
       const { key } = await this.db.list('tournaments').push(settings)
+      const currentUser = this.authentification.user
+      if (staff.admins.findIndex(({ id }) => id === currentUser.id) === -1) {
+        staff.admins.push(currentUser)
+      }
       await this.db.object(`staff/${key}`).set(staff)
       await Promise.all(
         zones.map((zone, zoneIndex) => this.createZone(zone, zoneIndex, key, settings.isTeam))
