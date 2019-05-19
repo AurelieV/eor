@@ -1,9 +1,10 @@
+import { createEmptyTable } from '@/app/utils/helpers'
 import { Injectable } from '@angular/core'
 import { AngularFireDatabase } from '@angular/fire/database'
 import { AuthenticationService } from '@core/services/authentication.service'
 import { Observable } from 'rxjs'
 import { map } from 'rxjs/operators'
-import { StoredUser, Table, TournamentStaff, User } from 'src/app/models'
+import { StoredUser, TournamentStaff, User } from 'src/app/models'
 import { TournamentSettings, Zone } from '../administration.models'
 
 @Injectable()
@@ -47,7 +48,7 @@ export class AdministrationService {
           .fill({})
           .forEach((_, i) => {
             const index = (section.start + i).toString()
-            tables[index] = this.createEmptyTable(
+            tables[index] = createEmptyTable(
               index,
               zoneIndex.toString(),
               sectionIndex.toString(),
@@ -59,41 +60,5 @@ export class AdministrationService {
           .set(tables)
       })
     )
-  }
-
-  private createEmptyTable(
-    index: string,
-    zoneIndex: string,
-    sectionIndex: string,
-    isTeam: boolean
-  ) {
-    const table: Table = {
-      id: index.toString(),
-      status: 'unknown',
-      isFeatured: false,
-      time: null,
-      updateStatusTime: null,
-      result: null,
-      stageHasPaper: false,
-      assignated: '',
-      zoneIndex,
-      sectionIndex,
-    }
-    if (isTeam) {
-      table.team = {
-        time: {
-          A: null,
-          B: null,
-          C: null,
-        },
-        status: {
-          A: 'unknown',
-          B: 'unknown',
-          C: 'unknown',
-        },
-      }
-    }
-
-    return table
   }
 }

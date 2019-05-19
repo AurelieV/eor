@@ -1,11 +1,19 @@
 import { Action, Filters, SortBy, Table, Tournament, TournamentStaff, ZoneInfo } from '@/app/models'
+import { createEmptyTable } from '@/app/utils/helpers'
 import { Injectable } from '@angular/core'
 import { AngularFireDatabase } from '@angular/fire/database'
 import { AuthenticationService } from '@core/services/authentication.service'
 import { WindowVisibility } from '@core/services/window-visibility.service'
 import { Zone } from '@pages/administration/administration.models'
 import * as moment from 'moment'
-import { BehaviorSubject, combineLatest as combine, Observable, of, timer } from 'rxjs'
+import {
+  BehaviorSubject,
+  combineLatest as combine,
+  Observable,
+  of,
+  Subscription,
+  timer,
+} from 'rxjs'
 import { combineLatest, filter, map, switchMap } from 'rxjs/operators'
 
 export type SectionsTables = Observable<Table[]>[]
@@ -15,6 +23,7 @@ export type ZonesTables = SectionsTables[]
 export class TournamentStore {
   private key$ = new BehaviorSubject<string>('')
   zones$: Observable<Zone[]>
+  zones: Zone[]
   zonesTables$: Observable<ZonesTables>
   tournament$: Observable<Tournament>
   clock$: Observable<moment.Duration>
@@ -34,6 +43,8 @@ export class TournamentStore {
   sortedTables$: Observable<Table[]>
   actions$: Observable<Action[]>
 
+  private subscriptions: Subscription[] = []
+
   constructor(
     private db: AngularFireDatabase,
     private windowVisibility: WindowVisibility,
@@ -45,6 +56,7 @@ export class TournamentStore {
     this.zones$ = this.key$.pipe(
       switchMap((key) => this.db.list<Zone>(`/zones/${key}`).valueChanges())
     )
+    this.subscriptions.push(this.zones$.subscribe((zones) => (this.zones = zones)))
     const filterFunc$: Observable<(table: Table) => boolean> = this.filters$.pipe(
       map((filters) => {
         return (table) => {
@@ -259,5 +271,37 @@ export class TournamentStore {
 
   setSortBy(sortBy: SortBy) {
     this.sortBy$.next(sortBy)
+  }
+
+  async restart() {
+    const key = this.key
+    const zones = this.zones
+    await Promise.all(zones.map((zone, zoneIndex) => this.recreateZone(zone, zoneIndex, key)))
+  }
+
+  private async recreateZone(zone, zoneIndex, tournamentKey, isTeam = false) {
+    await Promise.all(
+      zone.sections.map((section, sectionIndex) => {
+        let tables = {}
+        Array(section.end - section.start + 1)
+          .fill({})
+          .forEach((_, i) => {
+            const index = (section.start + i).toString()
+            tables[index] = createEmptyTable(
+              index,
+              zoneIndex.toString(),
+              sectionIndex.toString(),
+              isTeam
+            )
+          })
+        return this.db
+          .object(`zoneTables/${tournamentKey}/${zoneIndex}/${sectionIndex}`)
+          .set(tables)
+      })
+    )
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach((s) => s.unsubscribe())
   }
 }

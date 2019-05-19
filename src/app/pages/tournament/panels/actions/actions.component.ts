@@ -10,6 +10,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
 export class ActionsPanelComponent {
   @Input() actions: Action[]
   @Output() actionClick = new EventEmitter()
+  @Input() isLoading: boolean = false
 
   get groupActions() {
     if (!this.actions) {

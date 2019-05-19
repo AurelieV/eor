@@ -3,6 +3,7 @@ import { CdkScrollable, ScrollDispatcher } from '@angular/cdk/scrolling'
 import { AfterViewInit, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { HeaderService } from '@core/services/header.service'
+import { NotificationService } from '@core/services/notification.service'
 import { SidePanelService } from '@core/services/side-panel.service'
 import { Zone } from '@pages/administration/administration.models'
 import { Observable, Subscription } from 'rxjs'
@@ -31,6 +32,8 @@ export class TournamentComponent implements OnInit, OnDestroy, AfterViewInit {
 
   selectedTable: Table = null
 
+  isRestarting: boolean = false
+
   @ViewChild('header')
   private headerTemplateRef: TemplateRef<any>
   @ViewChild('menuHeader')
@@ -54,7 +57,8 @@ export class TournamentComponent implements OnInit, OnDestroy, AfterViewInit {
     private store: TournamentStore,
     private headerService: HeaderService,
     private sidePanel: SidePanelService,
-    private scroller: ScrollDispatcher
+    private scroller: ScrollDispatcher,
+    private notifier: NotificationService
   ) {}
 
   ngOnInit() {
@@ -131,6 +135,12 @@ export class TournamentComponent implements OnInit, OnDestroy, AfterViewInit {
     switch (key) {
       case 'add-time':
         this.sidePanel.open(this.addTimeTemplateRef, this.actionsTemplateRef)
+        break
+      case 'end-round':
+        this.store.restart().then(() => {
+          this.notifier.notify('Round reset')
+          this.sidePanel.close()
+        })
         break
       default:
         console.log('todo')
