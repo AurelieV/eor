@@ -1,0 +1,5 @@
+<div class="tournament" *ngIf="tournament">
+  <div class="name">{{ tournament.name }}</div>
+  <div class="clock">{{ clock$ | async }}</div>
+</div>
+<button mat-icon-button><mat-icon svgIcon="chat"></mat-icon></button>

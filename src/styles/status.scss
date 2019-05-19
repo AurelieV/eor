@@ -1,0 +1,28 @@
+@import 'utils/_colors.scss';
+
+.text {
+  &.playing {
+    color: $playing;
+  }
+  &.covered {
+    color: $covered;
+  }
+  &.done {
+    color: $done;
+  }
+}
+
+.block {
+  &.playing {
+    background: $playing;
+    color: white;
+  }
+  &.covered {
+    background: $covered;
+    color: white;
+  }
+  &.done {
+    background: $done;
+    color: white;
+  }
+}

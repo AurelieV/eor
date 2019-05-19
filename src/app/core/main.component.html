@@ -5,11 +5,11 @@
         <mat-icon>menu</mat-icon>
       </button>
       <ng-template #defaultHeader> <h1 class="main-app-name">Purple Fox EOR</h1> </ng-template>
-      <ng-container *ngIf="headerTemplate; else defaultHeader">
+      <div class="header_container" *ngIf="headerTemplate; else defaultHeader">
         <ng-container
           *ngTemplateOutlet="headerTemplate; context: { disabled: snav.opened || sidePanel.opened }"
         ></ng-container>
-      </ng-container>
+      </div>
     </mat-toolbar-row>
   </mat-toolbar>
 

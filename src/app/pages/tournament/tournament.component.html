@@ -1,1 +1,18 @@
-<h1>Tournament</h1>
+<div class="zones" *ngIf="(zoneTables$ | async) as zoneTables">
+  <div class="zone" *ngFor="let zone of (zones$ | async); let zoneIndex = index">
+    <div class="zone_title">{{ zone.name }}</div>
+    <div class="section" *ngFor="let section of zone.sections; let sectionIndex = index">
+      <table
+        [table]="table"
+        class="table"
+        *ngFor="let table of (zoneTables[zoneIndex][sectionIndex] | async)"
+      ></table>
+    </div>
+  </div>
+</div>
+
+<div class="block playing"></div>
+<div class=""></div>
+<ng-template #header>
+  <tournament-header [tournament]="tournament$ | async"></tournament-header>
+</ng-template>

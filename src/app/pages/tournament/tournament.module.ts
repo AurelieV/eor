@@ -1,18 +1,22 @@
 import { CommonModule } from '@angular/common'
 import { NgModule } from '@angular/core'
-import { MatSidenavModule } from '@angular/material'
+import { MatButtonModule, MatIconModule, MatSidenavModule } from '@angular/material'
 import { RouterModule } from '@angular/router'
+import { HeaderComponent } from './components/header/header.component'
+import { TableComponent } from './components/table/table.component'
+import { TournamentStore } from './services/tournament-store.service'
 import { TournamentComponent } from './tournament.component'
 
 @NgModule({
-  declarations: [TournamentComponent],
-  providers: [],
+  declarations: [TournamentComponent, TableComponent, HeaderComponent],
   imports: [
     // Angular
     CommonModule,
 
     // Material
     MatSidenavModule,
+    MatIconModule,
+    MatButtonModule,
 
     // App
     RouterModule.forChild([
@@ -22,5 +26,6 @@ import { TournamentComponent } from './tournament.component'
       },
     ]),
   ],
+  providers: [TournamentStore],
 })
 export class TournamentModule {}

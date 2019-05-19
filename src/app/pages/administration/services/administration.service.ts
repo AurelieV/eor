@@ -31,29 +31,44 @@ export class AdministrationService {
     try {
       const { key } = await this.db.list('tournaments').push(settings)
       await this.db.object(`staff/${key}`).set(staff)
-      zones.forEach(async (zone, zoneIndex) => {
-        let tables = {}
-        zone.sections.forEach((section) => {
-          Array(section.end - section.start + 1)
-            .fill({})
-            .forEach((_, i) => {
-              const index = (section.start + i).toString()
-              tables[index] = this.createEmptyTable(index, settings.isTeam)
-            })
-        })
-        await Promise.all([
-          this.db.object(`zones/${key}/${zoneIndex}`).set(zone),
-          this.db.object(`zoneTables/${key}/${zoneIndex}`).set(tables),
-        ])
-      })
-
+      await Promise.all(
+        zones.map((zone, zoneIndex) => this.createZone(zone, zoneIndex, key, settings.isTeam))
+      )
       return key
     } catch (err) {
       return Promise.reject(err)
     }
   }
 
-  private createEmptyTable(index: string, isTeam: boolean) {
+  private async createZone(zone, zoneIndex, tournamentKey, isTeam) {
+    await this.db.object(`zones/${tournamentKey}/${zoneIndex}`).set(zone)
+    await Promise.all(
+      zone.sections.map((section, sectionIndex) => {
+        let tables = {}
+        Array(section.end - section.start + 1)
+          .fill({})
+          .forEach((_, i) => {
+            const index = (section.start + i).toString()
+            tables[index] = this.createEmptyTable(
+              index,
+              zoneIndex.toString(),
+              sectionIndex.toString(),
+              isTeam
+            )
+          })
+        return this.db
+          .object(`zoneTables/${tournamentKey}/${zoneIndex}/${sectionIndex}`)
+          .set(tables)
+      })
+    )
+  }
+
+  private createEmptyTable(
+    index: string,
+    zoneIndex: string,
+    sectionIndex: string,
+    isTeam: boolean
+  ) {
     const table: Table = {
       id: index.toString(),
       status: 'unknown',
@@ -63,6 +78,8 @@ export class AdministrationService {
       result: null,
       isPaperOnStage: false,
       assignated: '',
+      zoneIndex,
+      sectionIndex,
     }
     if (isTeam) {
       table.team = {
