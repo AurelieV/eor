@@ -104,6 +104,8 @@ export interface Filters {
   onlyStageHasNotPaper: boolean
 }
 
+export type SortBy = 'time' | 'number' | 'zone' | 'status'
+
 export interface Action {
   label: string
   key: string

@@ -1,4 +1,4 @@
-import { Action, Filters, Table, Tournament, TournamentStaff, ZoneInfo } from '@/app/models'
+import { Action, Filters, SortBy, Table, Tournament, TournamentStaff, ZoneInfo } from '@/app/models'
 import { Injectable } from '@angular/core'
 import { AngularFireDatabase } from '@angular/fire/database'
 import { AuthenticationService } from '@core/services/authentication.service'
@@ -30,6 +30,8 @@ export class TournamentStore {
     onlyExtraTimed: false,
     onlyStageHasNotPaper: false,
   })
+  sortBy$ = new BehaviorSubject<SortBy>('zone')
+  sortedTables$: Observable<Table[]>
   actions$: Observable<Action[]>
 
   constructor(
@@ -213,6 +215,26 @@ export class TournamentStore {
         return actions
       })
     )
+    const allTables$ = this.key$.pipe(
+      switchMap((key) => this.db.list<Table[][]>(`/zoneTables/${key}`).valueChanges()),
+      map((zones) => zones.reduce((sections, zone) => sections.concat(zone), [])),
+      map((sections) =>
+        sections
+          .reduce((tables, section) => tables.concat(Object.values(section)), [])
+          .filter((table) => Boolean(table))
+      )
+    )
+    this.sortedTables$ = this.sortBy$.pipe(
+      switchMap((sortBy) => {
+        if (sortBy === 'zone') return of([]) // refer to other observable in this case
+        return allTables$
+      }),
+      combineLatest(filterFunc$),
+      map(([tables, fn]) => {
+        // TODO: distinct filters
+        return tables.filter(fn).sort((a, b) => (b.time || 0) - (a.time || 0))
+      })
+    )
   }
 
   set key(key: string) {
@@ -233,5 +255,9 @@ export class TournamentStore {
 
   setFilters(filters: Filters) {
     this.filters$.next(filters)
+  }
+
+  setSortBy(sortBy: SortBy) {
+    this.sortBy$.next(sortBy)
   }
 }

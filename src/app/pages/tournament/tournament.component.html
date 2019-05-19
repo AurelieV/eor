@@ -22,24 +22,38 @@
   </div>
 </div>
 
-<div class="zones" *ngIf="(zoneTables$ | async) as zoneTables">
-  <ng-container *ngFor="let zone of (zones$ | async); let zoneIndex = index">
-    <div class="zone" *ngIf="zoneInfoSelected === null || zoneInfoSelected === zoneIndex">
-      <div class="zone_title">{{ zone.name }}</div>
-      <div class="section" *ngFor="let section of zone.sections; let sectionIndex = index">
-        <table
-          [table]="table"
-          (openTable)="onOpenTable(table)"
-          class="table"
-          *ngFor="let table of (zoneTables[zoneIndex][sectionIndex] | async); trackBy: trackbyIdFn"
-        ></table>
+<ng-container *ngIf="(sortBy$ | async) === 'zone'; else sorted">
+  <div class="zones" *ngIf="(zoneTables$ | async) as zoneTables">
+    <ng-container *ngFor="let zone of (zones$ | async); let zoneIndex = index">
+      <div class="zone" *ngIf="zoneInfoSelected === null || zoneInfoSelected === zoneIndex">
+        <div class="zone_title">{{ zone.name }}</div>
+        <div class="section" *ngFor="let section of zone.sections; let sectionIndex = index">
+          <table
+            [table]="table"
+            (openTable)="onOpenTable(table)"
+            class="table"
+            *ngFor="
+              let table of (zoneTables[zoneIndex][sectionIndex] | async);
+              trackBy: trackbyIdFn
+            "
+          ></table>
+        </div>
       </div>
-    </div>
-  </ng-container>
-</div>
+    </ng-container>
+  </div>
+</ng-container>
 
-<div class="block playing"></div>
-<div class=""></div>
+<ng-template #sorted>
+  <div class="all-tables">
+    <table
+      [table]="table"
+      (openTable)="onOpenTable(table)"
+      class="table"
+      *ngFor="let table of (sortedTables$ | async); trackBy: trackbyIdFn"
+    ></table>
+  </div>
+</ng-template>
+
 <ng-template #header let-disabled="disabled">
   <tournament-header
     [disabled]="disabled"
@@ -50,7 +64,9 @@
 </ng-template>
 <ng-template #menuHeader>{{ (tournament$ | async)?.name }}</ng-template>
 <ng-template #clock><clock-panel (clockSet)="closePanel()"></clock-panel></ng-template>
-<ng-template #filters><filters-panel [filters]="filters$ | async"></filters-panel></ng-template>
+<ng-template #filters
+  ><filters-panel [filters]="filters$ | async" [sortBy]="sortBy$ | async"></filters-panel
+></ng-template>
 <ng-template #actions
   ><actions-panel [actions]="actions$ | async" (actionClick)="onActionClick($event)"></actions-panel
 ></ng-template>
