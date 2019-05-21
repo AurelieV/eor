@@ -1,20 +1,13 @@
-import { Action, Filters, SortBy, Table, Tournament, TournamentStaff, ZoneInfo } from '@/app/models'
-import { createEmptyTable } from '@/app/utils/helpers'
-import { Injectable } from '@angular/core'
-import { AngularFireDatabase } from '@angular/fire/database'
-import { AuthenticationService } from '@core/services/authentication.service'
-import { WindowVisibility } from '@core/services/window-visibility.service'
-import { Zone } from '@pages/administration/administration.models'
-import * as moment from 'moment'
-import {
-  BehaviorSubject,
-  combineLatest as combine,
-  Observable,
-  of,
-  Subscription,
-  timer,
-} from 'rxjs'
-import { combineLatest, filter, map, switchMap } from 'rxjs/operators'
+import { Action, Filters, SortBy, Table, Tournament, TournamentStaff, ZoneInfo } from '@/app/models';
+import { createEmptyTable } from '@/app/utils/helpers';
+import { Injectable } from '@angular/core';
+import { AngularFireDatabase } from '@angular/fire/database';
+import { AuthenticationService } from '@core/services/authentication.service';
+import { WindowVisibility } from '@core/services/window-visibility.service';
+import { Zone } from '@pages/administration/administration.models';
+import * as moment from 'moment';
+import { BehaviorSubject, combineLatest as combine, Observable, of, Subscription, timer } from 'rxjs';
+import { combineLatest, filter, map, switchMap } from 'rxjs/operators';
 
 export type SectionsTables = Observable<Table[]>[]
 export type ZonesTables = SectionsTables[]
@@ -219,9 +212,18 @@ export class TournamentStore {
       map((roles) => {
         const actions: Action[] = [
           { label: 'Add time', key: 'add-time', role: 'all', color: 'primary' },
+          { label: 'Assign judge', key: 'assign', role: 'zonelead', color: 'primary' },
+          {
+            label: 'Nominate floor judge',
+            key: 'nominate-floor',
+            role: 'zonelead',
+            color: 'primary',
+          },
           { label: 'Go to outstanding', key: 'go-outstanding', role: 'teamlead', color: 'warn' },
           { label: 'Go to next round', key: 'end-round', role: 'teamlead', color: 'warn' },
-          { label: 'Assign judge', key: 'assign', role: 'all', color: 'primary' },
+          { label: 'Change user roles', key: 'change-roles', role: 'teamlead', color: 'primary' },
+          { label: 'Import Pairings', key: 'import-pairings', role: 'scorekeeper', color: 'primary' },
+          { label: 'Import Results', key: 'import-results', role: 'scorekeeper', color: 'primary' },
         ]
 
         return actions
