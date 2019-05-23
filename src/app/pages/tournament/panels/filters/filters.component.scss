@@ -12,6 +12,9 @@
   &:not(.active) {
     opacity: 0.5;
   }
+  background: none;
+  border: none;
+  outline: none;
 }
 
 .label {

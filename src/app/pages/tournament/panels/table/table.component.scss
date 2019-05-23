@@ -5,6 +5,7 @@
   width: 50%;
   box-sizing: border-box;
   padding: 0.5rem 0;
+
   .block {
     width: 24px;
     height: 24px;
@@ -16,8 +17,15 @@
   }
 }
 
+button.status {
+  background: none;
+  border: none;
+  outline: none;
+}
+
 .status-block {
   display: flex;
   justify-items: center;
   flex-wrap: wrap;
+  margin-bottom: 1rem;
 }
