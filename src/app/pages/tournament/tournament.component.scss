@@ -11,6 +11,12 @@
   padding-bottom: 0.5em;
 }
 
+.section,
+.all-tables {
+  display: flex;
+  flex-wrap: wrap;
+}
+
 .zone {
   padding-top: 0.5em;
   padding-bottom: 0.5em;
