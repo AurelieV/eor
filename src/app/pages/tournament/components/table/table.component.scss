@@ -1,4 +1,5 @@
 @import 'utils/_colors';
+@import 'utils/_responsive';
 
 :host {
   display: inline-flex;
@@ -14,6 +15,13 @@
 
   box-sizing: border-box;
   padding: 0.5em;
-  width: 20%;
+  @include responsive(
+    'width',
+    (
+      xs: 20%,
+      sm: 10%,
+      lg: 5%,
+    )
+  );
   height: 60px;
 }

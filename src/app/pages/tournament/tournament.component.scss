@@ -1,5 +1,6 @@
 @import 'utils/_colors';
 @import 'utils/_media';
+@import 'utils/_responsive';
 
 :host {
   display: block;
@@ -65,7 +66,15 @@ tournament-filters {
   .zone-info {
     box-sizing: border-box;
     flex-shrink: 0;
-    width: 80%;
+    @include responsive(
+      'width',
+      (
+        xs: 80%,
+        sm: 45%,
+        md: 30%,
+        lg: 20%,
+      )
+    );
     margin-left: 1%;
     margin-right: 1%;
     cursor: pointer;
