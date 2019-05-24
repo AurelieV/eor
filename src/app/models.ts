@@ -15,6 +15,13 @@ export class Table {
   assignated: string
   sectionIndex: string
   zoneIndex: string
+  player1: Player
+  player2: Player
+}
+
+export interface Player {
+  name: string
+  currentPoints: number
 }
 
 export interface TeamTime {

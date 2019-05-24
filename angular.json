@@ -24,10 +24,10 @@
             "tsConfig": "src/tsconfig.app.json",
             "assets": ["src/favicon.ico", "src/assets"],
             "styles": ["src/styles.scss"],
+            "scripts": ["papaparse.min.js"],
             "stylePreprocessorOptions": {
               "includePaths": ["src/styles"]
-            },
-            "scripts": []
+            }
           },
           "configurations": {
             "production": {

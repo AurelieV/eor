@@ -48,6 +48,8 @@ export class TournamentComponent implements OnInit, OnDestroy, AfterViewInit {
   private addTimeTemplateRef: TemplateRef<any>
   @ViewChild('table')
   private tableTemplateRef: TemplateRef<any>
+  @ViewChild('importPairings')
+  private importPairingsRef: TemplateRef<any>
 
   @ViewChild(CdkScrollable)
   private zoneInfoContainer: CdkScrollable
@@ -131,6 +133,10 @@ export class TournamentComponent implements OnInit, OnDestroy, AfterViewInit {
     this.sidePanel.back()
   }
 
+  onPairingsImported() {
+    this.sidePanel.close()
+  }
+
   onActionClick(key: string) {
     switch (key) {
       case 'add-time':
@@ -142,8 +148,11 @@ export class TournamentComponent implements OnInit, OnDestroy, AfterViewInit {
           this.sidePanel.close()
         })
         break
+      case 'import-pairings':
+        this.sidePanel.open(this.importPairingsRef)
+        break
       default:
-        console.log('todo')
+        console.log('todo', key)
     }
   }
 

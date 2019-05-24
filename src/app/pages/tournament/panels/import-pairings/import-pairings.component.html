@@ -1,0 +1,8 @@
+<div class="panel-title">Import pairings</div>
+<p class="help">Copy paste here from WLTR Pairings By Table (Copy as text)</p>
+<div class="error" *ngIf="errorMessage">
+  <mat-icon>warning</mat-icon>
+  <div class="error__text" [innerHtml]="errorMessage"></div>
+</div>
+<textarea [(ngModel)]="textInput" id="input"></textarea>
+<button mat-flat-button color="primary" (click)="import()" [disabled]="!textInput">Import</button>
