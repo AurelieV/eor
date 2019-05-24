@@ -13,6 +13,7 @@ import {
   MatSidenavModule,
 } from '@angular/material'
 import { RouterModule } from '@angular/router'
+import { CommonModule as MyCommonModule } from '../../shared/common/common.module'
 import { HeaderComponent } from './components/header/header.component'
 import { TableComponent } from './components/table/table.component'
 import { ZoneInfoComponent } from './components/zone-info/zone-info.component'
@@ -57,6 +58,7 @@ import { TournamentComponent } from './tournament.component'
     MatSelectModule,
 
     // App
+    MyCommonModule,
     RouterModule.forChild([
       {
         path: '',

@@ -100,6 +100,10 @@ export class TableService {
     return promise
   }
 
+  getLogs(table: Table): Observable<TimeLog[]> {
+    return this.db.list<TimeLog>(`log/${this.store.key}/${table.id}`).valueChanges()
+  }
+
   private tablePath(table: Table) {
     return `/zoneTables/${this.store.key}/${table.zoneIndex}/${table.sectionIndex}/${table.id}`
   }

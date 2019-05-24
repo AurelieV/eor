@@ -22,6 +22,7 @@ import {
 } from '@angular/platform-browser'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { RouterModule } from '@angular/router'
+import { CommonModule } from '@shared/common/common.module'
 import { CustomFormModule } from '@shared/custom-form/custom-form.module'
 import { InlineSVGModule } from 'ng-inline-svg'
 import { environment } from 'src/environments/environment'
@@ -31,7 +32,6 @@ import { MainComponent } from './main.component'
 import { AuthentRedirectComponent } from './pages/authent-redirect/authent-redirect.component'
 import { LoginComponent } from './pages/login/login.component'
 import { TournamentsListComponent } from './pages/tournament-list/tournaments-list.component'
-import { UserPipe } from './pipes/user.pipe'
 import { AuthenticationService } from './services/authentication.service'
 import { ErrorService } from './services/error.service'
 import { HeaderService } from './services/header.service'
@@ -61,7 +61,6 @@ export class CustomHammerGestureConfig extends HammerGestureConfig {
     AuthentRedirectComponent,
     TournamentsListComponent,
     LoginComponent,
-    UserPipe,
     ErrorComponent,
   ],
   entryComponents: [ErrorComponent],
@@ -90,6 +89,7 @@ export class CustomHammerGestureConfig extends HammerGestureConfig {
 
     // App modules
     CustomFormModule,
+    CommonModule,
     RouterModule.forRoot([
       {
         path: 'login',

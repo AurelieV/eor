@@ -5,4 +5,6 @@
   <div class="error__text" [innerHtml]="errorMessage"></div>
 </div>
 <textarea [(ngModel)]="textInput" id="input"></textarea>
-<button mat-flat-button color="primary" (click)="import()" [disabled]="!textInput">Import</button>
+<button mat-flat-button color="primary" (click)="import()" [disabled]="!textInput || isLoading">
+  Import
+</button>

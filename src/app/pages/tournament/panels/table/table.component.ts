@@ -1,7 +1,8 @@
-import { Table, TableStatus } from '@/app/models'
+import { Table, TableStatus, TimeLog } from '@/app/models'
 import { Component, EventEmitter, Input, Output } from '@angular/core'
 import { TableService } from '@pages/tournament/services/table.service'
 import { Observable } from 'rxjs'
+import { switchMap, take } from 'rxjs/operators'
 
 @Component({
   selector: 'table-panel',
@@ -12,6 +13,7 @@ export class TablePanelComponent {
   @Input() table: Table
   @Output() addTime = new EventEmitter()
   table$: Observable<Table>
+  logs$: Observable<TimeLog[]>
   status: TableStatus[] = ['unknown', 'covered', 'playing', 'done']
 
   constructor(private tableService: TableService) {}
@@ -25,6 +27,10 @@ export class TablePanelComponent {
 
   ngOnInit() {
     this.table$ = this.tableService.getById(Number(this.table.id))
+    this.logs$ = this.table$.pipe(
+      take(1),
+      switchMap((table) => this.tableService.getLogs(table))
+    )
   }
 
   ngOnChanges() {

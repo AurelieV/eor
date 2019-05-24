@@ -50,4 +50,19 @@
     </div>
   </ng-container>
   <div class="panel-subtitle">Actions</div>
+  <div class="actions">
+    <button mat-flat-button color="primary">Sit at table</button>
+    <button mat-flat-button color="primary">Assign judge</button>
+    <button mat-flat-button color="primary">Enter result</button>
+  </div>
+  <ng-container *ngIf="(logs$ | async) as logs">
+    <ng-container *ngIf="logs.length">
+      <div class="panel-subtitle">Logs</div>
+      <ul class="logs">
+        <li *ngFor="let log of logs">
+          +{{ log.time }}min, {{ log.addOrUpdate }} by {{ log.user | user }}
+        </li>
+      </ul>
+    </ng-container>
+  </ng-container>
 </ng-container>

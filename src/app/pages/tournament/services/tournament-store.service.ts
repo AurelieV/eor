@@ -1,13 +1,20 @@
-import { Action, Filters, SortBy, Table, Tournament, TournamentStaff, ZoneInfo } from '@/app/models';
-import { createEmptyTable } from '@/app/utils/helpers';
-import { Injectable } from '@angular/core';
-import { AngularFireDatabase } from '@angular/fire/database';
-import { AuthenticationService } from '@core/services/authentication.service';
-import { WindowVisibility } from '@core/services/window-visibility.service';
-import { Zone } from '@pages/administration/administration.models';
-import * as moment from 'moment';
-import { BehaviorSubject, combineLatest as combine, Observable, of, Subscription, timer } from 'rxjs';
-import { combineLatest, filter, map, switchMap } from 'rxjs/operators';
+import { Action, Filters, SortBy, Table, Tournament, TournamentStaff, ZoneInfo } from '@/app/models'
+import { createEmptyTable } from '@/app/utils/helpers'
+import { Injectable } from '@angular/core'
+import { AngularFireDatabase } from '@angular/fire/database'
+import { AuthenticationService } from '@core/services/authentication.service'
+import { WindowVisibility } from '@core/services/window-visibility.service'
+import { Zone } from '@pages/administration/administration.models'
+import * as moment from 'moment'
+import {
+  BehaviorSubject,
+  combineLatest as combine,
+  Observable,
+  of,
+  Subscription,
+  timer,
+} from 'rxjs'
+import { combineLatest, filter, map, switchMap } from 'rxjs/operators'
 
 export type SectionsTables = Observable<Table[]>[]
 export type ZonesTables = SectionsTables[]
@@ -222,7 +229,12 @@ export class TournamentStore {
           { label: 'Go to outstanding', key: 'go-outstanding', role: 'teamlead', color: 'warn' },
           { label: 'Go to next round', key: 'end-round', role: 'teamlead', color: 'warn' },
           { label: 'Change user roles', key: 'change-roles', role: 'teamlead', color: 'primary' },
-          { label: 'Import Pairings', key: 'import-pairings', role: 'scorekeeper', color: 'primary' },
+          {
+            label: 'Import Pairings',
+            key: 'import-pairings',
+            role: 'scorekeeper',
+            color: 'primary',
+          },
           { label: 'Import Results', key: 'import-results', role: 'scorekeeper', color: 'primary' },
         ]
 
@@ -278,7 +290,15 @@ export class TournamentStore {
   async restart() {
     const key = this.key
     const zones = this.zones
-    await Promise.all(zones.map((zone, zoneIndex) => this.recreateZone(zone, zoneIndex, key)))
+    await Promise.all(
+      zones
+        .map((zone, zoneIndex) => this.recreateZone(zone, zoneIndex, key))
+        .concat(this.resetLogs())
+    )
+  }
+
+  private async resetLogs(): Promise<any> {
+    return this.db.object(`log/${this.key}`).set([])
   }
 
   private async recreateZone(zone, zoneIndex, tournamentKey, isTeam = false) {

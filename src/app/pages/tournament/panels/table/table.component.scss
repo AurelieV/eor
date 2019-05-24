@@ -78,3 +78,12 @@ button.status {
     }
   }
 }
+.actions {
+  button {
+    width: 100%;
+    &:not(:first-child) {
+      margin-top: 5px;
+    }
+  }
+  margin-bottom: 1rem;
+}
