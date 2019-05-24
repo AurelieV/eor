@@ -25,6 +25,29 @@
       <div class="label">{{ t.time || 0 }}min</div>
     </button>
   </div>
-
+  <ng-container *ngIf="table.player1 && table.player2">
+    <div class="panel-subtitle">Virtual Paper Slip</div>
+    <div class="slip">
+      <div class="description">
+        <div class="push"></div>
+        <div>Win</div>
+        <div>Drop?</div>
+      </div>
+      <div class="player line">
+        <div class="name">{{ table.player1.name }}</div>
+        <div class="score">{{ table.result && table.result.player1.score }}</div>
+        <div class="drop" [class.hasDropped]="table.result && table.result.player1.drop"></div>
+      </div>
+      <div class="draw">
+        <div class="push"></div>
+        <div class="score">{{ table.result && table.result.draw }}</div>
+      </div>
+      <div class="player line">
+        <div class="name">{{ table.player2.name }}</div>
+        <div class="score">{{ table.result && table.result.player2.score }}</div>
+        <div class="drop" [class.hasDropped]="table.result && table.result.player2.drop"></div>
+      </div>
+    </div>
+  </ng-container>
   <div class="panel-subtitle">Actions</div>
 </ng-container>

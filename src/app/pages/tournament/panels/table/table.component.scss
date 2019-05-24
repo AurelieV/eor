@@ -29,3 +29,52 @@ button.status {
   flex-wrap: wrap;
   margin-bottom: 1rem;
 }
+
+.slip {
+  margin-bottom: 1rem;
+  border: 1px solid black;
+  .line,
+  .draw,
+  .description {
+    display: flex;
+    justify-content: end;
+    align-items: center;
+  }
+  .description {
+    margin-top: 10px;
+    margin-right: 10px;
+    :last-child {
+      margin-left: 55px;
+    }
+  }
+  .player {
+    padding: 16px;
+  }
+  .score {
+    border-bottom: 1px solid black;
+    width: 36px;
+    height: 36px;
+    box-sizing: border-box;
+    margin-right: 40px;
+    line-height: 36px;
+    text-align: center;
+  }
+  .draw .score {
+    margin-right: 60px;
+  }
+  .name,
+  .push {
+    flex: 1 1 auto;
+    margin-right: 10px;
+  }
+  .drop {
+    width: 25px;
+    height: 25px;
+    border: 1px solid black;
+    box-sizing: border-box;
+    margin-left: 20px;
+    &.hasDropped {
+      background: black;
+    }
+  }
+}
