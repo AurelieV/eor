@@ -57,9 +57,11 @@
 <ng-template #header let-disabled="disabled">
   <tournament-header
     [disabled]="disabled"
+    [viewMode]="viewMode"
     (editClock)="onEditClock()"
     (editFilters)="onEditFilter()"
     (openActions)="onOpenActions()"
+    (toggleViewMode)="toggleViewMode()"
   ></tournament-header>
 </ng-template>
 <ng-template #menuHeader>{{ (tournament$ | async)?.name }}</ng-template>

@@ -1,4 +1,4 @@
-import { Action, Filters, SortBy, Table, Tournament, ZoneInfo } from '@/app/models'
+import { Action, Filters, SortBy, Table, Tournament, ViewMode, ZoneInfo } from '@/app/models'
 import { CdkScrollable, ScrollDispatcher } from '@angular/cdk/scrolling'
 import { AfterViewInit, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
@@ -34,6 +34,7 @@ export class TournamentComponent implements OnInit, OnDestroy, AfterViewInit {
   selectedTable: Table = null
 
   isRestarting: boolean = false
+  viewMode: ViewMode = 'small'
 
   @ViewChild('header')
   private headerTemplateRef: TemplateRef<any>
@@ -200,6 +201,19 @@ export class TournamentComponent implements OnInit, OnDestroy, AfterViewInit {
 
   closePanel() {
     this.sidePanel.close()
+  }
+
+  toggleViewMode() {
+    switch (this.viewMode) {
+      case 'small':
+        this.viewMode = 'medium'
+        break
+      case 'medium':
+        this.viewMode = 'large'
+        break
+      case 'large':
+        this.viewMode = 'small'
+    }
   }
 
   trackbyIdFn(index, val) {

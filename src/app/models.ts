@@ -126,3 +126,5 @@ export interface TimeLog {
   date: number
   addOrUpdate: 'add' | 'update'
 }
+
+export type ViewMode = 'small' | 'medium' | 'large'

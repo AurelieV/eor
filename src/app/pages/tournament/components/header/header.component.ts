@@ -1,3 +1,4 @@
+import { ViewMode } from '@/app/models'
 import { Component, EventEmitter, Input, Output } from '@angular/core'
 import { TournamentStore } from '@pages/tournament/services/tournament-store.service'
 import { Observable } from 'rxjs'
@@ -12,7 +13,9 @@ export class HeaderComponent {
   @Output() editClock = new EventEmitter()
   @Output() editFilters = new EventEmitter()
   @Output() openActions = new EventEmitter()
+  @Output() toggleViewMode = new EventEmitter()
   @Input() disabled: boolean
+  @Input() viewMode: ViewMode
 
   clock$: Observable<string>
   canEditClock$: Observable<boolean>
@@ -55,5 +58,9 @@ export class HeaderComponent {
     }
   }
 
-  onDisplayClick() {}
+  onDisplayClick() {
+    if (!this.disabled) {
+      this.toggleViewMode.emit()
+    }
+  }
 }

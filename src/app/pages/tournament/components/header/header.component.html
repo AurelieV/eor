@@ -13,7 +13,9 @@
   <mat-icon>filter_list</mat-icon>
 </button>
 <button mat-icon-button [disabled]="disabled" (click)="onDisplayClick()">
-  <mat-icon>view_comfy</mat-icon>
+  <mat-icon *ngIf="viewMode === 'small'">view_comfy</mat-icon>
+  <mat-icon *ngIf="viewMode === 'medium'">view_module</mat-icon>
+  <mat-icon *ngIf="viewMode === 'large'">view_agenda</mat-icon>
 </button>
 <button mat-icon-button [disabled]="disabled" (click)="onActionsClick()">
   <mat-icon>more_vert</mat-icon>
