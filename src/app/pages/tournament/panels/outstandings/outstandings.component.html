@@ -1,1 +1,23 @@
 <div class="panel-title">Outstandings</div>
+<div class="actions" *ngIf="!isOutstandings">
+  <button (click)="goOutstandings()" mat-flat-button color="primary" [disabled]="isLoading">
+    Go outstandings as it is
+  </button>
+  <button (click)="goToDefine()" mat-flat-button color="primary" [disabled]="isLoading">
+    Define last tables
+  </button>
+</div>
+<ng-container *ngIf="defineLastTables || isOutstandings">
+  <div class="panel-subtitle">Define last tables</div>
+  <p class="help">Tap table numbers, separated by space or newline</p>
+  <textarea [(ngModel)]="textInput" id="input" #input></textarea>
+  <button
+    mat-flat-button
+    color="primary"
+    (click)="defineAndGo()"
+    [disabled]="!textInput || isLoading"
+  >
+    <ng-container *ngIf="isOutstandings">Set and go outstandings</ng-container>
+    <ng-container *ngIf="isOutstandings">Set</ng-container>
+  </button>
+</ng-container>

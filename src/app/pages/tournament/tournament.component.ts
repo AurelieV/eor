@@ -26,6 +26,7 @@ export class TournamentComponent implements OnInit, OnDestroy, AfterViewInit {
   actions$: Observable<Action[]>
   sortedTables$: Observable<Table[]>
   sortBy$: Observable<SortBy>
+  isOutstandings$: Observable<boolean>
 
   zoneInfoSelected: number = null
   zoneInfoItemWidthRatio = 0.82
@@ -85,6 +86,7 @@ export class TournamentComponent implements OnInit, OnDestroy, AfterViewInit {
     this.actions$ = this.store.actions$
     this.sortedTables$ = this.store.sortedTables$
     this.sortBy$ = this.store.sortBy$
+    this.isOutstandings$ = this.store.isOutstandings$
     this.scroller
       .scrolled()
       .pipe(debounceTime(300))
@@ -142,6 +144,10 @@ export class TournamentComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   onResultsImported() {
+    this.sidePanel.back()
+  }
+
+  onOutstandingsDefined() {
     this.sidePanel.back()
   }
 

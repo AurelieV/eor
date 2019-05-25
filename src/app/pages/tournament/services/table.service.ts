@@ -104,6 +104,14 @@ export class TableService {
     return this.db.list<TimeLog>(`log/${this.store.key}/${table.id}`).valueChanges()
   }
 
+  setMissingPaper(tableIds: string[]): Promise<any> {
+    return Promise.all(
+      this.allTables.map((table) =>
+        this.update(table, { stageHasPaper: !tableIds.includes(table.id) }).catch((err) => err)
+      )
+    )
+  }
+
   private tablePath(table: Table) {
     return `/zoneTables/${this.store.key}/${table.zoneIndex}/${table.sectionIndex}/${table.id}`
   }

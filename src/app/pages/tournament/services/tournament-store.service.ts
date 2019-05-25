@@ -42,6 +42,7 @@ export class TournamentStore {
   sortBy$ = new BehaviorSubject<SortBy>('zone')
   sortedTables$: Observable<Table[]>
   actions$: Observable<Action[]>
+  isOutstandings$: Observable<boolean>
 
   private subscriptions: Subscription[] = []
 
@@ -53,12 +54,16 @@ export class TournamentStore {
     this.tournament$ = this.key$.pipe(
       switchMap((key) => this.db.object<Tournament>(`tournaments/${key}`).valueChanges())
     )
+    this.isOutstandings$ = this.key$.pipe(
+      switchMap((key) => this.db.object<boolean>(`isOutstandings/${key}`).valueChanges())
+    )
     this.zones$ = this.key$.pipe(
       switchMap((key) => this.db.list<Zone>(`/zones/${key}`).valueChanges())
     )
     this.subscriptions.push(this.zones$.subscribe((zones) => (this.zones = zones)))
     const filterFunc$: Observable<(table: Table) => boolean> = this.filters$.pipe(
-      map((filters) => {
+      combineLatest(this.isOutstandings$),
+      map(([filters, isOutstandings]) => {
         return (table) => {
           let result = true
           if (!filters.displayCovered) {
@@ -76,7 +81,7 @@ export class TournamentStore {
           if (filters.onlyExtraTimed) {
             result = result && table.time > 0
           }
-          if (filters.onlyStageHasNotPaper) {
+          if (filters.onlyStageHasNotPaper || isOutstandings) {
             result = result && !table.stageHasPaper
           }
 
@@ -110,11 +115,15 @@ export class TournamentStore {
             switchMap((key) =>
               this.db.list<Table[]>(`/zoneTables/${key}/${zoneIndex}`).valueChanges()
             ),
-            map((sections) => {
-              const tables = sections.reduce(
+            combineLatest(this.isOutstandings$),
+            map(([sections, isOutstandings]) => {
+              let tables = sections.reduce(
                 (tables, sectionTables) => tables.concat(Object.values(sectionTables)),
                 []
               )
+              if (isOutstandings) {
+                tables = tables.filter((table) => !table.stageHasPaper)
+              }
               const notDoneTables = tables.filter(({ status }) => status !== 'done')
               const extraTimesTables = notDoneTables.filter((table) => table.time > 0)
 
@@ -216,7 +225,8 @@ export class TournamentStore {
       })
     )
     this.actions$ = this.roles$.pipe(
-      map((roles) => {
+      combineLatest(this.isOutstandings$),
+      map(([roles, isOutstandings]) => {
         const actions: Action[] = [
           { label: 'Add time', key: 'add-time', role: 'all', color: 'primary' },
           { label: 'Assign judge', key: 'assign', role: 'zonelead', color: 'primary' },
@@ -226,7 +236,12 @@ export class TournamentStore {
             role: 'zonelead',
             color: 'primary',
           },
-          { label: 'Go to outstanding', key: 'go-outstanding', role: 'teamlead', color: 'warn' },
+          {
+            label: isOutstandings ? 'Set outstandings' : 'Go to outstanding',
+            key: 'go-outstanding',
+            role: 'teamlead',
+            color: 'warn',
+          },
           { label: 'Go to next round', key: 'end-round', role: 'teamlead', color: 'warn' },
           { label: 'Change user roles', key: 'change-roles', role: 'teamlead', color: 'primary' },
           {
@@ -293,11 +308,15 @@ export class TournamentStore {
     await Promise.all(
       zones
         .map((zone, zoneIndex) => this.recreateZone(zone, zoneIndex, key))
-        .concat(this.resetLogs())
+        .concat(this.resetLogs(), this.setIsOutstandings(false))
     )
   }
 
-  private async resetLogs(): Promise<any> {
+  setIsOutstandings(value: boolean): Promise<any> {
+    return this.db.object(`isOutstandings/${this.key}`).set(value)
+  }
+
+  private resetLogs(): Promise<any> {
     return this.db.object(`log/${this.key}`).set([])
   }
 

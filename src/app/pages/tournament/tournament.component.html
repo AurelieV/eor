@@ -65,7 +65,11 @@
 <ng-template #menuHeader>{{ (tournament$ | async)?.name }}</ng-template>
 <ng-template #clock><clock-panel (clockSet)="closePanel()"></clock-panel></ng-template>
 <ng-template #filters
-  ><filters-panel [filters]="filters$ | async" [sortBy]="sortBy$ | async"></filters-panel
+  ><filters-panel
+    [filters]="filters$ | async"
+    [sortBy]="sortBy$ | async"
+    [isOutstandings]="isOutstandings$ | async"
+  ></filters-panel
 ></ng-template>
 <ng-template #actions
   ><actions-panel
@@ -86,4 +90,9 @@
 <ng-template #importResults
   ><import-results-panel (resultsImported)="onResultssImported()"></import-results-panel
 ></ng-template>
-<ng-template #outstandings><outstandings-panel></outstandings-panel></ng-template>
+<ng-template #outstandings
+  ><outstandings-panel
+    (outstandingsDefined)="onOutstandingsDefined()"
+    [isOutstandings]="isOutstandings$ | async"
+  ></outstandings-panel
+></ng-template>

@@ -11,6 +11,7 @@ import { TournamentStore } from '@pages/tournament/services/tournament-store.ser
 export class FiltersPanelComponent {
   @Input() filters: Filters
   @Input() sortBy: SortBy
+  @Input() isOutstandings: boolean
 
   constructor(private store: TournamentStore) {}
 
