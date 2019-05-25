@@ -1,3 +1,4 @@
+import { Result } from '@/app/models'
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -9,18 +10,19 @@ import {
 } from '@angular/core'
 import { NotificationService } from '@core/services/notification.service'
 import { INVALID_ID, TableService } from '@pages/tournament/services/table.service'
+import * as moment from 'moment'
 
 @Component({
-  selector: 'import-pairings-panel',
-  templateUrl: './import-pairings.component.html',
-  styleUrls: ['./import-pairings.component.scss'],
+  selector: 'import-results-panel',
+  templateUrl: './import-results.component.html',
+  styleUrls: ['./import-results.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ImportPairingsPanelComponent {
+export class ImportResultsPanelComponent {
+  @Output() resultsImported = new EventEmitter()
   textInput: string
   errorMessage: string = null
   isLoading: boolean = false
-  @Output() pairingsImported = new EventEmitter()
 
   @ViewChild('input')
   inputRef: ElementRef
@@ -40,11 +42,8 @@ export class ImportPairingsPanelComponent {
     this.isLoading = true
     let [header, ...body] = this.textInput.split('\n')
     body = body.filter((line) => !!line)
-    header = header.replace('Team 1', 'Player 1')
-    header = header.replace('Team 2', 'Player 2')
-    header = header.replace(/Points/, 'player1Score')
-    header = header.replace(/Points/, 'player2Score')
-    const mandatoryHeaders = ['Player 1', 'Player 2', 'player1Score', 'player2Score', 'Table']
+    header = header.replace('Team', 'Player')
+    const mandatoryHeaders = ['Table', 'Player', 'Result', 'Opponent']
     if (mandatoryHeaders.findIndex((h) => !header.includes(h)) !== -1) {
       this.errorMessage = 'Your headers seem wrong. Have you done the right import?'
       this.isLoading = false
@@ -56,25 +55,52 @@ export class ImportPairingsPanelComponent {
         header: true,
       })
       .data.map((table) => {
-        return {
+        const result = table['Result']
+        if (!result || result === 'pending' || result === 'BYE') {
+          return null
+        }
+        const [type, scores] = result.split(' ')
+        let score1: number, score2: number, draw: number
+        if (type === 'Draw') {
+          score1 = score2 = draw = 1
+        } else if (scores) {
+          ;[score1, score2] = scores.split('-').map(Number)
+        } else {
+          return null
+        }
+        if (isNaN(score1) || isNaN(score2)) {
+          return null
+        }
+        const output: { tableId: string; result: Result } = {
           tableId: table['Table'],
-          player1: {
-            name: table['Player 1'],
-            currentPoints: table.player1Score === 'undefined' ? 0 : Number(table.player1Score),
-          },
-          player2: {
-            name: table['Player 2'],
-            currentPoints: table.player2Score === 'undefined' ? 0 : Number(table.player2Score),
+          result: {
+            player1: {
+              score: score1,
+              drop: false,
+            },
+            player2: {
+              score: score2,
+              drop: false,
+            },
+            draw: draw || 0,
           },
         }
+        return output
       })
-      .filter((t) => !isNaN(Number(t.tableId)))
+      .filter((t) => t && !isNaN(Number(t.tableId)))
+
     let successFullImport = 0
     let invalidTableIds = []
     let errorTables = []
-    const requests = tables.map(({ tableId, player1, player2 }) =>
+
+    const requests = tables.map(({ tableId, result }) =>
       this.tableService
-        .updateById(tableId, { player1, player2 })
+        .updateById(tableId, {
+          result,
+          status: 'done',
+          stageHasPaper: true,
+          updateStatusTime: moment.utc().valueOf(),
+        })
         .then(() => {
           successFullImport = successFullImport + 1
         })
@@ -86,14 +112,15 @@ export class ImportPairingsPanelComponent {
           }
         })
     )
+
     Promise.all(requests).then(() => {
       this.isLoading = false
       if (successFullImport === tables.length) {
-        this.notificationService.notify(`${successFullImport} tables imported successfully`)
-        this.pairingsImported.emit()
+        this.notificationService.notify(`${successFullImport} results imported successfully`)
+        this.resultsImported.emit()
       } else {
         this.errorMessage = `
-        Try to import ${tables.length} tables. <br>
+        Try to import ${tables.length} results. <br>
         ${errorTables.length + invalidTableIds.length} were not updated (${
           invalidTableIds.length
         } tables with non existing number) <br>

@@ -76,7 +76,7 @@ export class TournamentStore {
           if (filters.onlyExtraTimed) {
             result = result && table.time > 0
           }
-          if (!filters.onlyStageHasNotPaper) {
+          if (filters.onlyStageHasNotPaper) {
             result = result && !table.stageHasPaper
           }
 

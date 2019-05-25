@@ -50,6 +50,10 @@ export class TournamentComponent implements OnInit, OnDestroy, AfterViewInit {
   private tableTemplateRef: TemplateRef<any>
   @ViewChild('importPairings')
   private importPairingsRef: TemplateRef<any>
+  @ViewChild('outstandings')
+  private outstandingsRef: TemplateRef<any>
+  @ViewChild('importResults')
+  private importResultsRef: TemplateRef<any>
 
   @ViewChild(CdkScrollable)
   private zoneInfoContainer: CdkScrollable
@@ -134,7 +138,11 @@ export class TournamentComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   onPairingsImported() {
-    this.sidePanel.close()
+    this.sidePanel.back()
+  }
+
+  onResultsImported() {
+    this.sidePanel.back()
   }
 
   onActionClick(key: string) {
@@ -149,7 +157,13 @@ export class TournamentComponent implements OnInit, OnDestroy, AfterViewInit {
         })
         break
       case 'import-pairings':
-        this.sidePanel.open(this.importPairingsRef)
+        this.sidePanel.open(this.importPairingsRef, this.actionsTemplateRef)
+        break
+      case 'import-results':
+        this.sidePanel.open(this.importResultsRef, this.actionsTemplateRef)
+        break
+      case 'go-outstanding':
+        this.sidePanel.open(this.outstandingsRef, this.actionsTemplateRef)
         break
       default:
         console.log('todo', key)

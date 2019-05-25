@@ -1,5 +1,5 @@
-@import 'utils/media';
 @import 'utils/colors';
+@import 'utils/responsive';
 
 .main-container {
   display: flex;
@@ -71,15 +71,13 @@
 }
 
 #sidePanel {
-  width: 600px;
-  @include mobile {
-    width: 100%;
-  }
+  width: 100%;
+  max-width: 480px;
   display: flex;
   flex-direction: column;
 
   .side-panel-header {
-    padding: 1rem;
+    padding: 1rem 0.5rem 1rem 1rem;
     display: flex;
     .push {
       flex: 1 0 auto;
@@ -88,7 +86,7 @@
 
   .side-panel-container {
     flex: 1 0 auto;
-    padding: 0 2em;
+    padding: 0 2em 1em 2em;
   }
 }
 

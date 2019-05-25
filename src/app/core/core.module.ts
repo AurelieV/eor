@@ -132,7 +132,7 @@ export class CustomHammerGestureConfig extends HammerGestureConfig {
     ]),
   ],
   providers: [
-    { provide: MOBILE_MEDIA_QUERY, useValue: '(max-width: 719px)' },
+    { provide: MOBILE_MEDIA_QUERY, useValue: '(max-width: 959px)' },
     {
       provide: HAMMER_GESTURE_CONFIG,
       useClass: CustomHammerGestureConfig,
