@@ -23,6 +23,7 @@ import { ClockPanelComponent } from './panels/clock/clock.component'
 import { FiltersPanelComponent } from './panels/filters/filters.component'
 import { ImportPairingsPanelComponent } from './panels/import-pairings/import-pairings.component'
 import { ImportResultsPanelComponent } from './panels/import-results/import-results.component'
+import { MarkAllEmptyPanelComponent } from './panels/mark-all-empty/mark-all-empty.component'
 import { OutstandingsPanelComponent } from './panels/outstandings/outstandings.component'
 import { TablePanelComponent } from './panels/table/table.component'
 import { TableService } from './services/table.service'
@@ -43,6 +44,7 @@ import { TournamentComponent } from './tournament.component'
     ImportPairingsPanelComponent,
     OutstandingsPanelComponent,
     ImportResultsPanelComponent,
+    MarkAllEmptyPanelComponent,
   ],
   imports: [
     // Angular

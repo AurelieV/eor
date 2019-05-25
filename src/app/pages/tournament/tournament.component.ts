@@ -1,4 +1,13 @@
-import { Action, Filters, SortBy, Table, Tournament, ViewMode, ZoneInfo } from '@/app/models'
+import {
+  Action,
+  Filters,
+  SortBy,
+  Table,
+  TableStatus,
+  Tournament,
+  ViewMode,
+  ZoneInfo,
+} from '@/app/models'
 import { CdkScrollable, ScrollDispatcher } from '@angular/cdk/scrolling'
 import { AfterViewInit, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
@@ -35,6 +44,7 @@ export class TournamentComponent implements OnInit, OnDestroy, AfterViewInit {
 
   isRestarting: boolean = false
   viewMode: ViewMode = 'small'
+  markAllEmptyStatus: TableStatus
 
   @ViewChild('header')
   private headerTemplateRef: TemplateRef<any>
@@ -56,6 +66,8 @@ export class TournamentComponent implements OnInit, OnDestroy, AfterViewInit {
   private outstandingsRef: TemplateRef<any>
   @ViewChild('importResults')
   private importResultsRef: TemplateRef<any>
+  @ViewChild('markAllEmpty')
+  private markAllEmptyRef: TemplateRef<any>
 
   @ViewChild(CdkScrollable)
   private zoneInfoContainer: CdkScrollable
@@ -149,7 +161,11 @@ export class TournamentComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   onOutstandingsDefined() {
-    this.sidePanel.back()
+    this.sidePanel.close()
+  }
+
+  onAllEmptyMarked() {
+    this.sidePanel.close()
   }
 
   onActionClick(key: string) {
@@ -171,6 +187,14 @@ export class TournamentComponent implements OnInit, OnDestroy, AfterViewInit {
         break
       case 'go-outstanding':
         this.sidePanel.open(this.outstandingsRef, this.actionsTemplateRef)
+        break
+      case 'mark-all-empty-green':
+        this.markAllEmptyStatus = 'done'
+        this.sidePanel.open(this.markAllEmptyRef, this.actionsTemplateRef)
+        break
+      case 'mark-all-empty-red':
+        this.markAllEmptyStatus = 'playing'
+        this.sidePanel.open(this.markAllEmptyRef, this.actionsTemplateRef)
         break
       default:
         console.log('todo', key)

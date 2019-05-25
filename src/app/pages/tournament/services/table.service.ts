@@ -1,4 +1,4 @@
-import { Table, TimeLog } from '@/app/models'
+import { Table, TableStatus, TimeLog } from '@/app/models'
 import { Injectable } from '@angular/core'
 import { AngularFireDatabase } from '@angular/fire/database'
 import { AuthenticationService } from '@core/services/authentication.service'
@@ -109,6 +109,14 @@ export class TableService {
       this.allTables.map((table) =>
         this.update(table, { stageHasPaper: !tableIds.includes(table.id) }).catch((err) => err)
       )
+    )
+  }
+
+  markAllEmpty(zoneIndex: string, status: TableStatus): Promise<any> {
+    return Promise.all(
+      this.allTables
+        .filter((t) => t.zoneIndex === zoneIndex && t.status === 'unknown')
+        .map((t) => this.update(t, { status }))
     )
   }
 

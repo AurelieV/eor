@@ -1,0 +1,12 @@
+<div class="panel-title">Mark all empty as {{ status }}</div>
+<mat-form-field>
+  <mat-label>Choose a zone</mat-label>
+  <mat-select [(ngModel)]="zoneIndex">
+    <mat-option *ngFor="let zone of zones; let index = index" [value]="index">{{
+      zone.name
+    }}</mat-option>
+  </mat-select>
+</mat-form-field>
+<button mat-flat-button color="primary" (click)="markAllEmpty()" [disabled]="isLoading">
+  Mark all
+</button>

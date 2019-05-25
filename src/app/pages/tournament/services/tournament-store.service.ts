@@ -229,6 +229,18 @@ export class TournamentStore {
       map(([roles, isOutstandings]) => {
         const actions: Action[] = [
           { label: 'Add time', key: 'add-time', role: 'all', color: 'primary' },
+          {
+            label: 'Mark all empty as green',
+            key: 'mark-all-empty-green',
+            role: 'zonelead',
+            color: 'warn',
+          },
+          {
+            label: 'Mark all empty as red',
+            key: 'mark-all-empty-red',
+            role: 'zonelead',
+            color: 'warn',
+          },
           { label: 'Assign judge', key: 'assign', role: 'zonelead', color: 'primary' },
           {
             label: 'Nominate floor judge',
