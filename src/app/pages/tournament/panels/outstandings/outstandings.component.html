@@ -17,7 +17,7 @@
     (click)="defineAndGo()"
     [disabled]="!textInput || isLoading"
   >
-    <ng-container *ngIf="isOutstandings">Set and go outstandings</ng-container>
+    <ng-container *ngIf="!isOutstandings">Set and go outstandings</ng-container>
     <ng-container *ngIf="isOutstandings">Set</ng-container>
   </button>
 </ng-container>

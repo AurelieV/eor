@@ -1,2 +1,25 @@
-<div class="number">{{ table.id }}</div>
-<div class="time" *ngIf="table.time">{{ table.time }}min</div>
+<ng-container *ngIf="viewMode !== 'large'">
+  <div class="number">{{ table.id }}</div>
+  <div class="time" *ngIf="table.time">{{ table.time }}min</div>
+</ng-container>
+
+<ng-container *ngIf="viewMode === 'large'">
+  <div class="info">
+    <div class="number">{{ table.id }}</div>
+    <div class="players" *ngIf="table.player1 && table.player2">
+      {{ table.player1.name }} vs {{ table.player2.name }}
+    </div>
+    <div class="time" *ngIf="table.time">{{ table.time }}min</div>
+  </div>
+
+  <div class="actions">
+    <button
+      *ngIf="!table.stageHasPaper && isOutstandings"
+      mat-mini-fab
+      color="primary"
+      (click)="receivedPaper()"
+    >
+      <mat-icon>desktop_windows</mat-icon>
+    </button>
+  </div>
+</ng-container>

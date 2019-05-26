@@ -30,6 +30,8 @@
         <div class="section" *ngFor="let section of zone.sections; let sectionIndex = index">
           <table
             [table]="table"
+            [viewMode]="viewMode"
+            [isOutstandings]="isOutstandings$ | async"
             (openTable)="onOpenTable(table)"
             class="table"
             *ngFor="
@@ -47,6 +49,8 @@
   <div class="all-tables">
     <table
       [table]="table"
+      [viewMode]="viewMode"
+      [isOutstandings]="isOutstandings$ | async"
       (openTable)="onOpenTable(table)"
       class="table"
       *ngFor="let table of (sortedTables$ | async); trackBy: trackbyIdFn"

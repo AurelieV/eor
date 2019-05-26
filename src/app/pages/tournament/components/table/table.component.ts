@@ -1,4 +1,4 @@
-import { Table } from '@/app/models'
+import { Table, ViewMode } from '@/app/models'
 import {
   ChangeDetectionStrategy,
   Component,
@@ -19,11 +19,13 @@ import { TableService } from '@pages/tournament/services/table.service'
 export class TableComponent {
   @Input() table: Table
   @Input() canInteractWithFeaturedTables: boolean = true
+  @Input() viewMode: ViewMode
+  @Input() isOutstandings: boolean
   @Output() openTable = new EventEmitter()
 
   @HostBinding('class')
   get status() {
-    return `block ${this.table && this.table.status}`
+    return `block ${this.table && this.table.status} ${this.viewMode}`
   }
 
   constructor(private tableService: TableService) {}
@@ -36,5 +38,9 @@ export class TableComponent {
   @HostListener('press')
   secondaryAction() {
     this.openTable.emit()
+  }
+
+  receivedPaper() {
+    this.tableService.update(this.table, { stageHasPaper: true })
   }
 }
