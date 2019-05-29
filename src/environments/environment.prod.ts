@@ -18,8 +18,8 @@ export const environment: Environnement = {
   authenticateSettings: {
     authority: 'https://apps.magicjudges.org/openid/',
     client_id: '495440',
-    redirect_uri: 'http://eor-beta/authent-redirect',
-    post_logout_redirect_uri: 'http://eor-beta',
+    redirect_uri: 'http://eor-beta.purple-fox.fr/authent-redirect',
+    post_logout_redirect_uri: 'http://eor-beta.purple-fox.frs',
     response_type: 'code',
     scope: 'openid profile dciprofile',
   },
