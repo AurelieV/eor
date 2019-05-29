@@ -38,14 +38,26 @@
       />
     </mat-form-field>
     <div class="push"></div>
-    <button
-      type="submit"
-      mat-flat-button
-      color="primary"
-      [disabled]="!(currentTable$ | async) || (isLoading$ | async)"
-    >
-      <mat-icon>alarm</mat-icon>
-      <span>Add</span>
-    </button>
+    <div class="submit-buttons">
+      <button
+        type="submit"
+        mat-flat-button
+        color="primary"
+        [disabled]="!(currentTable$ | async) || (isLoading$ | async)"
+      >
+        <mat-icon>alarm</mat-icon>
+        <span>Add</span>
+      </button>
+      <button
+        *ngIf="(currentTable$ | async)?.time > 0"
+        type="submit"
+        mat-flat-button
+        color="accent"
+        [disabled]="!(currentTable$ | async) || (isLoading$ | async)"
+      >
+        <mat-icon>alarm</mat-icon>
+        <span>Set</span>
+      </button>
+    </div>
   </div>
 </form>

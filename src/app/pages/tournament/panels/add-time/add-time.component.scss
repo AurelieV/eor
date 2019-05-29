@@ -5,7 +5,13 @@
     flex: 1 0 auto;
   }
   .mat-form-field {
-    width: 100px;
+    width: 65px;
+  }
+  .submit-buttons {
+    display: flex;
+    button {
+      margin-left: 5px;
+    }
   }
 }
 
