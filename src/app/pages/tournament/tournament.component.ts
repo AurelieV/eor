@@ -1,14 +1,23 @@
-import { Action, Filters, SortBy, Table, TableStatus, Tournament, ViewMode, ZoneInfo } from '@/app/models';
-import { CdkScrollable, ScrollDispatcher } from '@angular/cdk/scrolling';
-import { AfterViewInit, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { HeaderService } from '@core/services/header.service';
-import { NotificationService } from '@core/services/notification.service';
-import { SidePanelService } from '@core/services/side-panel.service';
-import { Zone } from '@pages/administration/administration.models';
-import { Observable, Subscription } from 'rxjs';
-import { debounceTime } from 'rxjs/operators';
-import { TournamentStore, ZonesTables } from './services/tournament-store.service';
+import {
+  Action,
+  Filters,
+  SortBy,
+  Table,
+  TableStatus,
+  Tournament,
+  ViewMode,
+  ZoneInfo,
+} from '@/app/models'
+import { CdkScrollable, ScrollDispatcher } from '@angular/cdk/scrolling'
+import { AfterViewInit, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core'
+import { ActivatedRoute } from '@angular/router'
+import { HeaderService } from '@core/services/header.service'
+import { NotificationService } from '@core/services/notification.service'
+import { SidePanelService } from '@core/services/side-panel.service'
+import { Zone } from '@pages/administration/administration.models'
+import { Observable, Subscription } from 'rxjs'
+import { debounceTime } from 'rxjs/operators'
+import { TournamentStore, ZonesTables } from './services/tournament-store.service'
 
 @Component({
   selector: 'tournament',
@@ -91,6 +100,11 @@ export class TournamentComponent implements OnInit, OnDestroy, AfterViewInit {
     this.sortedTables$ = this.store.sortedTables$
     this.sortBy$ = this.store.sortBy$
     this.isOutstandings$ = this.store.isOutstandings$
+    this.subscriptions.push(
+      this.store.zoneInfoSelected$.subscribe(
+        (zoneInfoSelected) => (this.zoneInfoSelected = zoneInfoSelected)
+      )
+    )
     this.scroller
       .scrolled()
       .pipe(debounceTime(300))
@@ -193,7 +207,7 @@ export class TournamentComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   onZoneInfoClick(zoneIndex, arrayIndex) {
-    this.zoneInfoSelected = zoneIndex
+    this.store.zoneInfoSelected = zoneIndex
     window.scrollTo(0, 0)
 
     // Make visible

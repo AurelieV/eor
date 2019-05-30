@@ -1,20 +1,13 @@
-import { Action, Filters, SortBy, Table, Tournament, TournamentStaff, ZoneInfo } from '@/app/models'
-import { createEmptyTable } from '@/app/utils/helpers'
-import { Injectable } from '@angular/core'
-import { AngularFireDatabase } from '@angular/fire/database'
-import { AuthenticationService } from '@core/services/authentication.service'
-import { WindowVisibility } from '@core/services/window-visibility.service'
-import { Zone } from '@pages/administration/administration.models'
-import * as moment from 'moment'
-import {
-  BehaviorSubject,
-  combineLatest as combine,
-  Observable,
-  of,
-  Subscription,
-  timer,
-} from 'rxjs'
-import { combineLatest, filter, map, switchMap } from 'rxjs/operators'
+import { Action, Filters, SortBy, Table, Tournament, TournamentStaff, ZoneInfo } from '@/app/models';
+import { createEmptyTable } from '@/app/utils/helpers';
+import { Injectable } from '@angular/core';
+import { AngularFireDatabase } from '@angular/fire/database';
+import { AuthenticationService } from '@core/services/authentication.service';
+import { WindowVisibility } from '@core/services/window-visibility.service';
+import { Zone } from '@pages/administration/administration.models';
+import * as moment from 'moment';
+import { BehaviorSubject, combineLatest as combine, Observable, of, Subscription, timer } from 'rxjs';
+import { combineLatest, filter, map, switchMap } from 'rxjs/operators';
 
 export type SectionsTables = Observable<Table[]>[]
 export type ZonesTables = SectionsTables[]
@@ -43,6 +36,7 @@ export class TournamentStore {
   sortedTables$: Observable<Table[]>
   actions$: Observable<Action[]>
   isOutstandings$: Observable<boolean>
+  zoneInfoSelected$ = new BehaviorSubject<number>(null)
 
   private subscriptions: Subscription[] = []
 
@@ -282,10 +276,11 @@ export class TournamentStore {
         if (sortBy === 'zone') return of([]) // refer to other observable in this case
         return allTables$
       }),
-      combineLatest(filterFunc$),
-      map(([tables, fn]) => {
+      combineLatest(filterFunc$, this.zoneInfoSelected$),
+      map(([tables, fn, zoneInfoSelected]) => {
         // TODO: distinct filters
-        return tables.filter(fn).sort((a, b) => (b.time || 0) - (a.time || 0))
+        const filterFn = zoneInfoSelected === null ? fn : (table => fn(table) && Number(table.zoneIndex) === zoneInfoSelected)
+        return tables.filter(filterFn).sort((a, b) => (b.time || 0) - (a.time || 0))
       })
     )
   }
@@ -300,6 +295,10 @@ export class TournamentStore {
 
   get k$() {
     return this.key$.asObservable()
+  }
+
+  set zoneInfoSelected(value: number) {
+    this.zoneInfoSelected$.next(value)
   }
 
   setClock(value: number): Promise<any> {
