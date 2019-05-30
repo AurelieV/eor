@@ -69,6 +69,8 @@ export class TournamentComponent implements OnInit, OnDestroy, AfterViewInit {
   private importResultsRef: TemplateRef<any>
   @ViewChild('markAllEmpty')
   private markAllEmptyRef: TemplateRef<any>
+  @ViewChild('goNext')
+  private goNextRef: TemplateRef<any>
 
   @ViewChild(CdkScrollable)
   private zoneInfoContainer: CdkScrollable
@@ -190,16 +192,18 @@ export class TournamentComponent implements OnInit, OnDestroy, AfterViewInit {
     this.sidePanel.close()
   }
 
+  onGoNext() {
+    console.log('pouet')
+    this.sidePanel.close()
+  }
+
   onActionClick(key: string) {
     switch (key) {
       case 'add-time':
         this.sidePanel.open(this.addTimeTemplateRef, this.actionsTemplateRef)
         break
       case 'end-round':
-        this.store.restart().then(() => {
-          this.notifier.notify('Round reset')
-          this.sidePanel.close()
-        })
+        this.sidePanel.open(this.goNextRef, this.actionsTemplateRef)
         break
       case 'import-pairings':
         this.sidePanel.open(this.importPairingsRef, this.actionsTemplateRef)

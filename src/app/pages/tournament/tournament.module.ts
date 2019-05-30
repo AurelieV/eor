@@ -22,6 +22,7 @@ import { ActionsPanelComponent } from './panels/actions/actions.component'
 import { AddTimePanelComponent } from './panels/add-time/add-time.component'
 import { ClockPanelComponent } from './panels/clock/clock.component'
 import { FiltersPanelComponent } from './panels/filters/filters.component'
+import { GoNextPanelComponent } from './panels/go-next/go-next.component'
 import { ImportPairingsPanelComponent } from './panels/import-pairings/import-pairings.component'
 import { ImportResultsPanelComponent } from './panels/import-results/import-results.component'
 import { MarkAllEmptyPanelComponent } from './panels/mark-all-empty/mark-all-empty.component'
@@ -46,6 +47,7 @@ import { TournamentComponent } from './tournament.component'
     OutstandingsPanelComponent,
     ImportResultsPanelComponent,
     MarkAllEmptyPanelComponent,
+    GoNextPanelComponent,
   ],
   imports: [
     // Angular
