@@ -17,8 +17,14 @@ export function createEmptyTable(
     assignated: '',
     zoneIndex,
     sectionIndex,
-    player1: null,
-    player2: null,
+    player1: {
+      name: 'Player 1',
+      currentPoints: 0,
+    },
+    player2: {
+      name: 'Player 2',
+      currentPoints: 0,
+    },
   }
   if (isTeam) {
     table.team = {
