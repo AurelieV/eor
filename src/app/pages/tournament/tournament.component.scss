@@ -81,6 +81,14 @@ tournament-filters {
   }
   .push {
     flex-shrink: 0;
-    width: 20%;
+    @include responsive(
+      'width',
+      (
+        xs: 20%,
+        sm: 55%,
+        md: 70%,
+        lg: 80%,
+      )
+    );
   }
 }

@@ -8,6 +8,7 @@ import {
   ViewMode,
   ZoneInfo,
 } from '@/app/models'
+import { BreakpointObserver, Breakpoints, BreakpointState } from '@angular/cdk/layout'
 import { CdkScrollable, ScrollDispatcher } from '@angular/cdk/scrolling'
 import { AfterViewInit, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
@@ -78,7 +79,8 @@ export class TournamentComponent implements OnInit, OnDestroy, AfterViewInit {
     private headerService: HeaderService,
     private sidePanel: SidePanelService,
     private scroller: ScrollDispatcher,
-    private notifier: NotificationService
+    private notifier: NotificationService,
+    public breakpointObserver: BreakpointObserver
   ) {}
 
   ngOnInit() {
@@ -125,6 +127,21 @@ export class TournamentComponent implements OnInit, OnDestroy, AfterViewInit {
         }
       })
     this.subscriptions.push(this.sidePanel.onClose$.subscribe(() => (this.selectedTable = null)))
+    const itemWidths = [
+      { mediaQuery: Breakpoints.XSmall, value: 0.82 },
+      { mediaQuery: Breakpoints.Small, value: 0.47 },
+      { mediaQuery: Breakpoints.Medium, value: 0.32 },
+      { mediaQuery: [Breakpoints.Large, Breakpoints.XLarge], max: null, value: 0.22 },
+    ]
+    this.subscriptions = this.subscriptions.concat(
+      itemWidths.map(({ mediaQuery, value }) =>
+        this.breakpointObserver.observe(mediaQuery).subscribe((state: BreakpointState) => {
+          if (state.matches) {
+            this.zoneInfoItemWidthRatio = value
+          }
+        })
+      )
+    )
   }
 
   ngAfterViewInit() {

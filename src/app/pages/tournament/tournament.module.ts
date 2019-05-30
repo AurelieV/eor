@@ -1,3 +1,4 @@
+import { LayoutModule } from '@angular/cdk/layout'
 import { ScrollDispatchModule } from '@angular/cdk/scrolling'
 import { CommonModule } from '@angular/common'
 import { NgModule } from '@angular/core'
@@ -62,6 +63,7 @@ import { TournamentComponent } from './tournament.component'
     ScrollDispatchModule,
     MatMenuModule,
     MatSelectModule,
+    LayoutModule,
 
     // App
     MyCommonModule,
