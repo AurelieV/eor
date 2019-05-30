@@ -1,5 +1,5 @@
 <div class="panel-title">Add time</div>
-<form #form="ngForm" (ngSubmit)="onSubmit()">
+<form #form="ngForm">
   <div class="table">
     <mat-form-field>
       <input
@@ -43,6 +43,7 @@
         type="submit"
         mat-flat-button
         color="primary"
+        (click)="submit(false)"
         [disabled]="!(currentTable$ | async) || (isLoading$ | async)"
       >
         <mat-icon>alarm</mat-icon>
@@ -53,6 +54,7 @@
         type="submit"
         mat-flat-button
         color="accent"
+        (click)="submit(true)"
         [disabled]="!(currentTable$ | async) || (isLoading$ | async)"
       >
         <mat-icon>alarm</mat-icon>

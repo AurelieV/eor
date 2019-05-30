@@ -71,9 +71,9 @@ export class AddTimePanelComponent {
     this.currentTableId$.next(value)
   }
 
-  onSubmit() {
+  submit(replace: boolean) {
     this.currentTable$.pipe(take(1)).subscribe((table) => {
-      this.tableService.addTime(table, this.time).then(() => {
+      this.tableService.addTime(table, this.time, replace).then(() => {
         this.timeAdded.next()
       })
     })
