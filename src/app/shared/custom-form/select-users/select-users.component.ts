@@ -1,9 +1,9 @@
 import { User } from '@/app/models'
 import { Component, forwardRef, OnDestroy, OnInit } from '@angular/core'
 import { ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR } from '@angular/forms'
+import { AuthenticationService } from '@core/services/authentication.service'
 import { BehaviorSubject, Observable } from 'rxjs'
 import { combineLatest, filter, map, startWith } from 'rxjs/operators'
-import { AdministrationService } from '../services/administration.service'
 
 @Component({
   selector: 'select-users',
@@ -22,12 +22,12 @@ export class SelectUsersComponent implements OnInit, OnDestroy, ControlValueAcce
   filteredUsers$: Observable<User[]>
   selectedUsers$ = new BehaviorSubject<Array<User>>([])
 
-  constructor(private admin: AdministrationService) {}
+  constructor(private authentication: AuthenticationService) {}
 
   ngOnInit() {
     this.filteredUsers$ = this.inputControl.valueChanges.pipe(
       startWith(''),
-      combineLatest(this.admin.getUsers()),
+      combineLatest(this.authentication.getUsers()),
       map(([filter, users]) => {
         users = users || []
         if (filter && filter.id) {

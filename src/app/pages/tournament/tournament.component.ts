@@ -1,15 +1,25 @@
-import { Action, Filters, SortBy, Table, TableStatus, Tournament, ViewMode, ZoneInfo } from '@/app/models';
-import { BreakpointObserver, Breakpoints, BreakpointState } from '@angular/cdk/layout';
-import { CdkScrollable, ScrollDispatcher } from '@angular/cdk/scrolling';
-import { AfterViewInit, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { HeaderService } from '@core/services/header.service';
-import { NotificationService } from '@core/services/notification.service';
-import { SidePanelService } from '@core/services/side-panel.service';
-import { Zone } from '@pages/administration/administration.models';
-import { Observable, Subscription } from 'rxjs';
-import { debounceTime, map } from 'rxjs/operators';
-import { TournamentStore, ZonesTables } from './services/tournament-store.service';
+import {
+  Action,
+  Filters,
+  SortBy,
+  Table,
+  TableStatus,
+  Tournament,
+  TournamentStaff,
+  ViewMode,
+  ZoneInfo,
+} from '@/app/models'
+import { BreakpointObserver, Breakpoints, BreakpointState } from '@angular/cdk/layout'
+import { CdkScrollable, ScrollDispatcher } from '@angular/cdk/scrolling'
+import { AfterViewInit, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core'
+import { ActivatedRoute } from '@angular/router'
+import { HeaderService } from '@core/services/header.service'
+import { NotificationService } from '@core/services/notification.service'
+import { SidePanelService } from '@core/services/side-panel.service'
+import { Zone } from '@pages/administration/administration.models'
+import { Observable, Subscription } from 'rxjs'
+import { debounceTime, map } from 'rxjs/operators'
+import { TournamentStore, ZonesTables } from './services/tournament-store.service'
 
 @Component({
   selector: 'tournament',
@@ -29,6 +39,7 @@ export class TournamentComponent implements OnInit, OnDestroy, AfterViewInit {
   sortBy$: Observable<SortBy>
   isOutstandings$: Observable<boolean>
   software$: Observable<string>
+  staff$: Observable<TournamentStaff>
 
   zoneInfoSelected: number = null
   zoneInfoItemWidthRatio = 0.82
@@ -63,6 +74,8 @@ export class TournamentComponent implements OnInit, OnDestroy, AfterViewInit {
   private markAllEmptyRef: TemplateRef<any>
   @ViewChild('goNext')
   private goNextRef: TemplateRef<any>
+  @ViewChild('changeRoles')
+  private changeRolesRef: TemplateRef<any>
 
   @ViewChild(CdkScrollable)
   private zoneInfoContainer: CdkScrollable
@@ -96,7 +109,8 @@ export class TournamentComponent implements OnInit, OnDestroy, AfterViewInit {
     this.sortedTables$ = this.store.sortedTables$
     this.sortBy$ = this.store.sortBy$
     this.isOutstandings$ = this.store.isOutstandings$
-    this.software$ = this.store.tournament$.pipe(map(t => t.software))
+    this.software$ = this.store.tournament$.pipe(map((t) => t.software))
+    this.staff$ = this.store.staff$
     this.subscriptions.push(
       this.store.zoneInfoSelected$.subscribe(
         (zoneInfoSelected) => (this.zoneInfoSelected = zoneInfoSelected)
@@ -186,7 +200,10 @@ export class TournamentComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   onGoNext() {
-    console.log('pouet')
+    this.sidePanel.close()
+  }
+
+  onRolesChanged() {
     this.sidePanel.close()
   }
 
@@ -214,6 +231,9 @@ export class TournamentComponent implements OnInit, OnDestroy, AfterViewInit {
       case 'mark-all-empty-red':
         this.markAllEmptyStatus = 'playing'
         this.sidePanel.open(this.markAllEmptyRef, this.actionsTemplateRef)
+        break
+      case 'change-roles':
+        this.sidePanel.open(this.changeRolesRef, this.actionsTemplateRef)
         break
       default:
         console.log('todo', key)

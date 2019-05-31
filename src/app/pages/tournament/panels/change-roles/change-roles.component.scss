@@ -1,0 +1,30 @@
+@import 'utils/colors';
+
+select-users {
+  width: 100%;
+}
+h1.title,
+h2.title {
+  text-transform: uppercase;
+  font-weight: bold;
+  color: $primary;
+}
+h1.title {
+  font-size: 20px;
+  margin-bottom: 0.5em;
+}
+h2.title {
+  font-size: 16px;
+}
+
+.subheader {
+  display: flex;
+  h2 {
+    flex: 1;
+  }
+  align-items: center;
+}
+
+button[type='submit'] {
+  width: 100%;
+}

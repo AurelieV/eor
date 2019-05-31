@@ -1,10 +1,15 @@
 import { CommonModule } from '@angular/common'
 import { NgModule } from '@angular/core'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import {
+  MatAutocompleteModule,
   MatButtonModule,
+  MatFormFieldModule,
+  MatIconModule,
   MatInputModule,
   MatProgressSpinnerModule,
 } from '@angular/material'
+import { SelectUsersComponent } from './select-users/select-users.component'
 import { CustomSubmitButton } from './submit-button.component'
 
 @NgModule({
@@ -13,8 +18,13 @@ import { CustomSubmitButton } from './submit-button.component'
     MatInputModule,
     MatButtonModule,
     MatProgressSpinnerModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatAutocompleteModule,
+    MatFormFieldModule,
+    MatIconModule,
   ],
-  declarations: [CustomSubmitButton],
-  exports: [CustomSubmitButton],
+  declarations: [CustomSubmitButton, SelectUsersComponent],
+  exports: [CustomSubmitButton, SelectUsersComponent],
 })
 export class CustomFormModule {}

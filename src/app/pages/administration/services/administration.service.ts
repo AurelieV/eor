@@ -2,21 +2,12 @@ import { createEmptyTable } from '@/app/utils/helpers'
 import { Injectable } from '@angular/core'
 import { AngularFireDatabase } from '@angular/fire/database'
 import { AuthenticationService } from '@core/services/authentication.service'
-import { Observable } from 'rxjs'
-import { map } from 'rxjs/operators'
-import { StoredUser, TournamentStaff, User } from 'src/app/models'
+import { TournamentStaff } from 'src/app/models'
 import { TournamentSettings, Zone } from '../administration.models'
 
 @Injectable()
 export class AdministrationService {
   constructor(private db: AngularFireDatabase, private authentification: AuthenticationService) {}
-
-  getUsers(): Observable<User[]> {
-    return this.db
-      .list<StoredUser>(`users`)
-      .valueChanges()
-      .pipe(map((users) => users.map((u) => u.judgeapps)))
-  }
 
   async createTournament(
     settings: TournamentSettings,

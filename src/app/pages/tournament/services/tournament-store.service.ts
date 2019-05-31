@@ -1,21 +1,14 @@
-import { Software } from '@/app/interfaces'
-import { Action, Filters, SortBy, Table, Tournament, TournamentStaff, ZoneInfo } from '@/app/models'
-import { createEmptyTable } from '@/app/utils/helpers'
-import { Injectable } from '@angular/core'
-import { AngularFireDatabase } from '@angular/fire/database'
-import { AuthenticationService } from '@core/services/authentication.service'
-import { WindowVisibility } from '@core/services/window-visibility.service'
-import { Zone } from '@pages/administration/administration.models'
-import * as moment from 'moment'
-import {
-  BehaviorSubject,
-  combineLatest as combine,
-  Observable,
-  of,
-  Subscription,
-  timer,
-} from 'rxjs'
-import { combineLatest, filter, map, switchMap } from 'rxjs/operators'
+import { Software } from '@/app/interfaces';
+import { Action, Filters, SortBy, Table, Tournament, TournamentStaff, ZoneInfo } from '@/app/models';
+import { createEmptyTable } from '@/app/utils/helpers';
+import { Injectable } from '@angular/core';
+import { AngularFireDatabase } from '@angular/fire/database';
+import { AuthenticationService } from '@core/services/authentication.service';
+import { WindowVisibility } from '@core/services/window-visibility.service';
+import { Zone } from '@pages/administration/administration.models';
+import * as moment from 'moment';
+import { BehaviorSubject, combineLatest as combine, Observable, of, Subscription, timer } from 'rxjs';
+import { combineLatest, filter, map, switchMap } from 'rxjs/operators';
 
 export type SectionsTables = Observable<Table[]>[]
 export type ZonesTables = SectionsTables[]
@@ -51,7 +44,8 @@ export class TournamentStore {
   constructor(
     private db: AngularFireDatabase,
     private windowVisibility: WindowVisibility,
-    private auth: AuthenticationService
+    private auth: AuthenticationService,
+    private authentication: AuthenticationService
   ) {
     this.tournament$ = this.key$.pipe(
       switchMap((key) => this.db.object<Tournament>(`tournaments/${key}`).valueChanges())
@@ -353,6 +347,14 @@ export class TournamentStore {
 
   setIsOutstandings(value: boolean): Promise<any> {
     return this.db.object(`isOutstandings/${this.key}`).set(value)
+  }
+
+  setStaff(staff: TournamentStaff): Promise<any> {
+    const currentUser = this.authentication.user
+    if (staff.admins.findIndex(({ id }) => id === currentUser.id) === -1) {
+      staff.admins.push(currentUser)
+    }
+    return this.db.object(`staff/${this.key}`).set(staff)
   }
 
   private resetLogs(): Promise<any> {

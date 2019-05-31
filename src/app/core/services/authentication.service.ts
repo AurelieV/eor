@@ -64,4 +64,11 @@ export class AuthenticationService {
     // TODO: handle hierarchy
     return this.roles$.pipe(map((roles) => roles.includes(role)))
   }
+
+  getUsers(): Observable<User[]> {
+    return this.db
+      .list<StoredUser>(`users`)
+      .valueChanges()
+      .pipe(map((users) => users.map((u) => u.judgeapps)))
+  }
 }

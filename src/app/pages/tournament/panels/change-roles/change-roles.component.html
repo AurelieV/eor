@@ -1,0 +1,49 @@
+<div class="panel-title">Change roles</div>
+<form [formGroup]="form" (submit)="onSubmit()">
+  <div class="subheader">
+    <h2 class="title">Zone leader</h2>
+    <button
+      mat-icon-button
+      color="accent"
+      (click)="
+        displayHelp(
+          'Zone leaders will be able to edit table status and give this permission to other people'
+        )
+      "
+    >
+      <mat-icon>help</mat-icon>
+    </button>
+  </div>
+  <select-users #zoneLeadersSelecter formControlName="zoneLeaders"></select-users>
+  <div class="subheader">
+    <h2 class="title">Scorekeepers</h2>
+    <button
+      mat-icon-button
+      color="accent"
+      (click)="displayHelp('Scorekeepers will be able to import result and pairings on the app')"
+    >
+      <mat-icon>help</mat-icon>
+    </button>
+  </div>
+  <select-users #scorekeepersSelecter formControlName="scorekeepers"></select-users>
+  <div class="subheader">
+    <h2 class="title">Admin</h2>
+    <button
+      mat-icon-button
+      color="accent"
+      (click)="
+        displayHelp(
+          'Admins will have the same right as you (creator) on the tournament. All actions will be available'
+        )
+      "
+    >
+      <mat-icon>help</mat-icon>
+    </button>
+  </div>
+  <select-users #adminsSelecter formControlName="admins"></select-users>
+  <button mat-flat-button color="primary" type="submit" [disabled]="!form.valid">Save</button>
+</form>
+
+<ng-template #help>
+  <p>{{ helpText }}</p>
+</ng-template>

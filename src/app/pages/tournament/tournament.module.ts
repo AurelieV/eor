@@ -14,12 +14,14 @@ import {
   MatSidenavModule,
 } from '@angular/material'
 import { RouterModule } from '@angular/router'
+import { CustomFormModule } from '@shared/custom-form/custom-form.module'
 import { CommonModule as MyCommonModule } from '../../shared/common/common.module'
 import { HeaderComponent } from './components/header/header.component'
 import { TableComponent } from './components/table/table.component'
 import { ZoneInfoComponent } from './components/zone-info/zone-info.component'
 import { ActionsPanelComponent } from './panels/actions/actions.component'
 import { AddTimePanelComponent } from './panels/add-time/add-time.component'
+import { ChangeRolesPanelComponent } from './panels/change-roles/change-roles.component'
 import { ClockPanelComponent } from './panels/clock/clock.component'
 import { FiltersPanelComponent } from './panels/filters/filters.component'
 import { GoNextPanelComponent } from './panels/go-next/go-next.component'
@@ -48,6 +50,7 @@ import { TournamentComponent } from './tournament.component'
     ImportResultsPanelComponent,
     MarkAllEmptyPanelComponent,
     GoNextPanelComponent,
+    ChangeRolesPanelComponent,
   ],
   imports: [
     // Angular
@@ -69,6 +72,7 @@ import { TournamentComponent } from './tournament.component'
 
     // App
     MyCommonModule,
+    CustomFormModule,
     RouterModule.forChild([
       {
         path: '',

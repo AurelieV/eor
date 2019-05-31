@@ -14,12 +14,12 @@ import {
   MatSelectModule,
 } from '@angular/material'
 import { RouterModule } from '@angular/router'
+import { CustomFormModule } from '@shared/custom-form/custom-form.module'
 import { AdministrationComponent } from './administration.component'
-import { SelectUsersComponent } from './components/select-users.component'
 import { AdministrationService } from './services/administration.service'
 
 @NgModule({
-  declarations: [AdministrationComponent, SelectUsersComponent],
+  declarations: [AdministrationComponent],
   imports: [
     // Angular
     CommonModule,
@@ -39,6 +39,7 @@ import { AdministrationService } from './services/administration.service'
     MatAutocompleteModule,
 
     // App
+    CustomFormModule,
     RouterModule.forChild([
       {
         path: '',

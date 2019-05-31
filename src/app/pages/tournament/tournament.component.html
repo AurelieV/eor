@@ -118,3 +118,9 @@
   </mark-all-empty-panel
 ></ng-template>
 <ng-template #goNext><go-next-panel (goNext)="onGoNext()"></go-next-panel></ng-template>
+<ng-template #changeRoles
+  ><change-roles-panel
+    (rolesChanged)="onRolesChanged()"
+    [staff]="staff$ | async"
+  ></change-roles-panel
+></ng-template>

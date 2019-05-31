@@ -5,9 +5,9 @@ import { MatDialog } from '@angular/material'
 import { Router } from '@angular/router'
 import { HeaderService } from '@core/services/header.service'
 import { NotificationService } from '@core/services/notification.service'
+import { SelectUsersComponent } from '@shared/custom-form/select-users/select-users.component'
 import { environment } from 'src/environments/environment'
 import { Section } from './administration.models'
-import { SelectUsersComponent } from './components/select-users.component'
 import { AdministrationService } from './services/administration.service'
 
 enum Step {
