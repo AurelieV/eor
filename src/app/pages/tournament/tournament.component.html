@@ -8,14 +8,18 @@
         (click)="onZoneInfoClick(null, 0)"
       ></zone-info>
     </ng-container>
-    <ng-container *ngFor="let info$ of zoneInfos; let arrayIndex = index; trackBy: trackbyIndexFn">
-      <ng-container *ngIf="(info$ | async) as info">
-        <zone-info
-          [info]="info"
-          [selected]="info.id === zoneInfoSelected"
-          class="zone-info"
-          (click)="onZoneInfoClick(info.id, arrayIndex + 1)"
-        ></zone-info>
+    <ng-container *ngIf="zoneInfos.length > 1">
+      <ng-container
+        *ngFor="let info$ of zoneInfos; let arrayIndex = index; trackBy: trackbyIndexFn"
+      >
+        <ng-container *ngIf="(info$ | async) as info">
+          <zone-info
+            [info]="info"
+            [selected]="info.id === zoneInfoSelected"
+            class="zone-info"
+            (click)="onZoneInfoClick(info.id, arrayIndex + 1)"
+          ></zone-info>
+        </ng-container>
       </ng-container>
     </ng-container>
     <div class="push"></div>
@@ -94,7 +98,10 @@
   ><import-pairings-panel (pairingsImported)="onPairingsImported()"></import-pairings-panel
 ></ng-template>
 <ng-template #importResults
-  ><import-results-panel (resultsImported)="onResultssImported()"></import-results-panel
+  ><import-results-panel
+    (resultsImported)="onResultsImported()"
+    [software]="software$ | async"
+  ></import-results-panel
 ></ng-template>
 <ng-template #outstandings
   ><outstandings-panel

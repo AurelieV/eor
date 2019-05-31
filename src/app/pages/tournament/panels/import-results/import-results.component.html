@@ -1,10 +1,32 @@
-<div class="panel-title">Import Results</div>
-<p class="help">Copy paste here from WLTR Results (Copy as text)</p>
-<div class="error" *ngIf="errorMessage">
-  <mat-icon>warning</mat-icon>
-  <div class="error__text" [innerHtml]="errorMessage"></div>
-</div>
-<textarea [(ngModel)]="textInput" id="input" #input></textarea>
-<button mat-flat-button color="primary" (click)="import()" [disabled]="!textInput || isLoading">
-  Import
-</button>
+<div class="panel-title">Import Results (from {{ software }})</div>
+<ng-container *ngIf="software === Software.WLTR">
+  <p class="help">Copy paste here from WLTR Results (Copy as text)</p>
+  <div class="error" *ngIf="errorMessage">
+    <mat-icon>warning</mat-icon>
+    <div class="error__text" [innerHtml]="errorMessage"></div>
+  </div>
+  <textarea [(ngModel)]="textInput" id="input" #input></textarea>
+  <button
+    mat-flat-button
+    color="primary"
+    (click)="importWLTR()"
+    [disabled]="!textInput || isLoading"
+  >
+    Import
+  </button>
+</ng-container>
+<ng-container *ngIf="software === Software.WER">
+  <p class="help">
+    Sadly WER export are not really possible. Just enter here all remaining tables, separated by
+    space or new line
+  </p>
+  <textarea [(ngModel)]="textInput" id="input" #input></textarea>
+  <button
+    mat-flat-button
+    color="primary"
+    (click)="importWER()"
+    [disabled]="!textInput || isLoading"
+  >
+    Import
+  </button>
+</ng-container>

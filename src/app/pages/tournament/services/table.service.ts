@@ -106,9 +106,19 @@ export class TableService {
 
   setMissingPaper(tableIds: string[]): Promise<any> {
     return Promise.all(
-      this.allTables.map((table) =>
-        this.update(table, { stageHasPaper: !tableIds.includes(table.id) }).catch((err) => err)
-      )
+      this.allTables.map((table) => {
+        if (tableIds.includes(table.id)) {
+          return this.update(table, {
+            stageHasPaper: false,
+          }).catch((err) => err)
+        } else {
+          return this.update(table, {
+            stageHasPaper: true,
+            status: 'done',
+            updateStatusTime: moment.utc().valueOf(),
+          }).catch((err) => err)
+        }
+      })
     )
   }
 

@@ -1,3 +1,4 @@
+import { Software } from '@/app/interfaces'
 import { Result } from '@/app/models'
 import {
   ChangeDetectionStrategy,
@@ -5,6 +6,7 @@ import {
   Component,
   ElementRef,
   EventEmitter,
+  Input,
   Output,
   ViewChild,
 } from '@angular/core'
@@ -20,9 +22,11 @@ import * as moment from 'moment'
 })
 export class ImportResultsPanelComponent {
   @Output() resultsImported = new EventEmitter()
+  @Input() software: string
   textInput: string
   errorMessage: string = null
   isLoading: boolean = false
+  Software = Software
 
   @ViewChild('input')
   inputRef: ElementRef
@@ -37,7 +41,7 @@ export class ImportResultsPanelComponent {
     setTimeout(() => this.inputRef.nativeElement.focus(), 0)
   }
 
-  import() {
+  importWLTR() {
     this.errorMessage = null
     this.isLoading = true
     let [header, ...body] = this.textInput.split('\n')
@@ -130,5 +134,11 @@ export class ImportResultsPanelComponent {
       }
       this.cdr.detectChanges()
     })
+  }
+
+  importWER() {
+    this.isLoading = true
+    const tableIds = this.textInput.match(/(\d+)/g) || []
+    this.tableService.setMissingPaper(tableIds).then(() => this.resultsImported.emit())
   }
 }

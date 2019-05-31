@@ -1,13 +1,21 @@
-import { Action, Filters, SortBy, Table, Tournament, TournamentStaff, ZoneInfo } from '@/app/models';
-import { createEmptyTable } from '@/app/utils/helpers';
-import { Injectable } from '@angular/core';
-import { AngularFireDatabase } from '@angular/fire/database';
-import { AuthenticationService } from '@core/services/authentication.service';
-import { WindowVisibility } from '@core/services/window-visibility.service';
-import { Zone } from '@pages/administration/administration.models';
-import * as moment from 'moment';
-import { BehaviorSubject, combineLatest as combine, Observable, of, Subscription, timer } from 'rxjs';
-import { combineLatest, filter, map, switchMap } from 'rxjs/operators';
+import { Software } from '@/app/interfaces'
+import { Action, Filters, SortBy, Table, Tournament, TournamentStaff, ZoneInfo } from '@/app/models'
+import { createEmptyTable } from '@/app/utils/helpers'
+import { Injectable } from '@angular/core'
+import { AngularFireDatabase } from '@angular/fire/database'
+import { AuthenticationService } from '@core/services/authentication.service'
+import { WindowVisibility } from '@core/services/window-visibility.service'
+import { Zone } from '@pages/administration/administration.models'
+import * as moment from 'moment'
+import {
+  BehaviorSubject,
+  combineLatest as combine,
+  Observable,
+  of,
+  Subscription,
+  timer,
+} from 'rxjs'
+import { combineLatest, filter, map, switchMap } from 'rxjs/operators'
 
 export type SectionsTables = Observable<Table[]>[]
 export type ZonesTables = SectionsTables[]
@@ -219,45 +227,62 @@ export class TournamentStore {
       })
     )
     this.actions$ = this.roles$.pipe(
-      combineLatest(this.isOutstandings$),
-      map(([roles, isOutstandings]) => {
-        const actions: Action[] = [
+      combineLatest(this.isOutstandings$, this.tournament$.pipe(map((t) => t.software))),
+      map(([roles, isOutstandings, software]) => {
+        let actions: Action[] = [
           { label: 'Add time', key: 'add-time', role: 'all', color: 'primary' },
-          {
-            label: 'Mark all empty as green',
-            key: 'mark-all-empty-green',
-            role: 'zonelead',
-            color: 'warn',
-          },
-          {
-            label: 'Mark all empty as red',
-            key: 'mark-all-empty-red',
-            role: 'zonelead',
-            color: 'warn',
-          },
-          { label: 'Assign judge', key: 'assign', role: 'zonelead', color: 'primary' },
-          {
-            label: 'Nominate floor judge',
-            key: 'nominate-floor',
-            role: 'zonelead',
-            color: 'primary',
-          },
-          {
-            label: isOutstandings ? 'Set outstandings' : 'Go to outstanding',
-            key: 'go-outstanding',
-            role: 'teamlead',
-            color: 'warn',
-          },
-          { label: 'Go to next round', key: 'end-round', role: 'teamlead', color: 'warn' },
-          { label: 'Change user roles', key: 'change-roles', role: 'teamlead', color: 'primary' },
-          {
-            label: 'Import Pairings',
-            key: 'import-pairings',
+        ]
+        if (roles.includes('scorekeeper')) {
+          if (software === Software.WLTR) {
+            actions.push({
+              label: 'Import Pairings',
+              key: 'import-pairings',
+              role: 'scorekeeper',
+              color: 'primary',
+            })
+          }
+          actions = actions.concat({
+            label: 'Import Results',
+            key: 'import-results',
             role: 'scorekeeper',
             color: 'primary',
-          },
-          { label: 'Import Results', key: 'import-results', role: 'scorekeeper', color: 'primary' },
-        ]
+          })
+        }
+        if (roles.includes('zoneLeader') || roles.includes('tournamentAdmin')) {
+          actions = actions.concat(
+            {
+              label: 'Mark all empty as green',
+              key: 'mark-all-empty-green',
+              role: 'zonelead',
+              color: 'warn',
+            },
+            {
+              label: 'Mark all empty as red',
+              key: 'mark-all-empty-red',
+              role: 'zonelead',
+              color: 'warn',
+            }
+            // { label: 'Assign judge', key: 'assign', role: 'zonelead', color: 'primary' },
+            // {
+            //   label: 'Nominate floor judge',
+            //   key: 'nominate-floor',
+            //   role: 'zonelead',
+            //   color: 'primary',
+            // }
+          )
+        }
+        if (roles.includes('tournamentAdmin')) {
+          actions = actions.concat(
+            {
+              label: isOutstandings ? 'Set outstandings' : 'Go to outstanding',
+              key: 'go-outstanding',
+              role: 'teamlead',
+              color: 'warn',
+            },
+            { label: 'Go to next round', key: 'end-round', role: 'teamlead', color: 'warn' },
+            { label: 'Change user roles', key: 'change-roles', role: 'teamlead', color: 'primary' }
+          )
+        }
 
         return actions
       })
@@ -279,7 +304,10 @@ export class TournamentStore {
       combineLatest(filterFunc$, this.zoneInfoSelected$),
       map(([tables, fn, zoneInfoSelected]) => {
         // TODO: distinct filters
-        const filterFn = zoneInfoSelected === null ? fn : (table => fn(table) && Number(table.zoneIndex) === zoneInfoSelected)
+        const filterFn =
+          zoneInfoSelected === null
+            ? fn
+            : (table) => fn(table) && Number(table.zoneIndex) === zoneInfoSelected
         return tables.filter(filterFn).sort((a, b) => (b.time || 0) - (a.time || 0))
       })
     )

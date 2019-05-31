@@ -51,9 +51,8 @@
   </ng-container>
   <div class="panel-subtitle">Actions</div>
   <div class="actions">
-    <button mat-flat-button color="primary">Sit at table</button>
-    <button mat-flat-button color="primary">Assign judge</button>
-    <button mat-flat-button color="primary">Enter result</button>
+    <button mat-flat-button color="primary" disabled>Sit at table (comming soon)</button>
+    <button mat-flat-button color="primary" disabled>Enter result (comming soon)</button>
   </div>
   <ng-container *ngIf="(logs$ | async) as logs">
     <ng-container *ngIf="logs.length">

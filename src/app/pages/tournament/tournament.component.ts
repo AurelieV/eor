@@ -1,24 +1,15 @@
-import {
-  Action,
-  Filters,
-  SortBy,
-  Table,
-  TableStatus,
-  Tournament,
-  ViewMode,
-  ZoneInfo,
-} from '@/app/models'
-import { BreakpointObserver, Breakpoints, BreakpointState } from '@angular/cdk/layout'
-import { CdkScrollable, ScrollDispatcher } from '@angular/cdk/scrolling'
-import { AfterViewInit, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core'
-import { ActivatedRoute } from '@angular/router'
-import { HeaderService } from '@core/services/header.service'
-import { NotificationService } from '@core/services/notification.service'
-import { SidePanelService } from '@core/services/side-panel.service'
-import { Zone } from '@pages/administration/administration.models'
-import { Observable, Subscription } from 'rxjs'
-import { debounceTime } from 'rxjs/operators'
-import { TournamentStore, ZonesTables } from './services/tournament-store.service'
+import { Action, Filters, SortBy, Table, TableStatus, Tournament, ViewMode, ZoneInfo } from '@/app/models';
+import { BreakpointObserver, Breakpoints, BreakpointState } from '@angular/cdk/layout';
+import { CdkScrollable, ScrollDispatcher } from '@angular/cdk/scrolling';
+import { AfterViewInit, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { HeaderService } from '@core/services/header.service';
+import { NotificationService } from '@core/services/notification.service';
+import { SidePanelService } from '@core/services/side-panel.service';
+import { Zone } from '@pages/administration/administration.models';
+import { Observable, Subscription } from 'rxjs';
+import { debounceTime, map } from 'rxjs/operators';
+import { TournamentStore, ZonesTables } from './services/tournament-store.service';
 
 @Component({
   selector: 'tournament',
@@ -37,6 +28,7 @@ export class TournamentComponent implements OnInit, OnDestroy, AfterViewInit {
   sortedTables$: Observable<Table[]>
   sortBy$: Observable<SortBy>
   isOutstandings$: Observable<boolean>
+  software$: Observable<string>
 
   zoneInfoSelected: number = null
   zoneInfoItemWidthRatio = 0.82
@@ -104,6 +96,7 @@ export class TournamentComponent implements OnInit, OnDestroy, AfterViewInit {
     this.sortedTables$ = this.store.sortedTables$
     this.sortBy$ = this.store.sortBy$
     this.isOutstandings$ = this.store.isOutstandings$
+    this.software$ = this.store.tournament$.pipe(map(t => t.software))
     this.subscriptions.push(
       this.store.zoneInfoSelected$.subscribe(
         (zoneInfoSelected) => (this.zoneInfoSelected = zoneInfoSelected)
