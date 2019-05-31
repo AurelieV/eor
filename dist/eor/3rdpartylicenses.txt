@@ -1,5 +1,7 @@
 @angular/material/select
 
+@angular/material/autocomplete
+
 @angular/material/form-field
 
 @angular/material
@@ -820,5 +822,3 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 @angular/material/datepicker
 
 @angular/material/expansion
-
-@angular/material/autocomplete
