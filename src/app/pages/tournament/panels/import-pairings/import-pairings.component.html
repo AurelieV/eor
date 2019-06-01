@@ -1,5 +1,12 @@
-<div class="panel-title">Import pairings</div>
-<p class="help">Copy paste here from WLTR Pairings By Table (Copy as text)</p>
+<div class="panel-title">Import pairings from {{ software }}</div>
+<p class="help" *ngIf="software === Software.WLTR">
+  Copy paste here from WLTR Pairings By Table (Copy as text)
+</p>
+<ul class="help" *ngIf="software === Software.WER">
+  <li>Generate a pairing by table, then print it on a .pdf file</li>
+  <li>Open the pdf file in <strong>Firefox</strong> (for now only one working)</li>
+  <li>CTRL+A, then copy paste here</li>
+</ul>
 <div class="error" *ngIf="errorMessage">
   <mat-icon>warning</mat-icon>
   <div class="error__text" [innerHtml]="errorMessage"></div>

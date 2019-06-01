@@ -1,14 +1,20 @@
-import { Software } from '@/app/interfaces';
-import { Action, Filters, SortBy, Table, Tournament, TournamentStaff, ZoneInfo } from '@/app/models';
-import { createEmptyTable } from '@/app/utils/helpers';
-import { Injectable } from '@angular/core';
-import { AngularFireDatabase } from '@angular/fire/database';
-import { AuthenticationService } from '@core/services/authentication.service';
-import { WindowVisibility } from '@core/services/window-visibility.service';
-import { Zone } from '@pages/administration/administration.models';
-import * as moment from 'moment';
-import { BehaviorSubject, combineLatest as combine, Observable, of, Subscription, timer } from 'rxjs';
-import { combineLatest, filter, map, switchMap } from 'rxjs/operators';
+import { Action, Filters, SortBy, Table, Tournament, TournamentStaff, ZoneInfo } from '@/app/models'
+import { createEmptyTable } from '@/app/utils/helpers'
+import { Injectable } from '@angular/core'
+import { AngularFireDatabase } from '@angular/fire/database'
+import { AuthenticationService } from '@core/services/authentication.service'
+import { WindowVisibility } from '@core/services/window-visibility.service'
+import { Zone } from '@pages/administration/administration.models'
+import * as moment from 'moment'
+import {
+  BehaviorSubject,
+  combineLatest as combine,
+  Observable,
+  of,
+  Subscription,
+  timer,
+} from 'rxjs'
+import { combineLatest, filter, map, switchMap } from 'rxjs/operators'
 
 export type SectionsTables = Observable<Table[]>[]
 export type ZonesTables = SectionsTables[]
@@ -227,20 +233,20 @@ export class TournamentStore {
           { label: 'Add time', key: 'add-time', role: 'all', color: 'primary' },
         ]
         if (roles.includes('scorekeeper')) {
-          if (software === Software.WLTR) {
-            actions.push({
+          actions = actions.concat(
+            {
               label: 'Import Pairings',
               key: 'import-pairings',
               role: 'scorekeeper',
               color: 'primary',
-            })
-          }
-          actions = actions.concat({
-            label: 'Import Results',
-            key: 'import-results',
-            role: 'scorekeeper',
-            color: 'primary',
-          })
+            },
+            {
+              label: 'Import Results',
+              key: 'import-results',
+              role: 'scorekeeper',
+              color: 'primary',
+            }
+          )
         }
         if (roles.includes('zoneLeader') || roles.includes('tournamentAdmin')) {
           actions = actions.concat(

@@ -95,7 +95,7 @@
   ><table-panel [table]="selectedTable" (addTime)="onAddTime(selectedTable)"></table-panel
 ></ng-template>
 <ng-template #importPairings
-  ><import-pairings-panel (pairingsImported)="onPairingsImported()"></import-pairings-panel
+  ><import-pairings-panel (pairingsImported)="onPairingsImported()" [software]="software$ | async"></import-pairings-panel
 ></ng-template>
 <ng-template #importResults
   ><import-results-panel

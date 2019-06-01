@@ -1,14 +1,8 @@
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  ElementRef,
-  EventEmitter,
-  Output,
-  ViewChild,
-} from '@angular/core'
-import { NotificationService } from '@core/services/notification.service'
-import { INVALID_ID, TableService } from '@pages/tournament/services/table.service'
+import { Software } from '@/app/interfaces';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { ErrorService } from '@core/services/error.service';
+import { NotificationService } from '@core/services/notification.service';
+import { INVALID_ID, TableService } from '@pages/tournament/services/table.service';
 
 @Component({
   selector: 'import-pairings-panel',
@@ -21,6 +15,9 @@ export class ImportPairingsPanelComponent {
   errorMessage: string = null
   isLoading: boolean = false
   @Output() pairingsImported = new EventEmitter()
+  @Input() software: string
+
+  Software = Software
 
   @ViewChild('input')
   inputRef: ElementRef
@@ -28,16 +25,15 @@ export class ImportPairingsPanelComponent {
   constructor(
     private tableService: TableService,
     private notificationService: NotificationService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private errorService: ErrorService
   ) {}
 
   ngAfterViewInit() {
     setTimeout(() => this.inputRef.nativeElement.focus(), 0)
   }
 
-  import() {
-    this.errorMessage = null
-    this.isLoading = true
+  private extractFromWLTR() {
     let [header, ...body] = this.textInput.split('\n')
     body = body.filter((line) => !!line)
     header = header.replace('Team 1', 'Player 1')
@@ -69,6 +65,72 @@ export class ImportPairingsPanelComponent {
         }
       })
       .filter((t) => !isNaN(Number(t.tableId)))
+
+    return tables
+  }
+
+  private extractFromWER() {
+    let [header, ...body] = this.textInput
+      .split('\n')
+      .filter(
+        (line) =>
+          !line.startsWith('---') &&
+          !line.startsWith('Wizard') &&
+          !line.startsWith('Event') &&
+          !line.startsWith('Round') &&
+          !line.startsWith('Report') &&
+          !!line
+      )
+    const mandatoryHeaders = ['Table', 'Player', 'Opponent', 'Points']
+    if (mandatoryHeaders.findIndex((h) => !header.includes(h)) !== -1) {
+      this.errorMessage = 'Your headers seem wrong. Have you done the right import?'
+      this.isLoading = false
+      return
+    }
+    try {
+      const format = [header, ...body].join('\n').replace(/ {2,}/g, ';')
+      const tables = window['Papa']
+        .parse(format, {
+          header: true,
+        })
+        .data.map((table) => {
+          if (table['Opponent'] === '***Bye***') {
+            return
+          }
+          const [player1Score, player2Score] = table['Points-'].split('-').map((s) => Number(s))
+          return {
+            tableId: table['Table'],
+            player1: {
+              name: table['Player'],
+              currentPoints: isNaN(player1Score) ? 0 : player1Score,
+            },
+            player2: {
+              name: table['Opponent'],
+              currentPoints: isNaN(player2Score) ? 0 : player2Score,
+            },
+          }
+        })
+        .filter((t) => t && !isNaN(Number(t.tableId)))
+
+      return tables
+    } catch (e) {
+      this.errorService.raise(e)
+      this.errorMessage = 'Import failed'
+      return []
+    }
+  }
+
+  import() {
+    this.errorMessage = null
+    this.isLoading = true
+
+    let tables
+    if (this.software === Software.WER) {
+      tables = this.extractFromWER()
+    } else if (this.software === Software.WLTR) {
+      tables = this.extractFromWLTR()
+    }
+
     let successFullImport = 0
     let invalidTableIds = []
     let errorTables = []
