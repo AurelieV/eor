@@ -1,14 +1,16 @@
-import { animate, style, transition, trigger } from '@angular/animations'
-import { AfterViewInit, Component, OnDestroy, TemplateRef, ViewChild } from '@angular/core'
-import { AbstractControl, FormArray, FormControl, FormGroup, Validators } from '@angular/forms'
-import { MatDialog } from '@angular/material'
-import { Router } from '@angular/router'
-import { HeaderService } from '@core/services/header.service'
-import { NotificationService } from '@core/services/notification.service'
-import { SelectUsersComponent } from '@shared/custom-form/select-users/select-users.component'
-import { environment } from 'src/environments/environment'
-import { Section } from './administration.models'
-import { AdministrationService } from './services/administration.service'
+import { animate, style, transition, trigger } from '@angular/animations';
+import { AfterViewInit, Component, OnDestroy, TemplateRef, ViewChild } from '@angular/core';
+import { AbstractControl, FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material';
+import { ActivatedRoute, Router } from '@angular/router';
+import { HeaderService } from '@core/services/header.service';
+import { NotificationService } from '@core/services/notification.service';
+import { SidePanelService } from '@core/services/side-panel.service';
+import { SelectUsersComponent } from '@shared/custom-form/select-users/select-users.component';
+import { Subscription } from 'rxjs';
+import { environment } from 'src/environments/environment';
+import { Section } from './administration.models';
+import { AdministrationService } from './services/administration.service';
 
 enum Step {
   Settings,
@@ -36,11 +38,13 @@ const props = {
 export class AdministrationComponent implements AfterViewInit, OnDestroy {
   @ViewChild('header') headerTemplateRef: TemplateRef<any>
   @ViewChild('help') helpTemplateRef: TemplateRef<any>
+  @ViewChild('confirmEdit') confirmEditTemplateRef: TemplateRef<any>
   @ViewChild('scorekeepersSelecter') scorekeepersSelecterComp: SelectUsersComponent
   @ViewChild('zoneLeadersSelecter') zoneLeadersSelecterComp: SelectUsersComponent
   @ViewChild('adminsSelecter') adminsSelecterComp: SelectUsersComponent
 
   private forms = new Map<Step, FormGroup>()
+  tournamentId = null
 
   zoneDisplayed: number
   helpText: string
@@ -48,12 +52,16 @@ export class AdministrationComponent implements AfterViewInit, OnDestroy {
   Step = Step
   softwares = environment.configuration.softwares
 
+  private subscriptions: Subscription[] = []
+
   constructor(
     private headerService: HeaderService,
     private administration: AdministrationService,
     private dialog: MatDialog,
     private notifier: NotificationService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute,
+    private sidePanel: SidePanelService
   ) {
     this.forms.set(
       Step.Settings,
@@ -82,10 +90,66 @@ export class AdministrationComponent implements AfterViewInit, OnDestroy {
       })
     )
     this.addZone()
+    this.subscriptions.push(
+      this.route.paramMap.subscribe((params) => {
+        if (params.has('tournamentId')) {
+          this.tournamentId = params.get('tournamentId')
+          this.administration
+            .getTournamentById(this.tournamentId)
+            .subscribe(([settings, zones, staff]) => {
+              this.forms
+                .get(Step.Settings)
+                .setValue({ ...settings, endDate: new Date(settings.endDate) })
+              this.forms.get(Step.Staff).setValue({
+                scorekeepers: [],
+                zoneLeaders: [],
+                admins: [],
+                ...staff
+              })
+              this.forms.set(
+                Step.Zones,
+                new FormGroup(
+                  {
+                    zones: new FormArray(
+                      zones.map((zone) => {
+                        return new FormGroup(
+                          {
+                            name: new FormControl(zone.name, [Validators.required]),
+                            sections: new FormArray(
+                              zone.sections.map((section) => {
+                                return new FormGroup(
+                                  {
+                                    start: new FormControl(section.start, [
+                                      Validators.required,
+                                      positiveIntegerValidator,
+                                    ]),
+                                    end: new FormControl(section.end, [
+                                      Validators.required,
+                                      positiveIntegerValidator,
+                                    ]),
+                                  },
+                                  [sectionValidator]
+                                )
+                              })
+                            ),
+                          },
+                          [atLeastOneValidator('sections')]
+                        )
+                      })
+                    ),
+                  },
+                  [atLeastOneValidator('zones'), noOverlapSectionValidator]
+                )
+              )
+            })
+        }
+      })
+    )
   }
 
   ngAfterViewInit(): void {
     this.headerService.loadTemplate(this.headerTemplateRef)
+    setTimeout(() => this.sidePanel.close(), 0)
   }
 
   getForm(step: Step) {
@@ -150,6 +214,10 @@ export class AdministrationComponent implements AfterViewInit, OnDestroy {
     this.dialog.open(this.helpTemplateRef)
   }
 
+  cancelEdit() {
+    this.dialog.closeAll()
+  }
+
   next() {
     if (!this.forms.get(this.currentStep).valid) {
       return
@@ -161,14 +229,21 @@ export class AdministrationComponent implements AfterViewInit, OnDestroy {
     this.currentStep--
   }
 
-  create() {
+  create(confirm: boolean = false) {
+    this.dialog.closeAll()
+    if (this.tournamentId && !confirm) {
+      this.dialog.open(this.confirmEditTemplateRef, { disableClose: true })
+      return
+    }
     const settings = this.getForm(Step.Settings).value
     settings.endDate = settings.endDate.getTime()
     const zones = this.getForm(Step.Zones).value.zones
     const staff = this.getForm(Step.Staff).value
-    this.administration.createTournament(settings, zones, staff).then(
+    this.administration.createTournament(settings, zones, staff, this.tournamentId).then(
       (key) => {
-        this.notifier.notify(`Tournament ${settings.name} created successfully`)
+        this.notifier.notify(
+          `Tournament ${settings.name} ${this.tournamentId ? 'edited' : 'created'} successfully`
+        )
         this.router.navigate(['tournament', key])
       },
       () => this.notifier.notify(`Something goes wrong`, 5000)
@@ -177,6 +252,7 @@ export class AdministrationComponent implements AfterViewInit, OnDestroy {
 
   ngOnDestroy() {
     this.headerService.resetTemplate()
+    this.subscriptions.forEach((s) => s.unsubscribe())
   }
 }
 

@@ -115,12 +115,6 @@ export class CustomHammerGestureConfig extends HammerGestureConfig {
           {
             path: 'administration',
             loadChildren: '@pages/administration/administration.module#AdministrationModule',
-            canActivate: [RoleGuard],
-            data: {
-              roles: {
-                general: 'tournament-creation',
-              },
-            },
           },
           {
             path: 'settings',

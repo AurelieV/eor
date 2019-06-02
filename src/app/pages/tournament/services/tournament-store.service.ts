@@ -280,7 +280,8 @@ export class TournamentStore {
               color: 'warn',
             },
             { label: 'Go to next round', key: 'end-round', role: 'teamlead', color: 'warn' },
-            { label: 'Change user roles', key: 'change-roles', role: 'teamlead', color: 'primary' }
+            { label: 'Change user roles', key: 'change-roles', role: 'teamlead', color: 'primary' },
+            { label: 'Edit tournament', key: 'edit', role: 'teamlead', color: 'warn' }
           )
         }
 

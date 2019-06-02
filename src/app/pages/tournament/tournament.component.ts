@@ -14,7 +14,6 @@ import { CdkScrollable, ScrollDispatcher } from '@angular/cdk/scrolling'
 import { AfterViewInit, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { HeaderService } from '@core/services/header.service'
-import { NotificationService } from '@core/services/notification.service'
 import { SidePanelService } from '@core/services/side-panel.service'
 import { Zone } from '@pages/administration/administration.models'
 import { Observable, Subscription } from 'rxjs'
@@ -86,7 +85,6 @@ export class TournamentComponent implements OnInit, OnDestroy, AfterViewInit {
     private headerService: HeaderService,
     private sidePanel: SidePanelService,
     private scroller: ScrollDispatcher,
-    private notifier: NotificationService,
     public breakpointObserver: BreakpointObserver
   ) {}
 
@@ -235,6 +233,10 @@ export class TournamentComponent implements OnInit, OnDestroy, AfterViewInit {
       case 'change-roles':
         this.sidePanel.open(this.changeRolesRef, this.actionsTemplateRef)
         break
+      case 'edit':
+        this.sidePanel.closeAndNavigate(['/administration/edit', this.store.key])
+        break
+
       default:
         console.log('todo', key)
     }

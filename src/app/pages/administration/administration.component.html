@@ -1,5 +1,8 @@
 <ng-template #header let-disabled="disabled">
-  <h1 class="main-app-name">Tournament Creation</h1>
+  <h1 class="main-app-name">
+    <span *ngIf="!tournamentId">Tournament Creation</span>
+    <span *ngIf="tournamentId">Tounament edition</span>
+  </h1>
 </ng-template>
 
 <section class="step" [@step] *ngIf="currentStep === Step.Settings">
@@ -45,7 +48,12 @@
       </mat-form-field>
     </p>
     <div class="actions">
-      <a mat-stroked-button color="primary" [routerLink]="['/']">Cancel</a>
+      <a
+        mat-stroked-button
+        color="primary"
+        [routerLink]="tournamentId ? ['/tournament', tournamentId] : ['/']"
+        >Cancel</a
+      >
       <button
         type="submit"
         mat-flat-button
@@ -189,10 +197,26 @@
   </form>
   <div class="actions">
     <button type="button" mat-stroked-button color="primary" (click)="previous()">Previous</button>
-    <button type="button" mat-flat-button color="primary" (click)="create()">Create</button>
+    <button
+      type="button"
+      mat-flat-button
+      [color]="tournamentId ? 'warn' : 'primary'"
+      (click)="create()"
+    >
+      <span *ngIf="!tournamentId">Create</span> <span *ngIf="tournamentId">Edit</span>
+    </button>
   </div>
 </section>
 
 <ng-template #help>
   <p>{{ helpText }}</p>
+</ng-template>
+
+<ng-template #confirmEdit>
+  <p>This action will also reset the round. Are you sure you want to do this now?</p>
+  <p>If you want to only change roles, use the corresponding action</p>
+  <div class="actions">
+    <button (click)="cancelEdit()" mat-flat-button color="primary">Cancel</button>
+    <button (click)="create(true)" mat-flat-button color="warn">I want to edit</button>
+  </div>
 </ng-template>

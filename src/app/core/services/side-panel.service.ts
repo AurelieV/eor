@@ -1,13 +1,14 @@
 import { Injectable, TemplateRef } from '@angular/core'
 import { MatSidenav } from '@angular/material'
-import { BehaviorSubject } from 'rxjs'
+import { Router } from '@angular/router'
+import { BehaviorSubject, Subject } from 'rxjs'
 
 @Injectable()
 export class SidePanelService {
   sidePanel: MatSidenav
   _templateRef$ = new BehaviorSubject<TemplateRef<any>>(null)
   _backTemplateRef$ = new BehaviorSubject<TemplateRef<any>>(null)
-  _onClose$ = new BehaviorSubject<void>(null)
+  _onClose$ = new Subject<void>()
 
   get templateRef$() {
     return this._templateRef$.asObservable()
@@ -21,11 +22,11 @@ export class SidePanelService {
     return this._onClose$.asObservable()
   }
 
-  constructor() {
+  constructor(private router: Router) {
     window.addEventListener('popstate', (event) => {
       if (event.state && event.state.beforeSidePanel) {
-        this.sidePanel.close()
         history.replaceState(null, null)
+        this.sidePanel.close()
       }
     })
   }
@@ -46,6 +47,13 @@ export class SidePanelService {
     }
     this._templateRef$.next(null)
     this._onClose$.next(null)
+  }
+
+  closeAndNavigate(path: any[]) {
+    this._templateRef$.next(null)
+    this._onClose$.next(null)
+    this.sidePanel.close()
+    this.router.navigate(path, { replaceUrl: true })
   }
 
   back() {

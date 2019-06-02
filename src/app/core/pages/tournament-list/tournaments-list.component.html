@@ -23,7 +23,11 @@
   </a>
 </mat-nav-list>
 <div class="actions">
-  <a *ngIf="canCreateTournament$" mat-flat-button color="primary" [routerLink]="['/administration']"
+  <a
+    *ngIf="canCreateTournament$"
+    mat-flat-button
+    color="primary"
+    [routerLink]="['/administration/create']"
     >Create a new tournament</a
   >
 </div>

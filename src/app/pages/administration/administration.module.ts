@@ -14,6 +14,7 @@ import {
   MatSelectModule,
 } from '@angular/material'
 import { RouterModule } from '@angular/router'
+import { RoleGuard } from '@core/guards/auth.guard'
 import { CustomFormModule } from '@shared/custom-form/custom-form.module'
 import { AdministrationComponent } from './administration.component'
 import { AdministrationService } from './services/administration.service'
@@ -42,8 +43,24 @@ import { AdministrationService } from './services/administration.service'
     CustomFormModule,
     RouterModule.forChild([
       {
-        path: '',
+        path: 'create',
         component: AdministrationComponent,
+        canActivate: [RoleGuard],
+        data: {
+          roles: {
+            general: 'tournament-creation',
+          },
+        },
+      },
+      {
+        path: 'edit/:tournamentId',
+        component: AdministrationComponent,
+        // canActivate: [IsTournamentAdminGuard],
+        data: {
+          roles: {
+            tournament: 'tournamentAdmin',
+          },
+        },
       },
     ]),
   ],
