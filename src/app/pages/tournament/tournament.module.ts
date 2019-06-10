@@ -29,6 +29,7 @@ import { ImportPairingsPanelComponent } from './panels/import-pairings/import-pa
 import { ImportResultsPanelComponent } from './panels/import-results/import-results.component'
 import { MarkAllEmptyPanelComponent } from './panels/mark-all-empty/mark-all-empty.component'
 import { OutstandingsPanelComponent } from './panels/outstandings/outstandings.component'
+import { SetFeaturePanelComponent } from './panels/set-feature/set-feature.component'
 import { TablePanelComponent } from './panels/table/table.component'
 import { TableService } from './services/table.service'
 import { TournamentStore } from './services/tournament-store.service'
@@ -51,6 +52,7 @@ import { TournamentComponent } from './tournament.component'
     MarkAllEmptyPanelComponent,
     GoNextPanelComponent,
     ChangeRolesPanelComponent,
+    SetFeaturePanelComponent,
   ],
   imports: [
     // Angular

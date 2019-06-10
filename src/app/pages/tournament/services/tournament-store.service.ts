@@ -25,11 +25,13 @@ export class TournamentStore {
   zones$: Observable<Zone[]>
   zones: Zone[]
   zonesTables$: Observable<ZonesTables>
+  featureTables$: Observable<Table[]>
   tournament$: Observable<Tournament>
   clock$: Observable<moment.Duration>
   roles$: Observable<Array<String>>
   staff$: Observable<TournamentStaff>
   zoneInfos$: Observable<Observable<ZoneInfo>[]>
+  featureInfos$: Observable<ZoneInfo>
   allInfo$: Observable<ZoneInfo>
   filters$ = new BehaviorSubject<Filters>({
     displayUnknown: true,
@@ -43,7 +45,7 @@ export class TournamentStore {
   sortedTables$: Observable<Table[]>
   actions$: Observable<Action[]>
   isOutstandings$: Observable<boolean>
-  zoneInfoSelected$ = new BehaviorSubject<number>(null)
+  zoneInfoSelected$ = new BehaviorSubject<string>('all')
 
   private subscriptions: Subscription[] = []
 
@@ -110,6 +112,28 @@ export class TournamentStore {
         )
       )
     )
+    const allFeatureTables$ = this.zones$.pipe(
+      combineLatest(this.key$),
+      switchMap(([zones, key]) => this.getFeatures(zones, key))
+    )
+    this.featureTables$ = allFeatureTables$.pipe(
+      combineLatest(filterFunc$),
+      map(([tables, fn]) => {
+        return tables.filter(fn)
+      })
+    )
+    this.featureInfos$ = allFeatureTables$.pipe(
+      combineLatest(this.isOutstandings$),
+      map(([tables, isOutstandings]) => {
+        return {
+          id: 'feature',
+          name: 'Feature',
+          sections: [],
+          ...this.getTablesInfo(tables, isOutstandings),
+        }
+      })
+    )
+
     this.zoneInfos$ = this.zones$.pipe(
       map((zones) =>
         zones.map((zone, zoneIndex) =>
@@ -119,25 +143,14 @@ export class TournamentStore {
             ),
             combineLatest(this.isOutstandings$),
             map(([sections, isOutstandings]) => {
-              let tables = sections.reduce(
-                (tables, sectionTables) => tables.concat(Object.values(sectionTables)),
-                []
-              )
-              if (isOutstandings) {
-                tables = tables.filter((table) => !table.stageHasPaper)
-              }
-              const notDoneTables = tables.filter(({ status }) => status !== 'done')
-              const extraTimesTables = notDoneTables.filter((table) => table.time > 0)
-
               return {
-                id: zoneIndex,
+                id: '' + zoneIndex,
                 name: zone.name,
                 sections: zone.sections,
-                nbExtraTimed: extraTimesTables.length,
-                maxTimeExtension: Math.max(...extraTimesTables.map((table) => table.time)),
-                nbStillPlaying: notDoneTables.length,
-                nbStageHasNotPaper: tables.filter((table) => !table.stageHasPaper).length,
-                nbTotal: tables.length,
+                ...this.getTablesInfo(
+                  sections.map((sections) => Object.values(sections)).flat(),
+                  isOutstandings
+                ),
               }
             })
           )
@@ -149,7 +162,7 @@ export class TournamentStore {
       map((zoneInfos) =>
         zoneInfos.reduce(
           (allInfo, zoneInfo) => ({
-            id: null,
+            id: 'all',
             name: 'All',
             sections: [
               {
@@ -245,6 +258,12 @@ export class TournamentStore {
               key: 'import-results',
               role: 'scorekeeper',
               color: 'primary',
+            },
+            {
+              label: 'Set Feature',
+              key: 'set-feature',
+              role: 'scorekeeper',
+              color: 'primary',
             }
           )
         }
@@ -261,18 +280,24 @@ export class TournamentStore {
               key: 'mark-all-empty-red',
               role: 'zonelead',
               color: 'warn',
-            }
-            // { label: 'Assign judge', key: 'assign', role: 'zonelead', color: 'primary' },
-            // {
-            //   label: 'Nominate floor judge',
-            //   key: 'nominate-floor',
-            //   role: 'zonelead',
-            //   color: 'primary',
-            // }
+            },
+            {
+              label: 'Nominate floor judge',
+              key: 'nominate-floor',
+              role: 'zonelead',
+              color: 'primary',
+            },
+            { label: 'Assign judge', key: 'assign', role: 'zonelead', color: 'primary' }
           )
         }
         if (roles.includes('tournamentAdmin')) {
           actions = actions.concat(
+            {
+              label: 'Set Feature',
+              key: 'set-feature',
+              role: 'teamlead',
+              color: 'primary',
+            },
             {
               label: isOutstandings ? 'Set outstandings' : 'Go to outstanding',
               key: 'go-outstanding',
@@ -305,10 +330,14 @@ export class TournamentStore {
       combineLatest(filterFunc$, this.zoneInfoSelected$),
       map(([tables, fn, zoneInfoSelected]) => {
         // TODO: distinct filters
-        const filterFn =
-          zoneInfoSelected === null
-            ? fn
-            : (table) => fn(table) && Number(table.zoneIndex) === zoneInfoSelected
+        let filterFn = fn
+        if (zoneInfoSelected === 'all') {
+          filterFn = fn
+        } else if (zoneInfoSelected === 'feature') {
+          filterFn = (table) => fn(table) && table.isFeatured
+        } else {
+          filterFn = (table) => fn(table) && table.zoneIndex === zoneInfoSelected
+        }
         return tables.filter(filterFn).sort((a, b) => (b.time || 0) - (a.time || 0))
       })
     )
@@ -326,7 +355,7 @@ export class TournamentStore {
     return this.key$.asObservable()
   }
 
-  set zoneInfoSelected(value: number) {
+  set zoneInfoSelected(value: string) {
     this.zoneInfoSelected$.next(value)
   }
 
@@ -388,6 +417,46 @@ export class TournamentStore {
           .set(tables)
       })
     )
+  }
+
+  private getFeaturesFromSection(
+    zoneIndex: number,
+    sectionIndex: number,
+    key: string
+  ): Observable<Table[]> {
+    return this.db
+      .list<Table>(`/zoneTables/${key}/${zoneIndex}/${sectionIndex}`, (ref) =>
+        ref.orderByChild('isFeatured').equalTo(true)
+      )
+      .valueChanges()
+  }
+
+  private getFeaturesFromZone(zone: Zone, zoneIndex: number, key: string): Observable<Table[]>[] {
+    return zone.sections.map((section, sectionIndex) =>
+      this.getFeaturesFromSection(zoneIndex, sectionIndex, key)
+    )
+  }
+
+  private getFeatures(zones: Zone[], key: string): Observable<Table[]> {
+    return combine(
+      zones.flatMap((zone, zoneIndex) => this.getFeaturesFromZone(zone, zoneIndex, key))
+    ).pipe(map((tables) => tables.flat()))
+  }
+
+  private getTablesInfo(tables: Table[], isOutstandings) {
+    if (isOutstandings) {
+      tables = tables.filter((table) => !table.stageHasPaper)
+    }
+    const notDoneTables = tables.filter(({ status }) => status !== 'done')
+    const extraTimesTables = notDoneTables.filter((table) => table.time > 0)
+
+    return {
+      nbExtraTimed: extraTimesTables.length,
+      maxTimeExtension: Math.max(...extraTimesTables.map((table) => table.time)),
+      nbStillPlaying: notDoneTables.length,
+      nbStageHasNotPaper: tables.filter((table) => !table.stageHasPaper).length,
+      nbTotal: tables.length,
+    }
   }
 
   ngOnDestroy() {

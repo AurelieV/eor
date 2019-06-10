@@ -21,23 +21,36 @@ export class TableComponent {
   @Input() canInteractWithFeaturedTables: boolean = true
   @Input() viewMode: ViewMode
   @Input() isOutstandings: boolean
+  @Input() displayFeatured: boolean = false
   @Output() openTable = new EventEmitter()
 
   @HostBinding('class')
   get status() {
-    return `block ${this.table && this.table.status} ${this.viewMode}`
+    let status = `block ${this.viewMode}`
+    if (this.table) {
+      if (this.displayFeatured || !this.table.isFeatured) {
+        status += ` ${this.table.status}`
+      } else {
+        status += ` featured`
+      }
+    }
+    return status
   }
 
   constructor(private tableService: TableService) {}
 
   @HostListener('tap')
   mainAction() {
-    this.tableService.changeStatus(this.table)
+    if (this.displayFeatured || !this.table.isFeatured) {
+      this.tableService.changeStatus(this.table)
+    }
   }
 
   @HostListener('press')
   secondaryAction() {
-    this.openTable.emit()
+    if (this.displayFeatured || !this.table.isFeatured) {
+      this.openTable.emit()
+    }
   }
 
   receivedPaper() {

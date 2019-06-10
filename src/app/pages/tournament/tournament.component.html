@@ -3,9 +3,9 @@
     <ng-container *ngIf="(allInfo$ | async) as allInfo">
       <zone-info
         [info]="allInfo"
-        [selected]="zoneInfoSelected === null"
+        [selected]="zoneInfoSelected === 'all'"
         class="zone-info"
-        (click)="onZoneInfoClick(null, 0)"
+        (click)="onZoneInfoClick('all', 0)"
       ></zone-info>
     </ng-container>
     <ng-container *ngIf="zoneInfos.length > 1">
@@ -22,6 +22,14 @@
         </ng-container>
       </ng-container>
     </ng-container>
+    <ng-container *ngIf="(featureInfo$ | async) as featureInfo">
+      <zone-info
+        [info]="featureInfo"
+        [selected]="zoneInfoSelected === 'feature'"
+        class="zone-info"
+        (click)="onZoneInfoClick('feature', zoneInfos.length + 1)"
+      ></zone-info>
+    </ng-container>
     <div class="push"></div>
   </div>
 </div>
@@ -29,7 +37,7 @@
 <ng-container *ngIf="(sortBy$ | async) === 'zone'; else sorted">
   <div class="zones" *ngIf="(zoneTables$ | async) as zoneTables">
     <ng-container *ngFor="let zone of (zones$ | async); let zoneIndex = index">
-      <div class="zone" *ngIf="zoneInfoSelected === null || zoneInfoSelected === zoneIndex">
+      <div class="zone" *ngIf="zoneInfoSelected === 'all' || zoneInfoSelected === '' + zoneIndex">
         <div class="zone_title">{{ zone.name }}</div>
         <div class="section" *ngFor="let section of zone.sections; let sectionIndex = index">
           <table
@@ -46,6 +54,20 @@
         </div>
       </div>
     </ng-container>
+    <div class="zone" *ngIf="zoneInfoSelected === 'all' || zoneInfoSelected === 'feature'">
+      <div class="zone_title">Feature</div>
+      <div class="section">
+        <table
+          [table]="table"
+          [viewMode]="viewMode"
+          [isOutstandings]="isOutstandings$ | async"
+          [displayFeatured]="true"
+          (openTable)="onOpenTable(table)"
+          class="table"
+          *ngFor="let table of (featureTables$ | async); trackBy: trackbyIdFn"
+        ></table>
+      </div>
+    </div>
   </div>
 </ng-container>
 
@@ -95,7 +117,10 @@
   ><table-panel [table]="selectedTable" (addTime)="onAddTime(selectedTable)"></table-panel
 ></ng-template>
 <ng-template #importPairings
-  ><import-pairings-panel (pairingsImported)="onPairingsImported()" [software]="software$ | async"></import-pairings-panel
+  ><import-pairings-panel
+    (pairingsImported)="onPairingsImported()"
+    [software]="software$ | async"
+  ></import-pairings-panel
 ></ng-template>
 <ng-template #importResults
   ><import-results-panel
@@ -123,4 +148,7 @@
     (rolesChanged)="onRolesChanged()"
     [staff]="staff$ | async"
   ></change-roles-panel
+></ng-template>
+<ng-template #setFeature
+  ><set-feature-panel [tables]="featureTables$ | async"></set-feature-panel
 ></ng-template>

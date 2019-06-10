@@ -92,7 +92,7 @@ export interface Settings {
 export type StatusOrder = Array<TableStatus>
 
 export interface ZoneInfo {
-  id: number
+  id: string
   name: string
   sections: Section[]
   nbExtraTimed: number

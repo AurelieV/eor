@@ -29,4 +29,9 @@
     background: white;
     border: 2px solid $extra-timed;
   }
+  &.featured {
+    background: $featured;
+    color: black;
+    opacity: 0.5;
+  }
 }

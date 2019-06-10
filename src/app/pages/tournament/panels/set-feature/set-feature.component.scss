@@ -1,0 +1,33 @@
+form {
+  .help {
+    margin-top: 1rem;
+    font-style: italic;
+    margin-bottom: 1rem;
+  }
+  textarea {
+    border: 1px solid black;
+    box-sizing: border-box;
+    width: 100%;
+    height: 200px;
+    margin-bottom: 1rem;
+  }
+  button {
+    width: 100%;
+    &:not(:first-child) {
+      margin-top: 5px;
+    }
+  }
+  margin-bottom: 1em;
+}
+.tables {
+  li {
+    display: flex;
+    .table {
+      margin-right: 1em;
+      flex: 1 0 auto;
+    }
+    &:not(:first-child) {
+      margin-top: 0.5em;
+    }
+  }
+}

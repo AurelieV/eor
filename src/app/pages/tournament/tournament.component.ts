@@ -39,8 +39,10 @@ export class TournamentComponent implements OnInit, OnDestroy, AfterViewInit {
   isOutstandings$: Observable<boolean>
   software$: Observable<string>
   staff$: Observable<TournamentStaff>
+  featureTables$: Observable<Table[]>
+  featureInfo$: Observable<ZoneInfo>
 
-  zoneInfoSelected: number = null
+  zoneInfoSelected: string = 'all'
   zoneInfoItemWidthRatio = 0.82
 
   selectedTable: Table = null
@@ -75,6 +77,8 @@ export class TournamentComponent implements OnInit, OnDestroy, AfterViewInit {
   private goNextRef: TemplateRef<any>
   @ViewChild('changeRoles')
   private changeRolesRef: TemplateRef<any>
+  @ViewChild('setFeature')
+  private setFeatureRef: TemplateRef<any>
 
   @ViewChild(CdkScrollable)
   private zoneInfoContainer: CdkScrollable
@@ -109,6 +113,8 @@ export class TournamentComponent implements OnInit, OnDestroy, AfterViewInit {
     this.isOutstandings$ = this.store.isOutstandings$
     this.software$ = this.store.tournament$.pipe(map((t) => t.software))
     this.staff$ = this.store.staff$
+    this.featureInfo$ = this.store.featureInfos$
+    this.featureTables$ = this.store.featureTables$
     this.subscriptions.push(
       this.store.zoneInfoSelected$.subscribe(
         (zoneInfoSelected) => (this.zoneInfoSelected = zoneInfoSelected)
@@ -235,6 +241,9 @@ export class TournamentComponent implements OnInit, OnDestroy, AfterViewInit {
         break
       case 'edit':
         this.sidePanel.closeAndNavigate(['/administration/edit', this.store.key])
+        break
+      case 'set-feature':
+        this.sidePanel.open(this.setFeatureRef)
         break
 
       default:

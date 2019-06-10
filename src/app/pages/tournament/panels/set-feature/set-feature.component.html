@@ -1,0 +1,18 @@
+<div class="panel-title">Featured tables</div>
+<div class="panel-subtitle">Define feature</div>
+<form (submit)="set()">
+  <p class="help">Tap table numbers, separated by space or newline</p>
+  <textarea [(ngModel)]="textInput" id="input" #input name="text"></textarea>
+  <button type="submit" mat-flat-button color="primary" [disabled]="!textInput || isLoading">
+    Add to feature
+  </button>
+</form>
+
+<div class="panel-subtitle">Current tables</div>
+<ul class="tables" *ngIf="tables">
+  <li *ngFor="let table of tables">
+    <div class="table">Table {{ table.id }}</div>
+    <button mat-flat-button color="primary" (click)="delete(table.id)">Delete</button>
+  </li>
+</ul>
+<div *ngIf="tables && tables.length === 0">Pas de table en feature</div>

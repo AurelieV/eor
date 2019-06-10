@@ -11,7 +11,10 @@
   -moz-user-select: none;
   -webkit-user-select: none;
   -ms-user-select: none;
-  cursor: pointer;
+
+  &:not(.featured) {
+    cursor: pointer;
+  }
 
   box-sizing: border-box;
   padding: 0.5em;
