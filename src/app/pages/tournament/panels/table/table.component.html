@@ -1,69 +1,117 @@
 <ng-container *ngIf="(table$ | async) as t">
-  <div class="panel-title">Table {{ t.id }}</div>
-  <div class="panel-subtitle">Status</div>
-  <div class="status-block">
-    <button class="status" [matMenuTriggerFor]="statusMenu">
-      <div [class]="'block ' + t.status"></div>
-      <div class="label">{{ t.status }}</div>
-    </button>
-    <mat-menu #statusMenu="matMenu">
-      <button class="status" mat-menu-item *ngFor="let s of status" (click)="updateStatus(t, s)">
-        <div [class]="'block ' + s"></div>
-        <div class="label">{{ s }}</div>
+  <ng-container *ngIf="!isEditingSlip; else editableSlip">
+    <div class="panel-title">Table {{ t.id }}</div>
+    <div class="panel-subtitle">Status</div>
+    <div class="status-block">
+      <button class="status" [matMenuTriggerFor]="statusMenu">
+        <div [class]="'block ' + t.status"></div>
+        <div class="label">{{ t.status }}</div>
       </button>
-    </mat-menu>
-    <div class="status" *ngIf="!t.stageHasPaper">
-      <mat-icon>desktop_access_disabled</mat-icon>
-      <div class="label">Paper not on stage</div>
+      <mat-menu #statusMenu="matMenu">
+        <button class="status" mat-menu-item *ngFor="let s of status" (click)="updateStatus(t, s)">
+          <div [class]="'block ' + s"></div>
+          <div class="label">{{ s }}</div>
+        </button>
+      </mat-menu>
+      <div class="status" *ngIf="!t.stageHasPaper">
+        <mat-icon>desktop_access_disabled</mat-icon>
+        <div class="label">Paper not on stage</div>
+      </div>
+      <div class="status" *ngIf="t.stageHasPaper">
+        <mat-icon>desktop_windows</mat-icon>
+        <div class="label">Paper on stage</div>
+      </div>
+      <button class="status" (click)="onTimeClick()">
+        <mat-icon>alarm</mat-icon>
+        <div class="label">{{ t.time || 0 }}min</div>
+      </button>
     </div>
-    <div class="status" *ngIf="t.stageHasPaper">
-      <mat-icon>desktop_windows</mat-icon>
-      <div class="label">Paper on stage</div>
+    <div class="judge" *ngIf="t.assignated">Covered by {{ t.assignated }}</div>
+    <ng-container>
+      <div class="panel-subtitle">Virtual Paper Slip</div>
+      <div class="slip">
+        <div class="description">
+          <div class="push"></div>
+          <div>Win</div>
+          <div>Drop?</div>
+        </div>
+        <div class="player line">
+          <div class="name">{{ (t.player1 && t.player1.name) || 'Player 1' }}</div>
+          <div class="score">{{ t.result && t.result.player1.score }}</div>
+          <div class="drop" [class.hasDropped]="t.result && t.result.player1.drop"></div>
+        </div>
+        <div class="draw">
+          <div class="push"></div>
+          <div class="score">{{ t.result && t.result.draw }}</div>
+        </div>
+        <div class="player line">
+          <div class="name">{{ (t.player2 && t.player2.name) || 'Player 2' }}</div>
+          <div class="score">{{ t.result && t.result.player2.score }}</div>
+          <div class="drop" [class.hasDropped]="t.result && t.result.player2.drop"></div>
+        </div>
+      </div>
+    </ng-container>
+    <div class="panel-subtitle">Actions</div>
+    <div class="actions">
+      <button mat-flat-button color="primary" [disabled]="isLoading" (click)="sit()">
+        Sit at table
+      </button>
+      <button mat-flat-button color="primary" [disabled]="isLoading" (click)="enterResult()">
+        Enter result
+      </button>
+      <button mat-flat-button color="primary" [disabled]="isLoading" (click)="assign()">
+        Assign judge
+      </button>
     </div>
-    <button class="status" (click)="onTimeClick()">
-      <mat-icon>alarm</mat-icon>
-      <div class="label">{{ t.time || 0 }}min</div>
-    </button>
-  </div>
-  <div class="judge" *ngIf="t.assignated">Covered by {{ t.assignated }}</div>
-  <ng-container>
-    <div class="panel-subtitle">Virtual Paper Slip</div>
-    <div class="slip">
-      <div class="description">
-        <div class="push"></div>
-        <div>Win</div>
-        <div>Drop?</div>
-      </div>
-      <div class="player line">
-        <div class="name">{{ (table.player1 && table.player1.name) || 'Player 1' }}</div>
-        <div class="score">{{ table.result && table.result.player1.score }}</div>
-        <div class="drop" [class.hasDropped]="table.result && table.result.player1.drop"></div>
-      </div>
-      <div class="draw">
-        <div class="push"></div>
-        <div class="score">{{ table.result && table.result.draw }}</div>
-      </div>
-      <div class="player line">
-        <div class="name">{{ (table.player2 && table.player2.name) || 'Player 2' }}</div>
-        <div class="score">{{ table.result && table.result.player2.score }}</div>
-        <div class="drop" [class.hasDropped]="table.result && table.result.player2.drop"></div>
-      </div>
-    </div>
-  </ng-container>
-  <div class="panel-subtitle">Actions</div>
-  <div class="actions">
-    <button mat-flat-button color="primary" (click)="sit()">Sit at table</button>
-    <button mat-flat-button color="primary" disabled>Enter result (comming soon)</button>
-    <button mat-flat-button color="primary" (click)="assign()">Assign judge</button>
-  </div>
-  <ng-container *ngIf="(logs$ | async) as logs">
-    <ng-container *ngIf="logs.length">
-      <div class="panel-subtitle">Logs</div>
-      <ul class="logs">
-        <li *ngFor="let log of logs">
-          +{{ log.time }}min, {{ log.addOrUpdate }} by {{ log.user | user }}
-        </li>
-      </ul>
+    <ng-container *ngIf="(logs$ | async) as logs">
+      <ng-container *ngIf="logs.length">
+        <div class="panel-subtitle">Logs</div>
+        <ul class="logs">
+          <li *ngFor="let log of logs">
+            +{{ log.time }}min, {{ log.addOrUpdate }} by {{ log.user | user }}
+          </li>
+        </ul>
+      </ng-container>
     </ng-container>
   </ng-container>
 </ng-container>
+
+<ng-template #editableSlip>
+  <div class="editable-slip">
+    <div class="description">
+      <div class="push"></div>
+      <div>Win</div>
+      <div>Drop?</div>
+    </div>
+    <div class="player line">
+      <div class="name">{{ (table.player1 && table.player1.name) || 'Player 1' }}</div>
+      <button class="score" (click)="increasePlayer1()">{{ result.player1.score }}</button>
+      <button
+        class="drop"
+        [class.hasDropped]="result.player1.drop"
+        (click)="result.player1.drop = !result.player1.drop"
+      ></button>
+    </div>
+    <div class="draw">
+      <div class="push"></div>
+      <button class="score" (click)="increaseDraw()">{{ result.draw }}</button>
+    </div>
+    <div class="player line">
+      <div class="name">{{ (table.player2 && table.player2.name) || 'Player 2' }}</div>
+      <button class="score" (click)="increasePlayer2()">{{ result.player2.score }}</button>
+      <button
+        class="drop"
+        [class.hasDropped]="result.player2.drop"
+        (click)="result.player2.drop = !result.player2.drop"
+      ></button>
+    </div>
+  </div>
+  <div class="actions">
+    <button mat-flat-button color="primary" [disabled]="isLoading" (click)="editResult()">
+      Enter result
+    </button>
+    <button mat-flat-button color="warn" [disabled]="isLoading" (click)="isEditingSlip = false">
+      Cancel
+    </button>
+  </div>
+</ng-template>

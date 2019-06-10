@@ -1,4 +1,4 @@
-import { Table, TableStatus, TimeLog } from '@/app/models'
+import { Result, Table, TableStatus, TimeLog } from '@/app/models'
 import { Component, EventEmitter, Input, Output } from '@angular/core'
 import { AuthenticationService } from '@core/services/authentication.service'
 import { TableService } from '@pages/tournament/services/table.service'
@@ -19,6 +19,8 @@ export class TablePanelComponent {
   logs$: Observable<TimeLog[]>
   status: TableStatus[] = ['unknown', 'covered', 'playing', 'done']
   isLoading: boolean = false
+  isEditingSlip: boolean = false
+  result: Result
 
   constructor(private tableService: TableService, private authent: AuthenticationService) {}
 
@@ -47,6 +49,45 @@ export class TablePanelComponent {
 
   assign() {
     this.assignJudge.emit()
+  }
+
+  enterResult() {
+    this.table$.pipe(take(1)).subscribe((table) => {
+      this.result = table.result
+        ? { ...table.result }
+        : {
+            player1: {
+              score: 0,
+              drop: false,
+            },
+            player2: {
+              score: 0,
+              drop: false,
+            },
+            draw: 0,
+          }
+      this.isEditingSlip = true
+    })
+  }
+
+  editResult() {
+    this.isLoading = true
+    this.tableService.update(this.table, { result: this.result }).then(() => {
+      this.isLoading = false
+      this.isEditingSlip = false
+    })
+  }
+
+  increasePlayer1() {
+    this.result.player1.score = (this.result.player1.score + 1) % 4
+  }
+
+  increasePlayer2() {
+    this.result.player2.score = (this.result.player2.score + 1) % 4
+  }
+
+  increaseDraw() {
+    this.result.draw = (this.result.draw + 1) % 4
   }
 
   sit() {

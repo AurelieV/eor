@@ -1,4 +1,4 @@
-<ng-container *ngIf="viewMode !== 'large'">
+<ng-container *ngIf="viewMode === 'small'">
   <div class="number">{{ table.id }}</div>
   <div class="time" *ngIf="table.time">{{ table.time }}min</div>
 </ng-container>
@@ -11,6 +11,7 @@
     </div>
     <div class="time" *ngIf="table.time">{{ table.time }}min</div>
     <div class="judge" *ngIf="table.assignated">Covered by {{ table.assignated }}</div>
+    <div class="score" *ngIf="table.result">Result: {{ table.result | result }}</div>
   </div>
 
   <div class="actions">
