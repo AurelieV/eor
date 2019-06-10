@@ -1,0 +1,15 @@
+<mat-form-field class="full-width">
+  <input
+    type="text"
+    placeholder="Search user"
+    matInput
+    [formControl]="inputControl"
+    [matAutocomplete]="auto"
+    #inputRef
+  />
+  <mat-autocomplete #auto="matAutocomplete">
+    <mat-option *ngFor="let user of (filteredUsers$ | async)" [value]="user.name">
+      {{ user.name }}
+    </mat-option>
+  </mat-autocomplete>
+</mat-form-field>

@@ -76,9 +76,11 @@ export class TournamentComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('goNext')
   private goNextRef: TemplateRef<any>
   @ViewChild('changeRoles')
-  private changeRolesRef: TemplateRef<any>
+  private changeRolesTemplateRef: TemplateRef<any>
   @ViewChild('setFeature')
-  private setFeatureRef: TemplateRef<any>
+  private setFeatureTemplateRef: TemplateRef<any>
+  @ViewChild('assignJudge')
+  private assignJudgeTemplateRef: TemplateRef<any>
 
   @ViewChild(CdkScrollable)
   private zoneInfoContainer: CdkScrollable
@@ -183,7 +185,15 @@ export class TournamentComponent implements OnInit, OnDestroy, AfterViewInit {
     this.sidePanel.open(this.addTimeTemplateRef, this.tableTemplateRef)
   }
 
+  onAssignJudge() {
+    this.sidePanel.open(this.assignJudgeTemplateRef, this.tableTemplateRef)
+  }
+
   onTimeAdded() {
+    this.sidePanel.back()
+  }
+
+  onJudgeAssignated() {
     this.sidePanel.back()
   }
 
@@ -237,13 +247,16 @@ export class TournamentComponent implements OnInit, OnDestroy, AfterViewInit {
         this.sidePanel.open(this.markAllEmptyRef, this.actionsTemplateRef)
         break
       case 'change-roles':
-        this.sidePanel.open(this.changeRolesRef, this.actionsTemplateRef)
+        this.sidePanel.open(this.changeRolesTemplateRef, this.actionsTemplateRef)
         break
       case 'edit':
         this.sidePanel.closeAndNavigate(['/administration/edit', this.store.key])
         break
       case 'set-feature':
-        this.sidePanel.open(this.setFeatureRef)
+        this.sidePanel.open(this.setFeatureTemplateRef)
+        break
+      case 'assign-judge':
+        this.sidePanel.open(this.assignJudgeTemplateRef)
         break
 
       default:
@@ -278,16 +291,7 @@ export class TournamentComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   toggleViewMode() {
-    switch (this.viewMode) {
-      case 'small':
-        this.viewMode = 'medium'
-        break
-      case 'medium':
-        this.viewMode = 'large'
-        break
-      case 'large':
-        this.viewMode = 'small'
-    }
+    this.viewMode = this.viewMode === 'small' ? 'large' : 'small'
   }
 
   trackbyIdFn(index, val) {

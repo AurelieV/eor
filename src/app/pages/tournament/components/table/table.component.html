@@ -10,6 +10,7 @@
       {{ table.player1.name }} vs {{ table.player2.name }}
     </div>
     <div class="time" *ngIf="table.time">{{ table.time }}min</div>
+    <div class="judge" *ngIf="table.assignated">Covered by {{ table.assignated }}</div>
   </div>
 
   <div class="actions">
@@ -17,7 +18,7 @@
       *ngIf="!table.stageHasPaper && isOutstandings"
       mat-mini-fab
       color="primary"
-      (click)="receivedPaper()"
+      (click)="receivedPaper($event)"
     >
       <mat-icon>desktop_windows</mat-icon>
     </button>

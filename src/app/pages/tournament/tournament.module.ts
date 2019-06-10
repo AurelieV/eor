@@ -21,6 +21,7 @@ import { TableComponent } from './components/table/table.component'
 import { ZoneInfoComponent } from './components/zone-info/zone-info.component'
 import { ActionsPanelComponent } from './panels/actions/actions.component'
 import { AddTimePanelComponent } from './panels/add-time/add-time.component'
+import { AssignJudgePanelComponent } from './panels/assign-judge/assign-judge.component'
 import { ChangeRolesPanelComponent } from './panels/change-roles/change-roles.component'
 import { ClockPanelComponent } from './panels/clock/clock.component'
 import { FiltersPanelComponent } from './panels/filters/filters.component'
@@ -53,6 +54,7 @@ import { TournamentComponent } from './tournament.component'
     GoNextPanelComponent,
     ChangeRolesPanelComponent,
     SetFeaturePanelComponent,
+    AssignJudgePanelComponent,
   ],
   imports: [
     // Angular

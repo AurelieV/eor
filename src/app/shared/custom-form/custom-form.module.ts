@@ -9,6 +9,7 @@ import {
   MatInputModule,
   MatProgressSpinnerModule,
 } from '@angular/material'
+import { SelectUserComponent } from './select-user/select-user.component'
 import { SelectUsersComponent } from './select-users/select-users.component'
 import { CustomSubmitButton } from './submit-button.component'
 
@@ -24,7 +25,7 @@ import { CustomSubmitButton } from './submit-button.component'
     MatFormFieldModule,
     MatIconModule,
   ],
-  declarations: [CustomSubmitButton, SelectUsersComponent],
-  exports: [CustomSubmitButton, SelectUsersComponent],
+  declarations: [CustomSubmitButton, SelectUsersComponent, SelectUserComponent],
+  exports: [CustomSubmitButton, SelectUsersComponent, SelectUserComponent],
 })
 export class CustomFormModule {}

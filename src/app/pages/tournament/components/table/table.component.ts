@@ -39,10 +39,17 @@ export class TableComponent {
 
   constructor(private tableService: TableService) {}
 
-  @HostListener('tap')
-  mainAction() {
+  @HostListener('tap', ['$event.target.tagName'])
+  mainAction(tag) {
     if (this.displayFeatured || !this.table.isFeatured) {
-      this.tableService.changeStatus(this.table)
+      if (this.viewMode === 'large') {
+        if (tag === 'MAT-ICON' || tag === 'BUTTON') {
+          return
+        }
+        this.openTable.emit()
+      } else {
+        this.tableService.changeStatus(this.table)
+      }
     }
   }
 
@@ -53,7 +60,7 @@ export class TableComponent {
     }
   }
 
-  receivedPaper() {
+  receivedPaper(e: MouseEvent) {
     this.tableService.update(this.table, { stageHasPaper: true })
   }
 }

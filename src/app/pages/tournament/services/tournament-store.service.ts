@@ -287,7 +287,7 @@ export class TournamentStore {
               role: 'zonelead',
               color: 'primary',
             },
-            { label: 'Assign judge', key: 'assign', role: 'zonelead', color: 'primary' }
+            { label: 'Assign judge', key: 'assign-judge', role: 'zonelead', color: 'primary' }
           )
         }
         if (roles.includes('tournamentAdmin')) {

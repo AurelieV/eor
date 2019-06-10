@@ -1,0 +1,29 @@
+<div class="panel-title">Assign judge</div>
+<form #form="ngForm" (submit)="submit()">
+  <div class="table">
+    <mat-form-field>
+      <input
+        matInput
+        placeholder="Table"
+        required
+        (ngModelChange)="onTableNumberChange($event)"
+        [(ngModel)]="tableNumber"
+        name="tableNumber"
+        type="number"
+        min="0"
+        #tableNumberInput
+      />
+    </mat-form-field>
+    <ng-container *ngIf="(currentTable$ | async) as currentTable; else noTable">
+      <div class="table-info" *ngIf="!(isLoading$ | async); else searching">
+        Current: {{ currentTable.assignated || 'None' }}
+      </div>
+    </ng-container>
+    <ng-template #noTable>No table</ng-template>
+    <ng-template #searching>Searching...</ng-template>
+  </div>
+  <select-user name="judge" #judgeInput [(ngModel)]="judge"></select-user>
+  <button type="submit" mat-flat-button color="primary" [disabled]="!tableNumber || !judge">
+    Assign
+  </button>
+</form>

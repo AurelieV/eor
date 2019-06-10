@@ -113,8 +113,18 @@
 <ng-template #addTime
   ><add-time-panel [table]="selectedTable" (timeAdded)="onTimeAdded()"></add-time-panel
 ></ng-template>
+<ng-template #assignJudge
+  ><assign-judge-panel
+    [table]="selectedTable"
+    (judgeAssignated)="onJudgeAssignated()"
+  ></assign-judge-panel
+></ng-template>
 <ng-template #table
-  ><table-panel [table]="selectedTable" (addTime)="onAddTime(selectedTable)"></table-panel
+  ><table-panel
+    [table]="selectedTable"
+    (addTime)="onAddTime(selectedTable)"
+    (assignJudge)="onAssignJudge(selectedTable)"
+  ></table-panel
 ></ng-template>
 <ng-template #importPairings
   ><import-pairings-panel

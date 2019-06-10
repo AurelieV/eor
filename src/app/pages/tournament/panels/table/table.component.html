@@ -25,6 +25,7 @@
       <div class="label">{{ t.time || 0 }}min</div>
     </button>
   </div>
+  <div class="judge" *ngIf="t.assignated">Covered by {{ t.assignated }}</div>
   <ng-container>
     <div class="panel-subtitle">Virtual Paper Slip</div>
     <div class="slip">
@@ -51,8 +52,9 @@
   </ng-container>
   <div class="panel-subtitle">Actions</div>
   <div class="actions">
-    <button mat-flat-button color="primary" disabled>Sit at table (comming soon)</button>
+    <button mat-flat-button color="primary" (click)="sit()">Sit at table</button>
     <button mat-flat-button color="primary" disabled>Enter result (comming soon)</button>
+    <button mat-flat-button color="primary" (click)="assign()">Assign judge</button>
   </div>
   <ng-container *ngIf="(logs$ | async) as logs">
     <ng-container *ngIf="logs.length">
