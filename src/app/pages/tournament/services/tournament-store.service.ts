@@ -377,7 +377,7 @@ export class TournamentStore {
     await Promise.all(
       zones
         .map((zone, zoneIndex) => this.recreateZone(zone, zoneIndex, key))
-        .concat(this.resetLogs(), this.setIsOutstandings(false))
+        .concat(this.resetLogs(), this.setIsOutstandings(false), this.setClock(null))
     )
   }
 

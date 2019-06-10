@@ -31,6 +31,7 @@ export class AdministrationService {
       await this.db.object(`zones/${key}`).remove()
       await this.db.object(`zoneTables/${key}`).remove()
       await this.db.object(`log/${key}`).remove()
+      await this.db.object(`clock/${key}`).remove()
       await Promise.all(
         zones.map((zone, zoneIndex) => this.createZone(zone, zoneIndex, key, settings.isTeam))
       )
