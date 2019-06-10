@@ -28,7 +28,7 @@ export class TablePanelComponent {
     if (table.status === status) {
       return
     }
-    this.tableService.update(table, { status })
+    this.tableService.update(table, { status, updateStatusTime: moment.utc().valueOf() })
   }
 
   ngOnInit() {

@@ -41,9 +41,21 @@
     height: 60px;
   }
   &.large {
-    flex-direction: row;
-    .info {
-      flex: 1 1 auto;
+    justify-content: initial;
+    align-items: initial;
+    .header {
+      display: flex;
+      align-items: center;
+      .number {
+        flex: 1 0 auto;
+        font-weight: bold;
+        font-size: 16px;
+      }
+    }
+    .content {
+      display: flex;
+      align-items: center;
+      flex: 1 0 auto;
       @include responsive(
         'padding',
         (
@@ -51,19 +63,15 @@
           lg: 1rem,
         )
       );
-      @include responsive(
-        'align-self',
-        (
-          xs: center,
-          lg: flex-start,
-        )
-      );
+    }
+    .info {
+      flex: 1 1 auto;
       > *:not(:first-child) {
         margin-top: 5px;
       }
     }
     .actions {
-      padding: 1rem;
+      margin-left: 1rem;
     }
     @include responsive(
       'width',
@@ -88,12 +96,5 @@
       )
     );
     margin-bottom: 1rem;
-    @include responsive(
-      'height',
-      (
-        xs: 130px,
-        lg: 100px,
-      )
-    );
   }
 }

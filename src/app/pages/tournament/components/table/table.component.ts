@@ -7,8 +7,10 @@ import {
   HostListener,
   Input,
   Output,
+  SimpleChanges,
 } from '@angular/core'
 import { TableService } from '@pages/tournament/services/table.service'
+import * as moment from 'moment'
 
 @Component({
   selector: 'table',
@@ -23,6 +25,10 @@ export class TableComponent {
   @Input() isOutstandings: boolean
   @Input() displayFeatured: boolean = false
   @Output() openTable = new EventEmitter()
+
+  updateTimeout: number
+
+  @HostBinding('class.warn') warn: boolean
 
   @HostBinding('class')
   get status() {
@@ -62,5 +68,47 @@ export class TableComponent {
 
   receivedPaper(e: MouseEvent) {
     this.tableService.update(this.table, { stageHasPaper: true })
+  }
+
+  checkWarn() {
+    this.warn =
+      this.table &&
+      this.isOutstandings &&
+      !this.table.stageHasPaper &&
+      this.table.status === 'done' &&
+      moment.utc().diff(moment.utc(this.table.updateStatusTime), 'minute') > 3
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    this.checkWarn()
+    if (this.warn) {
+      this.cancelTimeout()
+    }
+    if (changes.table) {
+      const current = changes.table.currentValue
+      const previous = changes.table.previousValue
+      if ((!previous || current.updateStatusTime !== previous.updateStatusTime) && !this.warn) {
+        this.setTimeout()
+      }
+    }
+  }
+
+  setTimeout() {
+    const timeToWait = 20 * 1000
+    setTimeout(() => {
+      this.checkWarn()
+      if (!this.warn) this.setTimeout()
+    }, timeToWait)
+  }
+
+  cancelTimeout() {
+    if (this.updateTimeout) {
+      clearTimeout(this.updateTimeout)
+      this.updateTimeout = null
+    }
+  }
+
+  ngOnDestroy() {
+    this.cancelTimeout()
   }
 }

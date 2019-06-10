@@ -4,24 +4,32 @@
 </ng-container>
 
 <ng-container *ngIf="viewMode === 'large'">
-  <div class="info">
-    <div class="number">{{ table.id }}</div>
-    <div class="players" *ngIf="table.player1 && table.player2">
-      {{ table.player1.name }} vs {{ table.player2.name }}
-    </div>
-    <div class="time" *ngIf="table.time">{{ table.time }}min</div>
-    <div class="judge" *ngIf="table.assignated">Covered by {{ table.assignated }}</div>
-    <div class="score" *ngIf="table.result">Result: {{ table.result | result }}</div>
+  <div class="header">
+    <div class="number">Table {{ table.id }}</div>
+    <mat-icon class="warning" *ngIf="warn">warning</mat-icon>
   </div>
+  <div class="content">
+    <div class="info">
+      <div class="players" *ngIf="table.player1 && table.player2">
+        {{ table.player1.name }} vs {{ table.player2.name }}
+      </div>
+      <div class="sinceTime" *ngIf="table.status === 'done'">
+        {{ table.updateStatusTime | ago }}
+      </div>
+      <div class="time" *ngIf="table.time">{{ table.time }}min</div>
+      <div class="judge" *ngIf="table.assignated">Covered by {{ table.assignated }}</div>
+      <div class="score" *ngIf="table.result">Result: {{ table.result | result }}</div>
+    </div>
 
-  <div class="actions">
-    <button
-      *ngIf="!table.stageHasPaper && isOutstandings"
-      mat-mini-fab
-      color="primary"
-      (click)="receivedPaper($event)"
-    >
-      <mat-icon>desktop_windows</mat-icon>
-    </button>
+    <div class="actions">
+      <button
+        *ngIf="!table.stageHasPaper && isOutstandings"
+        mat-mini-fab
+        color="primary"
+        (click)="receivedPaper($event)"
+      >
+        <mat-icon>desktop_windows</mat-icon>
+      </button>
+    </div>
   </div>
 </ng-container>
