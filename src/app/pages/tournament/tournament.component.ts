@@ -38,7 +38,7 @@ export class TournamentComponent implements OnInit, OnDestroy, AfterViewInit {
   selectedTable: Table = null
 
   isRestarting: boolean = false
-  viewMode: ViewMode = 'large'
+  viewMode: ViewMode = 'small'
   markAllEmptyStatus: TableStatus
 
   @ViewChild('header')
