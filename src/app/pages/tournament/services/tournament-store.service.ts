@@ -1,4 +1,5 @@
 import { Action, Filters, SortBy, Table, Tournament, TournamentStaff, ZoneInfo } from '@/app/models'
+import { flat } from '@/app/utils/flat'
 import { createEmptyTable } from '@/app/utils/helpers'
 import { Injectable } from '@angular/core'
 import { AngularFireDatabase } from '@angular/fire/database'
@@ -148,7 +149,7 @@ export class TournamentStore {
                 name: zone.name,
                 sections: zone.sections,
                 ...this.getTablesInfo(
-                  sections.map((sections) => Object.values(sections)).flat(),
+                  flat(sections.map((sections) => Object.values(sections))),
                   isOutstandings
                 ),
               }
@@ -439,8 +440,8 @@ export class TournamentStore {
 
   private getFeatures(zones: Zone[], key: string): Observable<Table[]> {
     return combine(
-      zones.flatMap((zone, zoneIndex) => this.getFeaturesFromZone(zone, zoneIndex, key))
-    ).pipe(map((tables) => tables.flat()))
+      flat(zones.map((zone, zoneIndex) => this.getFeaturesFromZone(zone, zoneIndex, key)))
+    ).pipe(map((tables) => flat(tables)))
   }
 
   private getTablesInfo(tables: Table[], isOutstandings) {
