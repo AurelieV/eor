@@ -14,9 +14,11 @@
         {{ table.player1.name }} vs {{ table.player2.name }}
       </div>
       <div class="sinceTime" *ngIf="table.status === 'done'">
-        {{ table.updateStatusTime | ago }}
+        Empty {{ table.updateStatusTime | ago }}
       </div>
-      <div class="time" *ngIf="table.time">{{ table.time }}min</div>
+      <div class="time" *ngIf="table.time && table.status !== 'done'">
+        Extra time: {{ table.time }}min
+      </div>
       <div class="judge" *ngIf="table.assignated">Covered by {{ table.assignated }}</div>
       <div class="score" *ngIf="table.result">Result: {{ table.result | result }}</div>
     </div>

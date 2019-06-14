@@ -73,7 +73,7 @@ export class TableComponent {
   ngOnInit() {
     this.canUpdateReceived$ = this.store.roles$.pipe(
       map((roles) => {
-        return roles.includes('admin') || roles.includes('tournamentAdmin')
+        return roles.includes('tournamentAdmin') || roles.includes('scorekeeper')
       })
     )
   }

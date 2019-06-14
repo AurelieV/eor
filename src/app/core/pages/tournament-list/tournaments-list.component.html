@@ -24,7 +24,7 @@
 </mat-nav-list>
 <div class="actions">
   <a
-    *ngIf="canCreateTournament$"
+    *ngIf="(canCreateTournament$ | async)"
     mat-flat-button
     color="primary"
     [routerLink]="['/administration/create']"

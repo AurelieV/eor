@@ -27,7 +27,7 @@ export class TournamentStore {
   zones: Zone[]
   zonesTables$: Observable<ZonesTables>
   featureTables$: Observable<Table[]>
-  tournament$: Observable<Tournament>
+  tournament$: Observable<Tournament | { type: string; key: string }>
   clock$: Observable<moment.Duration>
   roles$: Observable<Array<String>>
   staff$: Observable<TournamentStaff>
@@ -57,7 +57,16 @@ export class TournamentStore {
     private authentication: AuthenticationService
   ) {
     this.tournament$ = this.key$.pipe(
-      switchMap((key) => this.db.object<Tournament>(`tournaments/${key}`).valueChanges())
+      switchMap((key) =>
+        this.db
+          .object<Tournament>(`tournaments/${key}`)
+          .valueChanges()
+          .pipe(
+            map((tournament) => {
+              return tournament || { type: 'unknown', key }
+            })
+          )
+      )
     )
     this.isOutstandings$ = this.key$.pipe(
       switchMap((key) => this.db.object<boolean>(`isOutstandings/${key}`).valueChanges())
@@ -241,7 +250,10 @@ export class TournamentStore {
       })
     )
     this.actions$ = this.roles$.pipe(
-      combineLatest(this.isOutstandings$, this.tournament$.pipe(map((t) => t.software))),
+      combineLatest(
+        this.isOutstandings$,
+        this.tournament$.pipe(map((t: Tournament) => t.software))
+      ),
       map(([roles, isOutstandings, software]) => {
         let actions: Action[] = [
           { label: 'Add time', key: 'add-time', role: 'all', color: 'primary' },

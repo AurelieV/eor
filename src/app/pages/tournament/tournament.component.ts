@@ -1,14 +1,25 @@
-import { Action, Filters, SortBy, Table, TableStatus, Tournament, TournamentStaff, ViewMode, ZoneInfo } from '@/app/models';
-import { BreakpointObserver, Breakpoints, BreakpointState } from '@angular/cdk/layout';
-import { CdkScrollable, ScrollDispatcher } from '@angular/cdk/scrolling';
-import { AfterViewInit, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { HeaderService } from '@core/services/header.service';
-import { SidePanelService } from '@core/services/side-panel.service';
-import { Zone } from '@pages/administration/administration.models';
-import { Observable, Subscription } from 'rxjs';
-import { debounceTime, map } from 'rxjs/operators';
-import { TournamentStore, ZonesTables } from './services/tournament-store.service';
+import {
+  Action,
+  Filters,
+  SortBy,
+  Table,
+  TableStatus,
+  Tournament,
+  TournamentStaff,
+  ViewMode,
+  ZoneInfo,
+} from '@/app/models'
+import { BreakpointObserver, Breakpoints, BreakpointState } from '@angular/cdk/layout'
+import { CdkScrollable, ScrollDispatcher } from '@angular/cdk/scrolling'
+import { AfterViewInit, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core'
+import { ActivatedRoute, Router } from '@angular/router'
+import { HeaderService } from '@core/services/header.service'
+import { NotificationService } from '@core/services/notification.service'
+import { SidePanelService } from '@core/services/side-panel.service'
+import { Zone } from '@pages/administration/administration.models'
+import { Observable, Subscription } from 'rxjs'
+import { debounceTime, filter, map } from 'rxjs/operators'
+import { TournamentStore, ZonesTables } from './services/tournament-store.service'
 
 @Component({
   selector: 'tournament',
@@ -81,7 +92,9 @@ export class TournamentComponent implements OnInit, OnDestroy, AfterViewInit {
     private headerService: HeaderService,
     private sidePanel: SidePanelService,
     private scroller: ScrollDispatcher,
-    public breakpointObserver: BreakpointObserver
+    public breakpointObserver: BreakpointObserver,
+    private router: Router,
+    private notifier: NotificationService
   ) {}
 
   ngOnInit() {
@@ -95,7 +108,9 @@ export class TournamentComponent implements OnInit, OnDestroy, AfterViewInit {
     )
     this.zones$ = this.store.zones$
     this.zoneTables$ = this.store.zonesTables$
-    this.tournament$ = this.store.tournament$
+    this.tournament$ = this.store.tournament$.pipe(
+      filter((t: any) => t.type !== 'unknwon')
+    ) as Observable<Tournament>
     this.zoneInfos$ = this.store.zoneInfos$
     this.allInfo$ = this.store.allInfo$
     this.filters$ = this.store.filters$
@@ -103,7 +118,7 @@ export class TournamentComponent implements OnInit, OnDestroy, AfterViewInit {
     this.sortedTables$ = this.store.sortedTables$
     this.sortBy$ = this.store.sortBy$
     this.isOutstandings$ = this.store.isOutstandings$
-    this.software$ = this.store.tournament$.pipe(map((t) => t.software))
+    this.software$ = this.tournament$.pipe(map((t) => t.software))
     this.staff$ = this.store.staff$
     this.featureInfo$ = this.store.featureInfos$
     this.featureTables$ = this.store.featureTables$
@@ -146,6 +161,14 @@ export class TournamentComponent implements OnInit, OnDestroy, AfterViewInit {
           }
         })
       )
+    )
+    this.subscriptions.push(
+      this.store.tournament$.pipe(filter((t: any) => t.type === 'unknown')).subscribe(({ key }) => {
+        if (this.store.key === key) {
+          this.router.navigate(['/'])
+          this.notifier.notify('Tournament does not exist anymore. Redirect to homepage')
+        }
+      })
     )
   }
 
