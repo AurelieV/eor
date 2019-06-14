@@ -29,6 +29,8 @@ export class TournamentService {
                 admins: [],
                 scorekeepers: [],
                 zoneLeaders: [],
+                floorJudges: [],
+                tmpFloorJudges: [],
                 ...(staff[tournament.key] || {}),
               })
           )
