@@ -194,6 +194,19 @@
       </button>
     </div>
     <select-users #adminsSelecter formControlName="admins"></select-users>
+    <div class="subheader">
+      <h2 class="title">Swipper floor judges</h2>
+      <button
+        mat-icon-button
+        color="accent"
+        (click)="
+          displayHelp('They will be able to change color of the tables during all the tournament')
+        "
+      >
+        <mat-icon>help</mat-icon>
+      </button>
+    </div>
+    <select-users #adminsSelecter formControlName="floorJudges"></select-users>
   </form>
   <div class="actions">
     <button type="button" mat-stroked-button color="primary" (click)="previous()">Previous</button>

@@ -2,9 +2,10 @@ import { Result, Table, TableStatus, TimeLog } from '@/app/models'
 import { Component, EventEmitter, Input, Output } from '@angular/core'
 import { AuthenticationService } from '@core/services/authentication.service'
 import { TableService } from '@pages/tournament/services/table.service'
+import { TournamentStore } from '@pages/tournament/services/tournament-store.service'
 import * as moment from 'moment'
-import { Observable } from 'rxjs'
-import { switchMap, take } from 'rxjs/operators'
+import { Observable, Subscription } from 'rxjs'
+import { map, switchMap, take } from 'rxjs/operators'
 
 @Component({
   selector: 'table-panel',
@@ -21,8 +22,16 @@ export class TablePanelComponent {
   isLoading: boolean = false
   isEditingSlip: boolean = false
   result: Result
+  isLead$: Observable<boolean>
 
-  constructor(private tableService: TableService, private authent: AuthenticationService) {}
+  canUpdate: boolean
+  private subscriptions: Subscription[] = []
+
+  constructor(
+    private tableService: TableService,
+    private authent: AuthenticationService,
+    private store: TournamentStore
+  ) {}
 
   updateStatus(table, status) {
     if (table.status === status) {
@@ -36,6 +45,17 @@ export class TablePanelComponent {
     this.logs$ = this.table$.pipe(
       take(1),
       switchMap((table) => this.tableService.getLogs(table))
+    )
+    this.subscriptions.push(
+      this.store.roles$.subscribe((roles) => {
+        this.canUpdate =
+          ['scorekeeper', 'tournamentAdmin', 'zoneLeader', 'floorJudge', 'tmpFloorJudge'].findIndex(
+            (role) => roles.indexOf(role) > -1
+          ) > -1
+      })
+    )
+    this.isLead$ = this.store.roles$.pipe(
+      map((roles) => roles.indexOf('zoneLeader') > -1 || roles.indexOf('tournamentAdmin') > -1)
     )
   }
 
@@ -99,5 +119,9 @@ export class TablePanelComponent {
         updateStatusTime: moment.utc().valueOf(),
       })
       .then(() => (this.isLoading = false))
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach((s) => s.unsubscribe())
   }
 }

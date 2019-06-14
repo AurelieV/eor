@@ -4,7 +4,6 @@ import { FormControl, FormGroup } from '@angular/forms'
 import { MatDialog } from '@angular/material'
 import { NotificationService } from '@core/services/notification.service'
 import { TournamentStore } from '@pages/tournament/services/tournament-store.service'
-import { SelectUsersComponent } from '@shared/custom-form/select-users/select-users.component'
 
 @Component({
   selector: 'change-roles-panel',
@@ -13,12 +12,10 @@ import { SelectUsersComponent } from '@shared/custom-form/select-users/select-us
 })
 export class ChangeRolesPanelComponent {
   @Input() staff: TournamentStaff
+  @Input() displayOnlyFloor: boolean
   @Output() rolesChanged = new EventEmitter()
 
   @ViewChild('help') helpTemplateRef: TemplateRef<any>
-  @ViewChild('scorekeepersSelecter') scorekeepersSelecterComp: SelectUsersComponent
-  @ViewChild('zoneLeadersSelecter') zoneLeadersSelecterComp: SelectUsersComponent
-  @ViewChild('adminsSelecter') adminsSelecterComp: SelectUsersComponent
 
   helpText: string
 
@@ -26,6 +23,8 @@ export class ChangeRolesPanelComponent {
     scorekeepers: new FormControl([]),
     zoneLeaders: new FormControl([]),
     admins: new FormControl([]),
+    floorJudges: new FormControl([]),
+    tmpFloorJudges: new FormControl([]),
   })
 
   constructor(
@@ -48,7 +47,14 @@ export class ChangeRolesPanelComponent {
 
   ngOnChanges() {
     if (this.staff) {
-      this.form.setValue({ admins: [], scorekeepers: [], zoneLeaders: [], ...this.staff })
+      this.form.setValue({
+        admins: [],
+        scorekeepers: [],
+        zoneLeaders: [],
+        floorJudges: [],
+        tmpFloorJudges: [],
+        ...this.staff,
+      })
     }
   }
 }

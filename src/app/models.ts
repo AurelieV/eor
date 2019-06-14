@@ -61,6 +61,8 @@ export interface TournamentStaff {
   admins: User[]
   scorekeepers: User[]
   zoneLeaders: User[]
+  floorJudges: User[]
+  tmpFloorJudges: User[]
 }
 
 export interface User {

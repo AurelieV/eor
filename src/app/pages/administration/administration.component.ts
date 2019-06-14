@@ -1,16 +1,16 @@
-import { animate, style, transition, trigger } from '@angular/animations';
-import { AfterViewInit, Component, OnDestroy, TemplateRef, ViewChild } from '@angular/core';
-import { AbstractControl, FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatDialog } from '@angular/material';
-import { ActivatedRoute, Router } from '@angular/router';
-import { HeaderService } from '@core/services/header.service';
-import { NotificationService } from '@core/services/notification.service';
-import { SidePanelService } from '@core/services/side-panel.service';
-import { SelectUsersComponent } from '@shared/custom-form/select-users/select-users.component';
-import { Subscription } from 'rxjs';
-import { environment } from 'src/environments/environment';
-import { Section } from './administration.models';
-import { AdministrationService } from './services/administration.service';
+import { animate, style, transition, trigger } from '@angular/animations'
+import { AfterViewInit, Component, OnDestroy, TemplateRef, ViewChild } from '@angular/core'
+import { AbstractControl, FormArray, FormControl, FormGroup, Validators } from '@angular/forms'
+import { MatDialog } from '@angular/material'
+import { ActivatedRoute, Router } from '@angular/router'
+import { HeaderService } from '@core/services/header.service'
+import { NotificationService } from '@core/services/notification.service'
+import { SidePanelService } from '@core/services/side-panel.service'
+import { SelectUsersComponent } from '@shared/custom-form/select-users/select-users.component'
+import { Subscription } from 'rxjs'
+import { environment } from 'src/environments/environment'
+import { Section } from './administration.models'
+import { AdministrationService } from './services/administration.service'
 
 enum Step {
   Settings,
@@ -87,6 +87,7 @@ export class AdministrationComponent implements AfterViewInit, OnDestroy {
         scorekeepers: new FormControl([]),
         zoneLeaders: new FormControl([]),
         admins: new FormControl([]),
+        floorJudges: new FormControl([]),
       })
     )
     this.addZone()
@@ -104,7 +105,8 @@ export class AdministrationComponent implements AfterViewInit, OnDestroy {
                 scorekeepers: [],
                 zoneLeaders: [],
                 admins: [],
-                ...staff
+                floorJudges: [],
+                ...staff,
               })
               this.forms.set(
                 Step.Zones,

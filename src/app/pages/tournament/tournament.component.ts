@@ -82,6 +82,8 @@ export class TournamentComponent implements OnInit, OnDestroy, AfterViewInit {
   private setFeatureTemplateRef: TemplateRef<any>
   @ViewChild('assignJudge')
   private assignJudgeTemplateRef: TemplateRef<any>
+  @ViewChild('nominateFloor')
+  private nominateFloorTemplateRef: TemplateRef<any>
 
   @ViewChild(CdkScrollable)
   private zoneInfoContainer: CdkScrollable
@@ -270,6 +272,9 @@ export class TournamentComponent implements OnInit, OnDestroy, AfterViewInit {
         break
       case 'assign-judge':
         this.sidePanel.open(this.assignJudgeTemplateRef)
+        break
+      case 'nominate-floor':
+        this.sidePanel.open(this.nominateFloorTemplateRef, this.actionsTemplateRef)
         break
 
       default:

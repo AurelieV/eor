@@ -237,6 +237,10 @@ export class TournamentStore {
         const isAdmin = staff.admins && staff.admins.findIndex(({ id }) => id === userId) > -1
         const isScorekeeper =
           staff.scorekeepers && staff.scorekeepers.findIndex(({ id }) => id === userId) > -1
+        const isFloorJudge =
+          staff.floorJudges && staff.floorJudges.findIndex(({ id }) => id === userId) > -1
+        const isTmpFloorJudge =
+          staff.tmpFloorJudges && staff.tmpFloorJudges.findIndex(({ id }) => id === userId) > -1
         if (isLeader) {
           allRoles.push('zoneLeader')
         }
@@ -245,6 +249,12 @@ export class TournamentStore {
         }
         if (isScorekeeper) {
           allRoles.push('scorekeeper')
+        }
+        if (isFloorJudge) {
+          allRoles.push('floorJudge')
+        }
+        if (isTmpFloorJudge) {
+          allRoles.push('tmpFloorJudge')
         }
         return allRoles
       })
@@ -390,7 +400,12 @@ export class TournamentStore {
     await Promise.all(
       zones
         .map((zone, zoneIndex) => this.recreateZone(zone, zoneIndex, key))
-        .concat(this.resetLogs(), this.setIsOutstandings(false), this.setClock(null))
+        .concat(
+          this.resetLogs(),
+          this.setIsOutstandings(false),
+          this.setClock(null),
+          this.db.object(`staff/${key}/tmpFloorJudges`).set(null)
+        )
     )
   }
 

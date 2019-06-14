@@ -3,16 +3,30 @@
     <div class="panel-title">Table {{ t.id }}</div>
     <div class="panel-subtitle">Status</div>
     <div class="status-block">
-      <button class="status" [matMenuTriggerFor]="statusMenu">
-        <div [class]="'block ' + t.status"></div>
-        <div class="label">{{ t.status }}</div>
-      </button>
-      <mat-menu #statusMenu="matMenu">
-        <button class="status" mat-menu-item *ngFor="let s of status" (click)="updateStatus(t, s)">
-          <div [class]="'block ' + s"></div>
-          <div class="label">{{ s }}</div>
+      <ng-container *ngIf="canUpdate">
+        <button class="status" [matMenuTriggerFor]="statusMenu">
+          <div [class]="'block ' + t.status"></div>
+          <div class="label">{{ t.status }}</div>
         </button>
-      </mat-menu>
+        <mat-menu #statusMenu="matMenu">
+          <button
+            class="status"
+            mat-menu-item
+            *ngFor="let s of status"
+            (click)="updateStatus(t, s)"
+          >
+            <div [class]="'block ' + s"></div>
+            <div class="label">{{ s }}</div>
+          </button>
+        </mat-menu>
+      </ng-container>
+      <ng-container *ngIf="!canUpdate">
+        <div class="status">
+          <div [class]="'block ' + t.status"></div>
+          <div class="label">{{ t.status }}</div>
+        </div>
+      </ng-container>
+
       <div class="status" *ngIf="!t.stageHasPaper">
         <mat-icon>desktop_access_disabled</mat-icon>
         <div class="label">Paper not on stage</div>
@@ -59,7 +73,13 @@
       <button mat-flat-button color="primary" [disabled]="isLoading" (click)="enterResult()">
         Enter result
       </button>
-      <button mat-flat-button color="primary" [disabled]="isLoading" (click)="assign()">
+      <button
+        mat-flat-button
+        color="primary"
+        [disabled]="isLoading"
+        (click)="assign()"
+        *ngIf="(isLead$ | async)"
+      >
         Assign judge
       </button>
     </div>

@@ -12,7 +12,7 @@ import {
 import { TableService } from '@pages/tournament/services/table.service'
 import { TournamentStore } from '@pages/tournament/services/tournament-store.service'
 import * as moment from 'moment'
-import { Observable } from 'rxjs'
+import { Observable, Subscription } from 'rxjs'
 import { map } from 'rxjs/operators'
 
 @Component({
@@ -31,6 +31,9 @@ export class TableComponent {
 
   updateTimeout: number
   canUpdateReceived$: Observable<boolean>
+  canUpdate: boolean
+
+  private subscriptions: Subscription[] = []
 
   @HostBinding('class.warn') warn: boolean
 
@@ -47,18 +50,29 @@ export class TableComponent {
     return status
   }
 
-  constructor(private tableService: TableService, private store: TournamentStore) {}
+  constructor(private tableService: TableService, private store: TournamentStore) {
+    this.subscriptions.push(
+      this.store.roles$.subscribe((roles) => {
+        this.canUpdate =
+          ['scorekeeper', 'tournamentAdmin', 'zoneLeader', 'floorJudge', 'tmpFloorJudge'].findIndex(
+            (role) => roles.indexOf(role) > -1
+          ) > -1
+      })
+    )
+  }
 
   @HostListener('tap', ['$event.target.tagName'])
   mainAction(tag) {
     if (this.displayFeatured || !this.table.isFeatured) {
-      if (this.viewMode === 'large') {
+      if (this.viewMode === 'large' || !this.canUpdate) {
         if (tag === 'MAT-ICON' || tag === 'BUTTON') {
           return
         }
         this.openTable.emit()
       } else {
-        this.tableService.changeStatus(this.table)
+        if (this.canUpdate) {
+          this.tableService.changeStatus(this.table)
+        }
       }
     }
   }
@@ -122,5 +136,6 @@ export class TableComponent {
 
   ngOnDestroy() {
     this.cancelTimeout()
+    this.subscriptions.forEach((s) => s.unsubscribe())
   }
 }

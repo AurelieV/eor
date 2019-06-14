@@ -159,6 +159,13 @@
     [staff]="staff$ | async"
   ></change-roles-panel
 ></ng-template>
+<ng-template #nominateFloor
+  ><change-roles-panel
+    (rolesChanged)="onRolesChanged()"
+    [staff]="staff$ | async"
+    [displayOnlyFloor]="true"
+  ></change-roles-panel
+></ng-template>
 <ng-template #setFeature
   ><set-feature-panel [tables]="featureTables$ | async"></set-feature-panel
 ></ng-template>
