@@ -1,88 +1,113 @@
-<div class="filters">
-  <div class="zone-infos" *ngIf="(zoneInfos$ | async) as zoneInfos" cdk-scrollable>
-    <ng-container *ngIf="(allInfo$ | async) as allInfo">
-      <zone-info
-        [info]="allInfo"
-        [selected]="zoneInfoSelected === 'all'"
-        class="zone-info"
-        (click)="onZoneInfoClick('all', 0)"
-      ></zone-info>
-    </ng-container>
-    <ng-container *ngIf="zoneInfos.length > 1">
-      <ng-container
-        *ngFor="let info$ of zoneInfos; let arrayIndex = index; trackBy: trackbyIndexFn"
-      >
-        <ng-container *ngIf="(info$ | async) as info">
-          <zone-info
-            [info]="info"
-            [selected]="info.id === zoneInfoSelected"
-            class="zone-info"
-            (click)="onZoneInfoClick(info.id, arrayIndex + 1)"
-          ></zone-info>
+<ng-container *ngIf="viewMode !== 'actions'">
+  <div class="filters">
+    <div class="zone-infos" *ngIf="(zoneInfos$ | async) as zoneInfos" cdk-scrollable>
+      <ng-container *ngIf="(allInfo$ | async) as allInfo">
+        <zone-info
+          [info]="allInfo"
+          [selected]="zoneInfoSelected === 'all'"
+          class="zone-info"
+          (click)="onZoneInfoClick('all', 0)"
+        ></zone-info>
+      </ng-container>
+      <ng-container *ngIf="zoneInfos.length > 1">
+        <ng-container
+          *ngFor="let info$ of zoneInfos; let arrayIndex = index; trackBy: trackbyIndexFn"
+        >
+          <ng-container *ngIf="(info$ | async) as info">
+            <zone-info
+              [info]="info"
+              [selected]="info.id === zoneInfoSelected"
+              class="zone-info"
+              (click)="onZoneInfoClick(info.id, arrayIndex + 1)"
+            ></zone-info>
+          </ng-container>
         </ng-container>
       </ng-container>
-    </ng-container>
-    <ng-container *ngIf="(featureInfo$ | async) as featureInfo">
-      <zone-info
-        [info]="featureInfo"
-        [selected]="zoneInfoSelected === 'feature'"
-        class="zone-info"
-        (click)="onZoneInfoClick('feature', zoneInfos.length + 1)"
-      ></zone-info>
-    </ng-container>
-    <div class="push"></div>
+      <ng-container *ngIf="(featureInfo$ | async) as featureInfo">
+        <zone-info
+          [info]="featureInfo"
+          [selected]="zoneInfoSelected === 'feature'"
+          class="zone-info"
+          (click)="onZoneInfoClick('feature', zoneInfos.length + 1)"
+        ></zone-info>
+      </ng-container>
+      <div class="push"></div>
+    </div>
   </div>
-</div>
 
-<ng-container *ngIf="(sortBy$ | async) === 'zone'; else sorted">
-  <div class="zones" *ngIf="(zoneTables$ | async) as zoneTables">
-    <ng-container *ngFor="let zone of (zones$ | async); let zoneIndex = index">
-      <div class="zone" *ngIf="zoneInfoSelected === 'all' || zoneInfoSelected === '' + zoneIndex">
-        <div class="zone_title">{{ zone.name }}</div>
-        <div class="section" *ngFor="let section of zone.sections; let sectionIndex = index">
+  <ng-container *ngIf="(sortBy$ | async) === 'zone'; else sorted">
+    <div class="zones" *ngIf="(zoneTables$ | async) as zoneTables">
+      <ng-container *ngFor="let zone of (zones$ | async); let zoneIndex = index">
+        <div class="zone" *ngIf="zoneInfoSelected === 'all' || zoneInfoSelected === '' + zoneIndex">
+          <div class="zone_title">{{ zone.name }}</div>
+          <div class="section" *ngFor="let section of zone.sections; let sectionIndex = index">
+            <table
+              [table]="table"
+              [viewMode]="viewMode"
+              [isOutstandings]="isOutstandings$ | async"
+              (openTable)="onOpenTable(table)"
+              class="table"
+              *ngFor="
+                let table of (zoneTables[zoneIndex][sectionIndex] | async);
+                trackBy: trackbyIdFn
+              "
+            ></table>
+          </div>
+        </div>
+      </ng-container>
+      <div class="zone" *ngIf="zoneInfoSelected === 'all' || zoneInfoSelected === 'feature'">
+        <div class="zone_title">Feature</div>
+        <div class="section">
           <table
             [table]="table"
             [viewMode]="viewMode"
             [isOutstandings]="isOutstandings$ | async"
+            [displayFeatured]="true"
             (openTable)="onOpenTable(table)"
             class="table"
-            *ngFor="
-              let table of (zoneTables[zoneIndex][sectionIndex] | async);
-              trackBy: trackbyIdFn
-            "
+            *ngFor="let table of (featureTables$ | async); trackBy: trackbyIdFn"
           ></table>
         </div>
       </div>
-    </ng-container>
-    <div class="zone" *ngIf="zoneInfoSelected === 'all' || zoneInfoSelected === 'feature'">
-      <div class="zone_title">Feature</div>
-      <div class="section">
-        <table
-          [table]="table"
-          [viewMode]="viewMode"
-          [isOutstandings]="isOutstandings$ | async"
-          [displayFeatured]="true"
-          (openTable)="onOpenTable(table)"
-          class="table"
-          *ngFor="let table of (featureTables$ | async); trackBy: trackbyIdFn"
-        ></table>
-      </div>
     </div>
-  </div>
+  </ng-container>
+
+  <ng-template #sorted>
+    <div class="all-tables">
+      <table
+        [table]="table"
+        [viewMode]="viewMode"
+        [isOutstandings]="isOutstandings$ | async"
+        (openTable)="onOpenTable(table)"
+        class="table"
+        *ngFor="let table of (sortedTables$ | async); trackBy: trackbyIdFn"
+      ></table>
+    </div>
+  </ng-template>
 </ng-container>
 
-<ng-template #sorted>
-  <div class="all-tables">
-    <table
-      [table]="table"
-      [viewMode]="viewMode"
-      [isOutstandings]="isOutstandings$ | async"
-      (openTable)="onOpenTable(table)"
-      class="table"
-      *ngFor="let table of (sortedTables$ | async); trackBy: trackbyIdFn"
-    ></table>
-  </div>
-</ng-template>
+<div class="actions-view" *ngIf="viewMode === 'actions'">
+  <div class="panel-title">{{ (tournament$ | async)?.name }}</div>
+  <button
+    *ngIf="!displayAddTimeOnActionsView"
+    mat-flat-button
+    color="primary"
+    class="big"
+    (click)="displayAddTimeOnActionsView = true"
+  >
+    Add time
+    <mat-icon>alarm</mat-icon>
+  </button>
+  <ng-container *ngIf="displayAddTimeOnActionsView">
+    <add-time-panel
+      class="add-time-panel"
+      (timeAdded)="displayAddTimeOnActionsView = false"
+    ></add-time-panel>
+    <button class="full" mat-flat-button (click)="displayAddTimeOnActionsView = false" color="warn">
+      Cancel
+    </button>
+  </ng-container>
+</div>
 
 <ng-template #header let-disabled="disabled">
   <tournament-header
@@ -92,6 +117,7 @@
     (editFilters)="onEditFilter()"
     (openActions)="onOpenActions()"
     (toggleViewMode)="toggleViewMode()"
+    (openChat)="onOpenChat()"
   ></tournament-header>
 </ng-template>
 <ng-template #menuHeader>{{ (tournament$ | async)?.name }}</ng-template>
@@ -169,3 +195,4 @@
 <ng-template #setFeature
   ><set-feature-panel [tables]="featureTables$ | async"></set-feature-panel
 ></ng-template>
+<ng-template #chat><chat-panel></chat-panel></ng-template>

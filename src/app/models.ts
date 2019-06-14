@@ -129,4 +129,4 @@ export interface TimeLog {
   addOrUpdate: 'add' | 'update'
 }
 
-export type ViewMode = 'small' | 'medium' | 'large'
+export type ViewMode = 'small' | 'actions' | 'large'

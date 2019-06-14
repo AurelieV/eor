@@ -1,5 +1,5 @@
 import { Result, Table, TableStatus, TimeLog } from '@/app/models'
-import { Component, EventEmitter, Input, Output } from '@angular/core'
+import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core'
 import { AuthenticationService } from '@core/services/authentication.service'
 import { TableService } from '@pages/tournament/services/table.service'
 import { TournamentStore } from '@pages/tournament/services/tournament-store.service'
@@ -12,7 +12,7 @@ import { map, switchMap, take } from 'rxjs/operators'
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.scss'],
 })
-export class TablePanelComponent {
+export class TablePanelComponent implements OnDestroy {
   @Input() table: Table
   @Output() addTime = new EventEmitter()
   @Output() assignJudge = new EventEmitter()

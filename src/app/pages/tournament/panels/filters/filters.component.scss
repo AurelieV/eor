@@ -6,19 +6,24 @@
   display: inline-flex;
   align-items: center;
   flex: 1 0 auto;
-  width: 50%;
+  width: 45%;
   box-sizing: border-box;
-  padding: 0.5rem 0;
+  padding: 0.5rem;
+  margin: 1%;
   &:not(.active) {
     opacity: 0.5;
+    border-style: dashed;
   }
   background: none;
-  border: none;
+  border: 1px solid black;
   outline: none;
 }
 
 .label {
   margin-left: 5px;
+  &.smaller {
+    font-size: smaller;
+  }
 }
 
 .status {

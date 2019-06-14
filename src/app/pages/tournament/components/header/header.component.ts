@@ -14,11 +14,13 @@ export class HeaderComponent {
   @Output() editFilters = new EventEmitter()
   @Output() openActions = new EventEmitter()
   @Output() toggleViewMode = new EventEmitter()
+  @Output() openChat = new EventEmitter()
   @Input() disabled: boolean
   @Input() viewMode: ViewMode
 
   clock$: Observable<string>
   canEditClock$: Observable<boolean>
+  isFiltersActive$: Observable<boolean>
 
   constructor(private store: TournamentStore) {}
 
@@ -36,6 +38,18 @@ export class HeaderComponent {
     this.canEditClock$ = this.store.roles$.pipe(
       map((roles) => {
         return roles.includes('admin') || roles.includes('tournamentAdmin')
+      })
+    )
+    this.isFiltersActive$ = this.store.filters$.pipe(
+      map((filters) => {
+        return (
+          !filters.displayCovered ||
+          !filters.displayDone ||
+          !filters.displayPlaying ||
+          !filters.displayUnknown ||
+          filters.onlyExtraTimed ||
+          filters.onlyStageHasNotPaper
+        )
       })
     )
   }
@@ -62,5 +76,9 @@ export class HeaderComponent {
     if (!this.disabled) {
       this.toggleViewMode.emit()
     }
+  }
+
+  onChatClick() {
+    this.openChat.emit()
   }
 }

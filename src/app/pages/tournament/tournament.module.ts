@@ -23,6 +23,7 @@ import { ActionsPanelComponent } from './panels/actions/actions.component'
 import { AddTimePanelComponent } from './panels/add-time/add-time.component'
 import { AssignJudgePanelComponent } from './panels/assign-judge/assign-judge.component'
 import { ChangeRolesPanelComponent } from './panels/change-roles/change-roles.component'
+import { ChatPanelComponent } from './panels/chat/chat.component'
 import { ClockPanelComponent } from './panels/clock/clock.component'
 import { FiltersPanelComponent } from './panels/filters/filters.component'
 import { GoNextPanelComponent } from './panels/go-next/go-next.component'
@@ -55,6 +56,7 @@ import { TournamentComponent } from './tournament.component'
     ChangeRolesPanelComponent,
     SetFeaturePanelComponent,
     AssignJudgePanelComponent,
+    ChatPanelComponent,
   ],
   imports: [
     // Angular

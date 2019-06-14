@@ -11,14 +11,22 @@ import {
 } from '@/app/models'
 import { BreakpointObserver, Breakpoints, BreakpointState } from '@angular/cdk/layout'
 import { CdkScrollable, ScrollDispatcher } from '@angular/cdk/scrolling'
-import { AfterViewInit, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core'
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  OnDestroy,
+  OnInit,
+  TemplateRef,
+  ViewChild,
+} from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { HeaderService } from '@core/services/header.service'
 import { NotificationService } from '@core/services/notification.service'
 import { SidePanelService } from '@core/services/side-panel.service'
 import { Zone } from '@pages/administration/administration.models'
 import { Observable, Subscription } from 'rxjs'
-import { debounceTime, filter, map } from 'rxjs/operators'
+import { debounceTime, filter, map, take } from 'rxjs/operators'
 import { TournamentStore, ZonesTables } from './services/tournament-store.service'
 
 @Component({
@@ -52,6 +60,8 @@ export class TournamentComponent implements OnInit, OnDestroy, AfterViewInit {
   viewMode: ViewMode = 'small'
   markAllEmptyStatus: TableStatus
 
+  displayAddTimeOnActionsView: boolean = false
+
   @ViewChild('header')
   private headerTemplateRef: TemplateRef<any>
   @ViewChild('menuHeader')
@@ -84,6 +94,8 @@ export class TournamentComponent implements OnInit, OnDestroy, AfterViewInit {
   private assignJudgeTemplateRef: TemplateRef<any>
   @ViewChild('nominateFloor')
   private nominateFloorTemplateRef: TemplateRef<any>
+  @ViewChild('chat')
+  private chatTemplateRef: TemplateRef<any>
 
   @ViewChild(CdkScrollable)
   private zoneInfoContainer: CdkScrollable
@@ -96,7 +108,8 @@ export class TournamentComponent implements OnInit, OnDestroy, AfterViewInit {
     private scroller: ScrollDispatcher,
     public breakpointObserver: BreakpointObserver,
     private router: Router,
-    private notifier: NotificationService
+    private notifier: NotificationService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
@@ -106,6 +119,18 @@ export class TournamentComponent implements OnInit, OnDestroy, AfterViewInit {
         if (key) {
           this.store.key = key
         }
+        this.store.roles$.pipe(take(1)).subscribe((roles) => {
+          if (
+            roles.indexOf('zoneLeader') > -1 ||
+            roles.indexOf('scorekeeper') > -1 ||
+            roles.indexOf('tournamentAdmin') > -1
+          ) {
+            this.viewMode = 'small'
+          } else {
+            this.viewMode = 'actions'
+          }
+          this.cdr.detectChanges()
+        })
       })
     )
     this.zones$ = this.store.zones$
@@ -194,6 +219,10 @@ export class TournamentComponent implements OnInit, OnDestroy, AfterViewInit {
   onOpenTable(table) {
     this.selectedTable = table
     this.sidePanel.open(this.tableTemplateRef)
+  }
+
+  onOpenChat() {
+    this.sidePanel.open(this.chatTemplateRef)
   }
 
   onAddTime() {
@@ -309,7 +338,10 @@ export class TournamentComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   toggleViewMode() {
-    this.viewMode = this.viewMode === 'small' ? 'large' : 'small'
+    const modes: ViewMode[] = ['small', 'large', 'actions']
+    const currentIndex = modes.findIndex((m) => m === this.viewMode)
+    this.viewMode = modes[(currentIndex + 1) % 3]
+    this.displayAddTimeOnActionsView = false
   }
 
   trackbyIdFn(index, val) {

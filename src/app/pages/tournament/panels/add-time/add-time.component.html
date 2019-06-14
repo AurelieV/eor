@@ -44,7 +44,7 @@
         mat-flat-button
         color="primary"
         (click)="submit(false)"
-        [disabled]="!(currentTable$ | async) || (isLoading$ | async)"
+        [disabled]="!(currentTable$ | async) || (isLoading$ | async) || !time"
       >
         <mat-icon>alarm</mat-icon>
         <span>Add</span>
@@ -55,7 +55,7 @@
         mat-flat-button
         color="accent"
         (click)="submit(true)"
-        [disabled]="!(currentTable$ | async) || (isLoading$ | async)"
+        [disabled]="!(currentTable$ | async) || (isLoading$ | async) || !time"
       >
         <mat-icon>alarm</mat-icon>
         <span>Set</span>

@@ -30,7 +30,7 @@ export class HeaderService {
   }
 
   resetAll() {
-    this.resetMenuTemplate()
+    this.resetTemplate()
     this.resetMenuTemplate()
   }
 }

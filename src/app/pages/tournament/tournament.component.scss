@@ -92,3 +92,34 @@ tournament-filters {
     );
   }
 }
+
+.actions-view {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem 1rem 1rem;
+  .big {
+    width: 200px;
+    height: 200px;
+    /deep/ .mat-button-wrapper {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      font-size: 26px;
+    }
+    mat-icon {
+      height: 150px;
+      width: 150px;
+      font-size: 150px;
+    }
+  }
+  .full {
+    width: 100%;
+    margin-top: 2em;
+  }
+  .add-time-panel {
+    align-self: stretch;
+  }
+}
