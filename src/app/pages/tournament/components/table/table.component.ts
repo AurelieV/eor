@@ -10,7 +10,10 @@ import {
   SimpleChanges,
 } from '@angular/core'
 import { TableService } from '@pages/tournament/services/table.service'
+import { TournamentStore } from '@pages/tournament/services/tournament-store.service'
 import * as moment from 'moment'
+import { Observable } from 'rxjs'
+import { map } from 'rxjs/operators'
 
 @Component({
   selector: 'table',
@@ -27,6 +30,7 @@ export class TableComponent {
   @Output() openTable = new EventEmitter()
 
   updateTimeout: number
+  canUpdateReceived$: Observable<boolean>
 
   @HostBinding('class.warn') warn: boolean
 
@@ -43,7 +47,7 @@ export class TableComponent {
     return status
   }
 
-  constructor(private tableService: TableService) {}
+  constructor(private tableService: TableService, private store: TournamentStore) {}
 
   @HostListener('tap', ['$event.target.tagName'])
   mainAction(tag) {
@@ -64,6 +68,14 @@ export class TableComponent {
     if (this.displayFeatured || !this.table.isFeatured) {
       this.openTable.emit()
     }
+  }
+
+  ngOnInit() {
+    this.canUpdateReceived$ = this.store.roles$.pipe(
+      map((roles) => {
+        return roles.includes('admin') || roles.includes('tournamentAdmin')
+      })
+    )
   }
 
   receivedPaper(e: MouseEvent) {

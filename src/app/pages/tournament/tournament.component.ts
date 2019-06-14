@@ -1,24 +1,14 @@
-import {
-  Action,
-  Filters,
-  SortBy,
-  Table,
-  TableStatus,
-  Tournament,
-  TournamentStaff,
-  ViewMode,
-  ZoneInfo,
-} from '@/app/models'
-import { BreakpointObserver, Breakpoints, BreakpointState } from '@angular/cdk/layout'
-import { CdkScrollable, ScrollDispatcher } from '@angular/cdk/scrolling'
-import { AfterViewInit, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core'
-import { ActivatedRoute } from '@angular/router'
-import { HeaderService } from '@core/services/header.service'
-import { SidePanelService } from '@core/services/side-panel.service'
-import { Zone } from '@pages/administration/administration.models'
-import { Observable, Subscription } from 'rxjs'
-import { debounceTime, map } from 'rxjs/operators'
-import { TournamentStore, ZonesTables } from './services/tournament-store.service'
+import { Action, Filters, SortBy, Table, TableStatus, Tournament, TournamentStaff, ViewMode, ZoneInfo } from '@/app/models';
+import { BreakpointObserver, Breakpoints, BreakpointState } from '@angular/cdk/layout';
+import { CdkScrollable, ScrollDispatcher } from '@angular/cdk/scrolling';
+import { AfterViewInit, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { HeaderService } from '@core/services/header.service';
+import { SidePanelService } from '@core/services/side-panel.service';
+import { Zone } from '@pages/administration/administration.models';
+import { Observable, Subscription } from 'rxjs';
+import { debounceTime, map } from 'rxjs/operators';
+import { TournamentStore, ZonesTables } from './services/tournament-store.service';
 
 @Component({
   selector: 'tournament',
