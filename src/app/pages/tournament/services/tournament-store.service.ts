@@ -4,6 +4,7 @@ import { createEmptyTable } from '@/app/utils/helpers'
 import { Injectable } from '@angular/core'
 import { AngularFireDatabase } from '@angular/fire/database'
 import { AuthenticationService } from '@core/services/authentication.service'
+import { NotificationService } from '@core/services/notification.service'
 import { WindowVisibility } from '@core/services/window-visibility.service'
 import { Zone } from '@pages/administration/administration.models'
 import * as moment from 'moment'
@@ -54,7 +55,8 @@ export class TournamentStore {
     private db: AngularFireDatabase,
     private windowVisibility: WindowVisibility,
     private auth: AuthenticationService,
-    private authentication: AuthenticationService
+    private authentication: AuthenticationService,
+    private notifier: NotificationService
   ) {
     this.tournament$ = this.key$.pipe(
       switchMap((key) =>
@@ -362,6 +364,19 @@ export class TournamentStore {
           filterFn = (table) => fn(table) && table.zoneIndex === zoneInfoSelected
         }
         return tables.filter(filterFn).sort((a, b) => (b.time || 0) - (a.time || 0))
+      })
+    )
+    this.subscriptions.push(
+      this.isOutstandings$.pipe(filter((v) => v)).subscribe((_) => {
+        this.notifier.notify('Going to outstandings')
+        this.filters$.next({
+          displayUnknown: true,
+          displayCovered: true,
+          displayPlaying: true,
+          displayDone: true,
+          onlyExtraTimed: false,
+          onlyStageHasNotPaper: false,
+        })
       })
     )
   }
