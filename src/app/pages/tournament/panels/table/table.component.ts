@@ -92,10 +92,16 @@ export class TablePanelComponent implements OnDestroy {
 
   editResult() {
     this.isLoading = true
-    this.tableService.update(this.table, { result: this.result }).then(() => {
-      this.isLoading = false
-      this.isEditingSlip = false
-    })
+    this.tableService
+      .update(this.table, {
+        result: this.result,
+        status: 'done',
+        updateStatusTime: moment.utc().valueOf(),
+      })
+      .then(() => {
+        this.isLoading = false
+        this.isEditingSlip = false
+      })
   }
 
   increasePlayer1() {

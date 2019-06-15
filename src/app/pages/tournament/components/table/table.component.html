@@ -1,6 +1,11 @@
 <ng-container *ngIf="viewMode === 'small'">
   <div class="number">{{ table.id }}</div>
-  <div class="time" *ngIf="table.time">{{ table.time }}min</div>
+  <div class="time" *ngIf="table.time && !(table.result && table.status === 'done')">
+    {{ table.time }}min
+  </div>
+  <div class="result" *ngIf="table.result && table.status === 'done'">
+    {{ table.result | result }}
+  </div>
 </ng-container>
 
 <ng-container *ngIf="viewMode === 'large'">
@@ -13,7 +18,7 @@
       <div class="players" *ngIf="table.player1 && table.player2">
         {{ table.player1.name }} vs {{ table.player2.name }}
       </div>
-      <div class="sinceTime" *ngIf="table.status === 'done'">
+      <div class="sinceTime" *ngIf="table.status === 'done' && !table.stageHasPaper">
         Empty {{ table.updateStatusTime | ago }}
       </div>
       <div class="time" *ngIf="table.time && table.status !== 'done'">
