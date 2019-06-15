@@ -38,37 +38,51 @@
   <ng-container *ngIf="(sortBy$ | async) === 'zone'; else sorted">
     <div class="zones" *ngIf="(zoneTables$ | async) as zoneTables">
       <ng-container *ngFor="let zone of (zones$ | async); let zoneIndex = index">
-        <div class="zone" *ngIf="zoneInfoSelected === 'all' || zoneInfoSelected === '' + zoneIndex">
-          <div class="zone_title">{{ zone.name }}</div>
-          <div class="section" *ngFor="let section of zone.sections; let sectionIndex = index">
+        <ng-container *ngFor="let section of zone.sections; let sectionIndex = index">
+          <ng-container *ngIf="(zoneTables[zoneIndex][sectionIndex] | async) as tables">
+            <div
+              class="zone"
+              *ngIf="
+                tables.length > 0 &&
+                (zoneInfoSelected === 'all' || zoneInfoSelected === '' + zoneIndex)
+              "
+            >
+              <div class="zone_title" *ngIf="sectionIndex === 0">{{ zone.name }}</div>
+              <div class="section">
+                <table
+                  [table]="table"
+                  [viewMode]="viewMode"
+                  [isOutstandings]="isOutstandings$ | async"
+                  (openTable)="onOpenTable(table)"
+                  class="table"
+                  *ngFor="let table of tables; trackBy: trackbyIdFn"
+                ></table>
+              </div>
+            </div>
+          </ng-container>
+        </ng-container>
+      </ng-container>
+      <ng-container *ngIf="(featureTables$ | async) as tables">
+        <div
+          class="zone"
+          *ngIf="
+            tables.length > 0 && (zoneInfoSelected === 'all' || zoneInfoSelected === 'feature')
+          "
+        >
+          <div class="zone_title">Feature</div>
+          <div class="section">
             <table
               [table]="table"
               [viewMode]="viewMode"
               [isOutstandings]="isOutstandings$ | async"
+              [displayFeatured]="true"
               (openTable)="onOpenTable(table)"
               class="table"
-              *ngFor="
-                let table of (zoneTables[zoneIndex][sectionIndex] | async);
-                trackBy: trackbyIdFn
-              "
+              *ngFor="let table of tables; trackBy: trackbyIdFn"
             ></table>
           </div>
         </div>
       </ng-container>
-      <div class="zone" *ngIf="zoneInfoSelected === 'all' || zoneInfoSelected === 'feature'">
-        <div class="zone_title">Feature</div>
-        <div class="section">
-          <table
-            [table]="table"
-            [viewMode]="viewMode"
-            [isOutstandings]="isOutstandings$ | async"
-            [displayFeatured]="true"
-            (openTable)="onOpenTable(table)"
-            class="table"
-            *ngFor="let table of (featureTables$ | async); trackBy: trackbyIdFn"
-          ></table>
-        </div>
-      </div>
     </div>
   </ng-container>
 

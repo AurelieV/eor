@@ -90,6 +90,7 @@ export class TableComponent {
         return roles.includes('tournamentAdmin') || roles.includes('scorekeeper')
       })
     )
+    this.checkWarn()
   }
 
   receivedPaper(e: MouseEvent) {

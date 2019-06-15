@@ -1,8 +1,7 @@
 <ng-container *ngIf="viewMode === 'small'">
+  <mat-icon class="warning" *ngIf="warn">warning</mat-icon>
   <div class="number">{{ table.id }}</div>
-  <div class="time" *ngIf="table.time && !(table.result && table.status === 'done')">
-    {{ table.time }}min
-  </div>
+  <div class="time" *ngIf="table.time && table.status !== 'done'">{{ table.time }}min</div>
   <div class="result" *ngIf="table.result && table.status === 'done'">
     {{ table.result | result }}
   </div>
