@@ -130,6 +130,15 @@ export class TableService {
     )
   }
 
+  synchroWithPairings(tableIds: Array<String>): Promise<Array<any>> {
+    const erased = this.allTables.filter((t) => tableIds.indexOf(t.id) === -1)
+    return Promise.all(
+      erased
+        .map((table) => this.db.object(this.tablePath(table)).remove())
+        .map((p) => p.catch((err) => undefined))
+    )
+  }
+
   private tablePath(table: Table) {
     return `/zoneTables/${this.store.key}/${table.zoneIndex}/${table.sectionIndex}/${table.id}`
   }

@@ -1,8 +1,17 @@
-import { Software } from '@/app/interfaces';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
-import { ErrorService } from '@core/services/error.service';
-import { NotificationService } from '@core/services/notification.service';
-import { INVALID_ID, TableService } from '@pages/tournament/services/table.service';
+import { Software } from '@/app/interfaces'
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  Output,
+  ViewChild,
+} from '@angular/core'
+import { ErrorService } from '@core/services/error.service'
+import { NotificationService } from '@core/services/notification.service'
+import { INVALID_ID, TableService } from '@pages/tournament/services/table.service'
 
 @Component({
   selector: 'import-pairings-panel',
@@ -152,6 +161,9 @@ export class ImportPairingsPanelComponent {
       this.isLoading = false
       if (successFullImport === tables.length) {
         this.notificationService.notify(`${successFullImport} tables imported successfully`)
+        this.tableService.synchroWithPairings(tables.map((t) => t.tableId)).then(({ length }) => {
+          this.notificationService.notify(`${length} tables erased successfully`)
+        })
         this.pairingsImported.emit()
       } else {
         this.errorMessage = `

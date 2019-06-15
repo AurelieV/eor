@@ -37,7 +37,12 @@ export class HeaderComponent {
     )
     this.canEditClock$ = this.store.roles$.pipe(
       map((roles) => {
-        return roles.includes('admin') || roles.includes('tournamentAdmin')
+        return (
+          roles.includes('admin') ||
+          roles.includes('tournamentAdmin') ||
+          roles.includes('zoneLeader') ||
+          roles.includes('scorekeeper')
+        )
       })
     )
     this.isFiltersActive$ = this.store.filters$.pipe(
