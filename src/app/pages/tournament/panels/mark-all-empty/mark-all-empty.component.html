@@ -2,7 +2,7 @@
 <mat-form-field>
   <mat-label>Choose a zone</mat-label>
   <mat-select [(ngModel)]="zoneIndex">
-    <mat-option *ngFor="let zone of zones; let index = index" [value]="index">{{
+    <mat-option *ngFor="let zone of zones; let index = index" [value]="'' + index">{{
       zone.name
     }}</mat-option>
   </mat-select>

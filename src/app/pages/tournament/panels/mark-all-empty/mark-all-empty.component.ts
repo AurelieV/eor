@@ -2,6 +2,7 @@ import { TableStatus } from '@/app/models'
 import { Component, EventEmitter, Input, Output } from '@angular/core'
 import { Zone } from '@pages/administration/administration.models'
 import { TableService } from '@pages/tournament/services/table.service'
+import { TournamentStore } from '@pages/tournament/services/tournament-store.service'
 
 @Component({
   selector: 'mark-all-empty-panel',
@@ -14,13 +15,19 @@ export class MarkAllEmptyPanelComponent {
   @Output() allEmptyMarked = new EventEmitter()
 
   isLoading: boolean = false
-  zoneIndex: number = 0
+  zoneIndex: string = '0'
 
-  constructor(private tableService: TableService) {}
+  constructor(private tableService: TableService, private store: TournamentStore) {}
+
+  ngOnInit() {
+    if (this.store.zoneInfoSelected !== 'all' && this.store.zoneInfoSelected !== 'feature') {
+      this.zoneIndex = this.store.zoneInfoSelected
+    }
+  }
 
   markAllEmpty() {
     this.isLoading = true
-    this.tableService.markAllEmpty(String(this.zoneIndex), this.status).then(() => {
+    this.tableService.markAllEmpty(this.zoneIndex, this.status).then(() => {
       this.isLoading = false
       this.allEmptyMarked.emit()
     })

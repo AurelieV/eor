@@ -1,22 +1,15 @@
-import { Action, Filters, SortBy, Table, Tournament, TournamentStaff, ZoneInfo } from '@/app/models'
-import { flat } from '@/app/utils/flat'
-import { createEmptyTable } from '@/app/utils/helpers'
-import { Injectable } from '@angular/core'
-import { AngularFireDatabase } from '@angular/fire/database'
-import { AuthenticationService } from '@core/services/authentication.service'
-import { NotificationService } from '@core/services/notification.service'
-import { WindowVisibility } from '@core/services/window-visibility.service'
-import { Zone } from '@pages/administration/administration.models'
-import * as moment from 'moment'
-import {
-  BehaviorSubject,
-  combineLatest as combine,
-  Observable,
-  of,
-  Subscription,
-  timer,
-} from 'rxjs'
-import { combineLatest, filter, map, switchMap } from 'rxjs/operators'
+import { Action, Filters, SortBy, Table, Tournament, TournamentStaff, ZoneInfo } from '@/app/models';
+import { flat } from '@/app/utils/flat';
+import { createEmptyTable } from '@/app/utils/helpers';
+import { Injectable } from '@angular/core';
+import { AngularFireDatabase } from '@angular/fire/database';
+import { AuthenticationService } from '@core/services/authentication.service';
+import { NotificationService } from '@core/services/notification.service';
+import { WindowVisibility } from '@core/services/window-visibility.service';
+import { Zone } from '@pages/administration/administration.models';
+import * as moment from 'moment';
+import { BehaviorSubject, combineLatest as combine, Observable, of, Subscription, timer } from 'rxjs';
+import { combineLatest, filter, map, switchMap } from 'rxjs/operators';
 
 export type SectionsTables = Observable<Table[]>[]
 export type ZonesTables = SectionsTables[]
@@ -395,6 +388,10 @@ export class TournamentStore {
 
   set zoneInfoSelected(value: string) {
     this.zoneInfoSelected$.next(value)
+  }
+
+  get zoneInfoSelected() {
+    return this.zoneInfoSelected$.getValue()
   }
 
   setClock(value: number): Promise<any> {
