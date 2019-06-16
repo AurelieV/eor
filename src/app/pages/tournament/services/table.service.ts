@@ -1,14 +1,14 @@
-import { Table, TableStatus, TimeLog } from '@/app/models'
-import { Injectable } from '@angular/core'
-import { AngularFireDatabase } from '@angular/fire/database'
-import { AuthenticationService } from '@core/services/authentication.service'
-import { ErrorService } from '@core/services/error.service'
-import { NotificationService } from '@core/services/notification.service'
-import { SettingsService } from '@core/services/settings.service'
-import * as moment from 'moment'
-import { Observable, of, Subscription } from 'rxjs'
-import { map, switchMap, take } from 'rxjs/operators'
-import { TournamentStore } from './tournament-store.service'
+import { Table, TableStatus, TimeLog } from '@/app/models';
+import { Injectable } from '@angular/core';
+import { AngularFireDatabase } from '@angular/fire/database';
+import { AuthenticationService } from '@core/services/authentication.service';
+import { ErrorService } from '@core/services/error.service';
+import { NotificationService } from '@core/services/notification.service';
+import { SettingsService } from '@core/services/settings.service';
+import * as moment from 'moment';
+import { Observable, of, Subscription } from 'rxjs';
+import { map, switchMap, take } from 'rxjs/operators';
+import { TournamentStore } from './tournament-store.service';
 
 export const INVALID_ID = 'Table does not exist'
 
@@ -125,8 +125,8 @@ export class TableService {
   markAllEmpty(zoneIndex: string, status: TableStatus): Promise<any> {
     return Promise.all(
       this.allTables
-        .filter((t) => t.zoneIndex === zoneIndex && t.status === 'unknown')
-        .map((t) => this.update(t, { status }))
+        .filter((t) => t.zoneIndex === zoneIndex && t.status === 'unknown' && !t.isFeatured)
+        .map((t) => this.update(t, { status, updateStatusTime: moment.utc().valueOf() }))
     )
   }
 
