@@ -1,7 +1,6 @@
 import {
   Action,
   Filters,
-  SortBy,
   Table,
   TableStatus,
   Tournament,
@@ -43,8 +42,8 @@ export class TournamentComponent implements OnInit, OnDestroy, AfterViewInit {
   allInfo$: Observable<ZoneInfo>
   filters$: Observable<Filters>
   actions$: Observable<Action[]>
-  sortedTables$: Observable<Table[]>
-  sortBy$: Observable<SortBy>
+  // sortedTables$: Observable<Table[]>
+  // sortBy$: Observable<SortBy>
   isOutstandings$: Observable<boolean>
   software$: Observable<string>
   staff$: Observable<TournamentStaff>
@@ -142,8 +141,8 @@ export class TournamentComponent implements OnInit, OnDestroy, AfterViewInit {
     this.allInfo$ = this.store.allInfo$
     this.filters$ = this.store.filters$
     this.actions$ = this.store.actions$
-    this.sortedTables$ = this.store.sortedTables$
-    this.sortBy$ = this.store.sortBy$
+    // this.sortedTables$ = this.store.sortedTables$
+    // this.sortBy$ = this.store.sortBy$
     this.isOutstandings$ = this.store.isOutstandings$
     this.software$ = this.tournament$.pipe(map((t) => t.software))
     this.staff$ = this.store.staff$

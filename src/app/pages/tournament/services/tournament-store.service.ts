@@ -1,15 +1,22 @@
-import { Action, Filters, SortBy, Table, Tournament, TournamentStaff, ZoneInfo } from '@/app/models';
-import { flat } from '@/app/utils/flat';
-import { createEmptyTable } from '@/app/utils/helpers';
-import { Injectable } from '@angular/core';
-import { AngularFireDatabase } from '@angular/fire/database';
-import { AuthenticationService } from '@core/services/authentication.service';
-import { NotificationService } from '@core/services/notification.service';
-import { WindowVisibility } from '@core/services/window-visibility.service';
-import { Zone } from '@pages/administration/administration.models';
-import * as moment from 'moment';
-import { BehaviorSubject, combineLatest as combine, Observable, of, Subscription, timer } from 'rxjs';
-import { combineLatest, filter, map, switchMap } from 'rxjs/operators';
+import { Action, Filters, Table, Tournament, TournamentStaff, ZoneInfo } from '@/app/models'
+import { flat } from '@/app/utils/flat'
+import { createEmptyTable } from '@/app/utils/helpers'
+import { Injectable } from '@angular/core'
+import { AngularFireDatabase } from '@angular/fire/database'
+import { AuthenticationService } from '@core/services/authentication.service'
+import { NotificationService } from '@core/services/notification.service'
+import { WindowVisibility } from '@core/services/window-visibility.service'
+import { Zone } from '@pages/administration/administration.models'
+import * as moment from 'moment'
+import {
+  BehaviorSubject,
+  combineLatest as combine,
+  Observable,
+  of,
+  Subscription,
+  timer,
+} from 'rxjs'
+import { combineLatest, filter, map, switchMap } from 'rxjs/operators'
 
 export type SectionsTables = Observable<Table[]>[]
 export type ZonesTables = SectionsTables[]
@@ -36,8 +43,8 @@ export class TournamentStore {
     onlyExtraTimed: false,
     onlyStageHasNotPaper: false,
   })
-  sortBy$ = new BehaviorSubject<SortBy>('zone')
-  sortedTables$: Observable<Table[]>
+  // sortBy$ = new BehaviorSubject<SortBy>('zone')
+  // sortedTables$: Observable<Table[]>
   actions$: Observable<Action[]>
   isOutstandings$: Observable<boolean>
   zoneInfoSelected$ = new BehaviorSubject<string>('all')
@@ -331,34 +338,34 @@ export class TournamentStore {
         return actions
       })
     )
-    const allTables$ = this.key$.pipe(
-      switchMap((key) => this.db.list<Table[][]>(`/zoneTables/${key}`).valueChanges()),
-      map((zones) => zones.reduce((sections, zone) => sections.concat(zone), [])),
-      map((sections) =>
-        sections
-          .reduce((tables, section) => tables.concat(Object.values(section)), [])
-          .filter((table) => Boolean(table))
-      )
-    )
-    this.sortedTables$ = this.sortBy$.pipe(
-      switchMap((sortBy) => {
-        if (sortBy === 'zone') return of([]) // refer to other observable in this case
-        return allTables$
-      }),
-      combineLatest(filterFunc$, this.zoneInfoSelected$),
-      map(([tables, fn, zoneInfoSelected]) => {
-        // TODO: distinct filters
-        let filterFn = fn
-        if (zoneInfoSelected === 'all') {
-          filterFn = fn
-        } else if (zoneInfoSelected === 'feature') {
-          filterFn = (table) => fn(table) && table.isFeatured
-        } else {
-          filterFn = (table) => fn(table) && table.zoneIndex === zoneInfoSelected
-        }
-        return tables.filter(filterFn).sort((a, b) => (b.time || 0) - (a.time || 0))
-      })
-    )
+    // const allTables$ = this.key$.pipe(
+    //   switchMap((key) => this.db.list<Table[][]>(`/zoneTables/${key}`).valueChanges()),
+    //   map((zones) => zones.reduce((sections, zone) => sections.concat(zone), [])),
+    //   map((sections) =>
+    //     sections
+    //       .reduce((tables, section) => tables.concat(Object.values(section)), [])
+    //       .filter((table) => Boolean(table))
+    //   )
+    // )
+    // this.sortedTables$ = this.sortBy$.pipe(
+    //   switchMap((sortBy) => {
+    //     if (sortBy === 'zone') return of([]) // refer to other observable in this case
+    //     return allTables$
+    //   }),
+    //   combineLatest(filterFunc$, this.zoneInfoSelected$),
+    //   map(([tables, fn, zoneInfoSelected]) => {
+    //     // TODO: distinct filters
+    //     let filterFn = fn
+    //     if (zoneInfoSelected === 'all') {
+    //       filterFn = fn
+    //     } else if (zoneInfoSelected === 'feature') {
+    //       filterFn = (table) => fn(table) && table.isFeatured
+    //     } else {
+    //       filterFn = (table) => fn(table) && table.zoneIndex === zoneInfoSelected
+    //     }
+    //     return tables.filter(filterFn).sort((a, b) => (b.time || 0) - (a.time || 0))
+    //   })
+    // )
     this.subscriptions.push(
       this.isOutstandings$.pipe(filter((v) => v)).subscribe((_) => {
         this.notifier.notify('Going to outstandings')
@@ -402,9 +409,9 @@ export class TournamentStore {
     this.filters$.next(filters)
   }
 
-  setSortBy(sortBy: SortBy) {
-    this.sortBy$.next(sortBy)
-  }
+  // setSortBy(sortBy: SortBy) {
+  //   this.sortBy$.next(sortBy)
+  // }
 
   async restart() {
     const key = this.key

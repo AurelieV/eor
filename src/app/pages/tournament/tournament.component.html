@@ -35,7 +35,8 @@
     </div>
   </div>
 
-  <ng-container *ngIf="(sortBy$ | async) === 'zone'; else sorted">
+  <!-- <ng-container *ngIf="(sortBy$ | async) === 'zone'; else sorted"> -->
+  <ng-container>
     <div class="zones" *ngIf="(zoneTables$ | async) as zoneTables">
       <ng-container *ngFor="let zone of (zones$ | async); let zoneIndex = index">
         <ng-container *ngFor="let section of zone.sections; let sectionIndex = index">
@@ -86,7 +87,7 @@
     </div>
   </ng-container>
 
-  <ng-template #sorted>
+  <!-- <ng-template #sorted>
     <div class="all-tables">
       <table
         [table]="table"
@@ -97,7 +98,7 @@
         *ngFor="let table of (sortedTables$ | async); trackBy: trackbyIdFn"
       ></table>
     </div>
-  </ng-template>
+  </ng-template> -->
 </ng-container>
 
 <div class="actions-view" *ngIf="viewMode === 'actions'">
@@ -136,13 +137,17 @@
 </ng-template>
 <ng-template #menuHeader>{{ (tournament$ | async)?.name }}</ng-template>
 <ng-template #clock><clock-panel (clockSet)="closePanel()"></clock-panel></ng-template>
-<ng-template #filters
-  ><filters-panel
+<ng-template #filters>
+  <!-- <filters-panel
     [filters]="filters$ | async"
     [sortBy]="sortBy$ | async"
     [isOutstandings]="isOutstandings$ | async"
-  ></filters-panel
-></ng-template>
+  ></filters-panel> -->
+  <filters-panel
+    [filters]="filters$ | async"
+    [isOutstandings]="isOutstandings$ | async"
+  ></filters-panel>
+</ng-template>
 <ng-template #actions
   ><actions-panel
     [actions]="actions$ | async"

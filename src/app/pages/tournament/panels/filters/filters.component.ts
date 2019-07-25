@@ -1,4 +1,4 @@
-import { Filters, SortBy } from '@/app/models'
+import { Filters } from '@/app/models'
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core'
 import { TournamentStore } from '@pages/tournament/services/tournament-store.service'
 
@@ -10,7 +10,7 @@ import { TournamentStore } from '@pages/tournament/services/tournament-store.ser
 })
 export class FiltersPanelComponent {
   @Input() filters: Filters
-  @Input() sortBy: SortBy
+  // @Input() sortBy: SortBy
   @Input() isOutstandings: boolean
 
   constructor(private store: TournamentStore) {}
@@ -22,9 +22,9 @@ export class FiltersPanelComponent {
     })
   }
 
-  changeSortBy(sortBy) {
-    if (sortBy !== this.sortBy) {
-      this.store.setSortBy(sortBy)
-    }
-  }
+  // changeSortBy(sortBy) {
+  //   if (sortBy !== this.sortBy) {
+  //     this.store.setSortBy(sortBy)
+  //   }
+  // }
 }

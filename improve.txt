@@ -1,0 +1,6 @@
+* Assign judge focus is strange mobile
+* See all tables for coverage
+* Leave table
+* L-L for results
+* Click on slip to edit it
+
