@@ -43,7 +43,7 @@
     <div class="judge" *ngIf="t.assignated">Covered by {{ t.assignated }}</div>
     <ng-container>
       <div class="panel-subtitle">Virtual Result Slip</div>
-      <div class="slip">
+      <div class="slip" (click)="enterResult()">
         <div class="description">
           <div class="push"></div>
           <div>Win</div>

@@ -2,5 +2,14 @@
 * See all tables for coverage
 * Leave table
 * L-L for results
+* Improve performance
+* Coverage role
+* Add actions for SK
+* Architecture
+* Template for desktop
+* long press + click
+
+// DONE
 * Click on slip to edit it
+* Remove tmp sortBy time because of performance issue
 
