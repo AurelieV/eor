@@ -59,7 +59,6 @@ export class AssignJudgePanelComponent {
     if (this.table) {
       this.tableNumber = Number(this.table.id)
       this.currentTableId$.next(Number(this.table.id))
-      setTimeout(() => this.selectUserComponent.focus(), 0)
     } else {
       setTimeout(() => this.tableNumberInputRef.nativeElement.focus(), 0)
     }
