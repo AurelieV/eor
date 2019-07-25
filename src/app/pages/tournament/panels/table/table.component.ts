@@ -5,7 +5,7 @@ import { TableService } from '@pages/tournament/services/table.service'
 import { TournamentStore } from '@pages/tournament/services/tournament-store.service'
 import * as moment from 'moment'
 import { Observable, Subscription } from 'rxjs'
-import { map, switchMap, take } from 'rxjs/operators'
+import { combineLatest, map, switchMap, take } from 'rxjs/operators'
 
 @Component({
   selector: 'table-panel',
@@ -24,6 +24,7 @@ export class TablePanelComponent implements OnDestroy {
   result: Result
   isLead$: Observable<boolean>
   isInteractive: boolean = false
+  isAssignated$: Observable<boolean>
 
   canUpdate: boolean
   private subscriptions: Subscription[] = []
@@ -44,6 +45,11 @@ export class TablePanelComponent implements OnDestroy {
   ngOnInit() {
     setTimeout(() => (this.isInteractive = true), 1000)
     this.table$ = this.tableService.getById(Number(this.table.id))
+    this.isAssignated$ = this.authent.user$.pipe(
+      map((user) => user.name),
+      combineLatest(this.table$.pipe(map((t) => t.assignated))),
+      map(([name, assignated]) => name === assignated)
+    )
     this.logs$ = this.table$.pipe(
       take(1),
       switchMap((table) => this.tableService.getLogs(table))
@@ -128,6 +134,18 @@ export class TablePanelComponent implements OnDestroy {
       .update(this.table, {
         assignated: this.authent.user.name,
         status: 'covered',
+        updateStatusTime: moment.utc().valueOf(),
+      })
+      .then(() => (this.isLoading = false))
+  }
+
+  leave() {
+    if (!this.isInteractive) return
+    this.isLoading = true
+    this.tableService
+      .update(this.table, {
+        assignated: '',
+        status: 'playing',
         updateStatusTime: moment.utc().valueOf(),
       })
       .then(() => (this.isLoading = false))

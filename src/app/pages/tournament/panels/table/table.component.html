@@ -67,9 +67,20 @@
     </ng-container>
     <div class="panel-subtitle">Actions</div>
     <div class="actions">
-      <button mat-flat-button color="primary" [disabled]="isLoading" (click)="sit()">
+      <button
+        mat-flat-button
+        color="primary"
+        [disabled]="isLoading"
+        (click)="sit()"
+        *ngIf="!(isAssignated$ | async); else leaveTable"
+      >
         Watch table
       </button>
+      <ng-template #leaveTable>
+        <button mat-flat-button color="primary" [disabled]="isLoading" (click)="leave()">
+          Leave table
+        </button>
+      </ng-template>
       <button mat-flat-button color="primary" [disabled]="isLoading" (click)="enterResult()">
         Enter result
       </button>
