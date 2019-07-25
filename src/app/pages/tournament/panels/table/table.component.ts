@@ -23,6 +23,7 @@ export class TablePanelComponent implements OnDestroy {
   isEditingSlip: boolean = false
   result: Result
   isLead$: Observable<boolean>
+  isInteractive: boolean = false
 
   canUpdate: boolean
   private subscriptions: Subscription[] = []
@@ -41,6 +42,7 @@ export class TablePanelComponent implements OnDestroy {
   }
 
   ngOnInit() {
+    setTimeout(() => (this.isInteractive = true), 1000)
     this.table$ = this.tableService.getById(Number(this.table.id))
     this.logs$ = this.table$.pipe(
       take(1),
@@ -64,14 +66,17 @@ export class TablePanelComponent implements OnDestroy {
   }
 
   onTimeClick() {
+    if (!this.isInteractive) return
     this.addTime.emit()
   }
 
   assign() {
+    if (!this.isInteractive) return
     this.assignJudge.emit()
   }
 
   enterResult() {
+    if (!this.isInteractive) return
     this.table$.pipe(take(1)).subscribe((table) => {
       this.result = table.result
         ? { ...table.result }
@@ -117,6 +122,7 @@ export class TablePanelComponent implements OnDestroy {
   }
 
   sit() {
+    if (!this.isInteractive) return
     this.isLoading = true
     this.tableService
       .update(this.table, {
