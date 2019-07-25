@@ -11,6 +11,7 @@
 * add isStaff?
 * Change view design
 * Delete table paper received design by drag and drop
+* style des panels à nettoyer
 
 
 // DONE
@@ -21,3 +22,4 @@
 * Coverage role
 * Add actions for SK
 * See all tables for coverage
+* Design des panels => titre plus haut

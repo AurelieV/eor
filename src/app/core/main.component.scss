@@ -77,7 +77,10 @@
   flex-direction: column;
 
   .side-panel-header {
-    padding: 1rem 0.5rem 1rem 1rem;
+    position: absolute;
+    right: 0;
+    left: 0;
+    padding: 0.5rem 0;
     display: flex;
     .push {
       flex: 1 0 auto;
@@ -86,7 +89,7 @@
 
   .side-panel-container {
     flex: 1 0 auto;
-    padding: 0 2em 1em 2em;
+    padding: 1rem 2rem;
   }
 }
 
