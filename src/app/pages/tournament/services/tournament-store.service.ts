@@ -76,10 +76,52 @@ export class TournamentStore {
     this.zones$ = this.key$.pipe(
       switchMap((key) => this.db.list<Zone>(`/zones/${key}`).valueChanges())
     )
+    this.staff$ = this.key$.pipe(
+      switchMap((key) => db.object<TournamentStaff>(`staff/${key}`).valueChanges())
+    )
+    this.roles$ = this.auth.roles$.pipe(
+      combineLatest(this.staff$, this.auth.userId$),
+      map(([roles, staff, userId]) => {
+        const allRoles = [...roles]
+        if (!staff) {
+          return allRoles
+        }
+        const isLeader =
+          staff.zoneLeaders && staff.zoneLeaders.findIndex(({ id }) => id === userId) > -1
+        const isAdmin = staff.admins && staff.admins.findIndex(({ id }) => id === userId) > -1
+        const isScorekeeper =
+          staff.scorekeepers && staff.scorekeepers.findIndex(({ id }) => id === userId) > -1
+        const isFloorJudge =
+          staff.floorJudges && staff.floorJudges.findIndex(({ id }) => id === userId) > -1
+        const isTmpFloorJudge =
+          staff.tmpFloorJudges && staff.tmpFloorJudges.findIndex(({ id }) => id === userId) > -1
+        const isCoverage =
+          staff.coverage && staff.coverage.findIndex(({ id }) => id === userId) > -1
+        if (isLeader) {
+          allRoles.push('zoneLeader')
+        }
+        if (isAdmin) {
+          allRoles.push('tournamentAdmin')
+        }
+        if (isScorekeeper) {
+          allRoles.push('scorekeeper')
+        }
+        if (isFloorJudge) {
+          allRoles.push('floorJudge')
+        }
+        if (isTmpFloorJudge) {
+          allRoles.push('tmpFloorJudge')
+        }
+        if (isCoverage) {
+          allRoles.push('coverage')
+        }
+        return allRoles
+      })
+    )
     this.subscriptions.push(this.zones$.subscribe((zones) => (this.zones = zones)))
     const filterFunc$: Observable<(table: Table) => boolean> = this.filters$.pipe(
-      combineLatest(this.isOutstandings$),
-      map(([filters, isOutstandings]) => {
+      combineLatest(this.isOutstandings$, this.roles$),
+      map(([filters, isOutstandings, roles]) => {
         return (table) => {
           let result = true
           if (!filters.displayCovered) {
@@ -97,7 +139,7 @@ export class TournamentStore {
           if (filters.onlyExtraTimed) {
             result = result && table.time > 0
           }
-          if (filters.onlyStageHasNotPaper || isOutstandings) {
+          if (filters.onlyStageHasNotPaper || (isOutstandings && !roles.includes('coverage'))) {
             result = result && !table.stageHasPaper
           }
 
@@ -224,52 +266,24 @@ export class TournamentStore {
         )
       })
     )
-    this.staff$ = this.key$.pipe(
-      switchMap((key) => db.object<TournamentStaff>(`staff/${key}`).valueChanges())
-    )
-    this.roles$ = this.auth.roles$.pipe(
-      combineLatest(this.staff$, this.auth.userId$),
-      map(([roles, staff, userId]) => {
-        const allRoles = [...roles]
-        if (!staff) {
-          return allRoles
-        }
-        const isLeader =
-          staff.zoneLeaders && staff.zoneLeaders.findIndex(({ id }) => id === userId) > -1
-        const isAdmin = staff.admins && staff.admins.findIndex(({ id }) => id === userId) > -1
-        const isScorekeeper =
-          staff.scorekeepers && staff.scorekeepers.findIndex(({ id }) => id === userId) > -1
-        const isFloorJudge =
-          staff.floorJudges && staff.floorJudges.findIndex(({ id }) => id === userId) > -1
-        const isTmpFloorJudge =
-          staff.tmpFloorJudges && staff.tmpFloorJudges.findIndex(({ id }) => id === userId) > -1
-        if (isLeader) {
-          allRoles.push('zoneLeader')
-        }
-        if (isAdmin) {
-          allRoles.push('tournamentAdmin')
-        }
-        if (isScorekeeper) {
-          allRoles.push('scorekeeper')
-        }
-        if (isFloorJudge) {
-          allRoles.push('floorJudge')
-        }
-        if (isTmpFloorJudge) {
-          allRoles.push('tmpFloorJudge')
-        }
-        return allRoles
-      })
-    )
     this.actions$ = this.roles$.pipe(
       combineLatest(
         this.isOutstandings$,
         this.tournament$.pipe(map((t: Tournament) => t.software))
       ),
       map(([roles, isOutstandings, software]) => {
-        let actions: Action[] = [
-          { label: 'Add time', key: 'add-time', role: 'all', color: 'primary' },
-        ]
+        let actions: Action[] = []
+        if (roles.filter((r) => r !== 'coverage').length > 1) {
+          actions.push({ label: 'Add time', key: 'add-time', role: 'all', color: 'primary' })
+        }
+        if (roles.includes('coverage')) {
+          actions = actions.concat({
+            label: 'Set Feature',
+            key: 'set-feature',
+            role: 'teamlead',
+            color: 'primary',
+          })
+        }
         if (roles.includes('scorekeeper')) {
           actions = actions.concat(
             {
@@ -289,7 +303,14 @@ export class TournamentStore {
               key: 'set-feature',
               role: 'scorekeeper',
               color: 'primary',
-            }
+            },
+            {
+              label: isOutstandings ? 'Set outstandings' : 'Go to outstanding',
+              key: 'go-outstanding',
+              role: 'teamlead',
+              color: 'warn',
+            },
+            { label: 'Go to next round', key: 'end-round', role: 'teamlead', color: 'warn' }
           )
         }
         if (roles.includes('zoneLeader') || roles.includes('tournamentAdmin')) {

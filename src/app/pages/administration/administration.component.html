@@ -193,7 +193,7 @@
         <mat-icon>help</mat-icon>
       </button>
     </div>
-    <select-users #adminsSelecter formControlName="admins"></select-users>
+    <select-users formControlName="admins"></select-users>
     <div class="subheader">
       <h2 class="title">Swipper floor judges</h2>
       <button
@@ -206,7 +206,22 @@
         <mat-icon>help</mat-icon>
       </button>
     </div>
-    <select-users #adminsSelecter formControlName="floorJudges"></select-users>
+    <select-users formControlName="floorJudges"></select-users>
+    <div class="subheader">
+      <h2 class="title">Coverage</h2>
+      <button
+        mat-icon-button
+        color="accent"
+        (click)="
+          displayHelp(
+            'They will be able to set featured table, and will always have all tables displayes, even in outstandings phase'
+          )
+        "
+      >
+        <mat-icon>help</mat-icon>
+      </button>
+    </div>
+    <select-users formControlName="coverage"></select-users>
   </form>
   <div class="actions">
     <button type="button" mat-stroked-button color="primary" (click)="previous()">Previous</button>

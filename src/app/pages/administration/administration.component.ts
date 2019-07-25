@@ -6,7 +6,6 @@ import { ActivatedRoute, Router } from '@angular/router'
 import { HeaderService } from '@core/services/header.service'
 import { NotificationService } from '@core/services/notification.service'
 import { SidePanelService } from '@core/services/side-panel.service'
-import { SelectUsersComponent } from '@shared/custom-form/select-users/select-users.component'
 import { Subscription } from 'rxjs'
 import { environment } from 'src/environments/environment'
 import { Section } from './administration.models'
@@ -39,9 +38,6 @@ export class AdministrationComponent implements AfterViewInit, OnDestroy {
   @ViewChild('header') headerTemplateRef: TemplateRef<any>
   @ViewChild('help') helpTemplateRef: TemplateRef<any>
   @ViewChild('confirmEdit') confirmEditTemplateRef: TemplateRef<any>
-  @ViewChild('scorekeepersSelecter') scorekeepersSelecterComp: SelectUsersComponent
-  @ViewChild('zoneLeadersSelecter') zoneLeadersSelecterComp: SelectUsersComponent
-  @ViewChild('adminsSelecter') adminsSelecterComp: SelectUsersComponent
 
   private forms = new Map<Step, FormGroup>()
   tournamentId = null
@@ -88,6 +84,7 @@ export class AdministrationComponent implements AfterViewInit, OnDestroy {
         zoneLeaders: new FormControl([]),
         admins: new FormControl([]),
         floorJudges: new FormControl([]),
+        coverage: new FormControl([]),
       })
     )
     this.addZone()

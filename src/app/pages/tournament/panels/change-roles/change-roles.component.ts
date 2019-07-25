@@ -25,6 +25,7 @@ export class ChangeRolesPanelComponent {
     admins: new FormControl([]),
     floorJudges: new FormControl([]),
     tmpFloorJudges: new FormControl([]),
+    coverage: new FormControl([]),
   })
 
   constructor(
@@ -53,6 +54,7 @@ export class ChangeRolesPanelComponent {
         zoneLeaders: [],
         floorJudges: [],
         tmpFloorJudges: [],
+        coverage: [],
         ...this.staff,
       })
     }

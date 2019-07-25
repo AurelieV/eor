@@ -31,6 +31,7 @@ export class TournamentService {
                 zoneLeaders: [],
                 floorJudges: [],
                 tmpFloorJudges: [],
+                coverage: [],
                 ...(staff[tournament.key] || {}),
               })
           )

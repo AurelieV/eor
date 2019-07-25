@@ -1,11 +1,16 @@
-* See all tables for coverage
 * Leave table
 * L-L for results
 * Improve performance
-* Coverage role
-* Add actions for SK
 * Architecture
 * Template for desktop
+* Change role components
+* Improve design for handling roles on the app
+* Check update information for panel
+* Automatize role list?
+* Réécrire les actions en auto?
+* add isStaff?
+* Change view design
+* Delete table paper received design by drag and drop
 
 
 // DONE
@@ -13,4 +18,6 @@
 * Remove tmp sortBy time because of performance issue
 * long press + click
 * Assign judge focus is strange mobile
-
+* Coverage role
+* Add actions for SK
+* See all tables for coverage
