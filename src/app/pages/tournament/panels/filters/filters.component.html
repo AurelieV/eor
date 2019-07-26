@@ -28,7 +28,7 @@
     class="filter"
     [class.active]="filters.onlyStageHasNotPaper"
     (click)="toggle('onlyStageHasNotPaper')"
-    *ngIf="!isOutstandings || isCoverage"
+    *ngIf="!isOutstandings || (isCoverage$ | async)"
   >
     <mat-icon>desktop_access_disabled</mat-icon>
     <div class="label smaller">Only missing</div>
