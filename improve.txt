@@ -12,6 +12,7 @@
 * Delete table paper received design by drag and drop
 * style des panels à nettoyer
 * coverage cannot open table
+* Only edit zone
 
 
 // DONE
