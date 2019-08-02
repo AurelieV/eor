@@ -273,7 +273,10 @@ export class TournamentStore {
       ),
       map(([roles, isOutstandings, software]) => {
         let actions: Action[] = []
-        if (roles.filter((r) => r !== 'coverage').length > 1) {
+        if (
+          roles.findIndex((r) => r === 'coverage') === -1 ||
+          roles.filter((r) => r !== 'coverage').length > 1
+        ) {
           actions.push({ label: 'Add time', key: 'add-time', role: 'all', color: 'primary' })
         }
         if (roles.includes('coverage')) {
